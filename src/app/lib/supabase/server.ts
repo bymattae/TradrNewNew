@@ -19,20 +19,18 @@ export const createClient = () => {
         get(name: string) {
           return cookieStore.get(name)?.value;
         },
-        set(name: string, value: string, options: { path?: string; maxAge?: number; domain?: string; secure?: boolean }) {
+        set(name: string, value: string, options: any) {
           try {
-            cookieStore.set(name, value, options);
+            cookieStore.set({ name, value, ...options });
           } catch (error) {
-            // Handle cookie errors silently in production
-            console.error('Cookie set error:', error);
+            // Handle cookie errors
           }
         },
-        remove(name: string, options: { path?: string; domain?: string }) {
+        remove(name: string, options: any) {
           try {
-            cookieStore.set(name, '', { ...options, maxAge: 0 });
+            cookieStore.set({ name, value: '', ...options });
           } catch (error) {
-            // Handle cookie errors silently in production
-            console.error('Cookie remove error:', error);
+            // Handle cookie errors
           }
         },
       },

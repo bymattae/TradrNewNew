@@ -135,7 +135,7 @@ export default function VerifyPage() {
           <div className="text-center">
             <h1 className="text-4xl font-bold mb-4">Enter code</h1>
             <p className="text-gray-400">
-              We've sent a 6-digit code to your email.
+              We&apos;ve sent a 6-digit code to your email.
             </p>
           </div>
 
@@ -175,7 +175,7 @@ export default function VerifyPage() {
               disabled={countdown > 0}
               className="text-sm hover:text-white disabled:hover:text-gray-400"
             >
-              Didn't get it? Resend in {countdown}s
+              Didn&apos;t get it? Resend in {countdown}s
             </button>
           </div>
         </div>

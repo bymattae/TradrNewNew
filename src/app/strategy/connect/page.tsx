@@ -240,7 +240,7 @@ export default function ConnectPage() {
             <span className="text-base text-white">Your data is secure</span>
           </div>
           <p className="text-sm text-gray-400">
-            We'll sync your account and preview it live. Your credentials are encrypted and never stored.
+            We&apos;ll sync your account and preview it live. Your credentials are encrypted and never stored.
           </p>
         </div>
       </div>

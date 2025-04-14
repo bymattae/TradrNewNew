@@ -1,48 +1,53 @@
-'use client';
+import { Metadata } from 'next'
+import { createClient } from '@/app/lib/supabase/server'
 
-import { useEffect, useState } from 'react';
-import { supabase } from '@/lib/supabase/client';
-import { User } from '@supabase/supabase-js';
+export const metadata: Metadata = {
+  title: 'Dashboard | Tradr',
+  description: 'View and manage your trading strategies'
+}
 
-export default function DashboardPage() {
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
+export default async function DashboardPage() {
+  const supabase = createClient()
+  const { data: { user } } = await supabase.auth.getUser()
 
-  useEffect(() => {
-    const getUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      setUser(user);
-      setLoading(false);
-    };
-
-    getUser();
-  }, []);
-
-  if (loading) {
+  if (!user) {
     return (
-      <div className="min-h-screen bg-black text-white flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-indigo-500"></div>
+      <div className="flex flex-col items-center justify-center min-h-screen py-12 px-4 sm:px-6 lg:px-8">
+        <h1 className="text-4xl font-bold text-gray-900">Please sign in</h1>
+        <p className="mt-2 text-gray-600">You need to be signed in to view this page.</p>
       </div>
-    );
+    )
   }
 
   return (
-    <div className="min-h-screen bg-black text-white p-8">
-      <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold mb-8">Welcome to Tradr!</h1>
-        <div className="bg-zinc-900 rounded-lg p-6">
-          <h2 className="text-xl font-semibold mb-4">Getting Started</h2>
-          <p className="text-gray-400 mb-6">
-            Let's set up your trading profile and connect your first trading account.
-          </p>
-          <button
-            className="bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition-colors"
-            onClick={() => window.location.href = '/dashboard/connect'}
-          >
-            Connect Trading Account →
-          </button>
+    <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+      <div className="px-4 py-6 sm:px-0">
+        <div className="border-4 border-dashed border-gray-200 rounded-lg p-8">
+          <h1 className="text-3xl font-bold text-gray-900">Welcome back!</h1>
+          <p className="mt-4 text-lg text-gray-600">Let&apos;s get started with your trading journey.</p>
+          
+          {/* Strategy List Section */}
+          <div className="mt-8">
+            <h2 className="text-2xl font-semibold text-gray-900">Your Strategies</h2>
+            <div className="mt-4 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {/* Add strategy cards here */}
+            </div>
+          </div>
+
+          {/* Quick Actions */}
+          <div className="mt-8">
+            <h2 className="text-2xl font-semibold text-gray-900">Quick Actions</h2>
+            <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              <button className="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700">
+                Create New Strategy
+              </button>
+              <button className="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700">
+                Connect Account
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-  );
+  )
 } 

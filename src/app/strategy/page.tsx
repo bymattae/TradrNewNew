@@ -92,8 +92,8 @@ export default function StrategyPage() {
           </svg>
         </button>
         <div className="text-center">
-          <h1 className="text-xl font-bold">What's this strategy about?</h1>
-          <p className="text-sm text-gray-400 mt-1">1/3 steps</p>
+          <h1 className="text-xl font-bold">What&apos;s this strategy about?</h1>
+          <p className="text-sm text-muted-foreground mt-1">1/3 steps</p>
         </div>
         <div className="w-5"></div>
       </div>

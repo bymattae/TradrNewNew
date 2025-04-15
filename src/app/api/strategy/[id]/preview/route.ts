@@ -65,12 +65,14 @@ export async function GET(
       .single();
 
     // 4. Get account state from MetaApi
+    const headers = {
+      'auth-token': METAAPI_TOKEN as string
+    };
+
     const stateResponse = await fetch(
       `${METAAPI_URL}/users/current/accounts/${account.metaapi_id}`,
       {
-        headers: {
-          'auth-token': METAAPI_TOKEN
-        },
+        headers,
         agent: httpsAgent as any
       }
     );
@@ -92,9 +94,7 @@ export async function GET(
       const metricsResponse = await fetch(
         `${METASTATS_URL}/users/current/accounts/${account.login}/metrics`,
         {
-          headers: {
-            'auth-token': METAAPI_TOKEN
-          },
+          headers,
           agent: httpsAgent as any
         }
       );

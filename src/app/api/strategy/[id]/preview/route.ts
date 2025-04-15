@@ -3,28 +3,8 @@ import { createClient } from '@supabase/supabase-js';
 import fetch from 'node-fetch';
 import https from 'https';
 
-// Validate environment variables
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseKey = process.env.SUPABASE_SERVICE_KEY;
-
-if (!supabaseUrl || !supabaseKey) {
-  throw new Error('Missing required environment variables: NEXT_PUBLIC_SUPABASE_URL or SUPABASE_SERVICE_KEY');
-}
-
-const supabase = createClient(supabaseUrl, supabaseKey, {
-  auth: {
-    autoRefreshToken: false,
-    persistSession: false
-  }
-});
-
-const METAAPI_URL = 'https://mt-provisioning-api-v1.agiliumtrade.ai';
+const METAAPI_URL = 'https://mt-provisioning-api-v1.agiliumtrade.agiliumtrade.ai';
 const METASTATS_URL = 'https://metastats-api-v1.agiliumtrade.ai';
-const METAAPI_TOKEN = process.env.METAAPI_TOKEN;
-
-if (!METAAPI_TOKEN) {
-  throw new Error('Missing required environment variable: METAAPI_TOKEN');
-}
 
 const httpsAgent = new https.Agent({
   rejectUnauthorized: false,
@@ -37,6 +17,31 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseKey = process.env.SUPABASE_SERVICE_KEY;
+    const metaapiToken = process.env.METAAPI_TOKEN;
+
+    if (!supabaseUrl || !supabaseKey) {
+      return NextResponse.json(
+        { error: 'Missing required environment variables: NEXT_PUBLIC_SUPABASE_URL or SUPABASE_SERVICE_KEY' },
+        { status: 500 }
+      );
+    }
+
+    if (!metaapiToken) {
+      return NextResponse.json(
+        { error: 'Missing required environment variable: METAAPI_TOKEN' },
+        { status: 500 }
+      );
+    }
+
+    const supabase = createClient(supabaseUrl, supabaseKey, {
+      auth: {
+        autoRefreshToken: false,
+        persistSession: false
+      }
+    });
+
     const { id: strategy_id } = params;
 
     // 1. Get strategy details from Supabase using strategy_id
@@ -66,7 +71,7 @@ export async function GET(
 
     // 4. Get account state from MetaApi
     const headers = {
-      'auth-token': METAAPI_TOKEN as string
+      'auth-token': metaapiToken as string
     };
 
     const stateResponse = await fetch(

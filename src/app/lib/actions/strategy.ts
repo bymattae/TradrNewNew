@@ -1,9 +1,10 @@
 'use server';
 
-import { createClient } from '../supabase/server'
+import { createClient } from '@supabase/supabase-js';
 import { StrategyInsert } from '@/lib/types/supabase'
 import { cookies } from 'next/headers';
 import { nanoid } from 'nanoid';
+import { v4 as uuidv4 } from 'uuid';
 
 interface CreateStrategyParams {
   title: string;
@@ -28,48 +29,71 @@ interface Metrics {
   duration: number;
 }
 
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+
 /**
  * Creates a new strategy and returns the generated strategy_id
  */
-export async function createStrategy({
-  title,
-  description,
-  hashtags
-}: {
-  title: string;
-  description?: string;
-  hashtags?: string[];
-}) {
-  const supabase = createClient();
-  
-  // Get the current user's ID from the session
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) {
-    throw new Error('User not authenticated');
+export async function createStrategy(title: string, description: string, hashtags: string[]) {
+  try {
+    const cookieStore = cookies();
+    const supabase = createClient(supabaseUrl, supabaseKey, {
+      auth: {
+        persistSession: false
+      },
+      global: {
+        headers: {
+          'Cookie': cookieStore.getAll()
+            .map(cookie => `${cookie.name}=${cookie.value}`)
+            .join('; ')
+        }
+      }
+    });
+
+    // Get the current user's ID from the session
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      throw new Error('User not authenticated');
+    }
+
+    // Generate a unique strategy ID
+    const strategyId = uuidv4();
+
+    // Check if strategy_id already exists
+    const { data: existingStrategy } = await supabase
+      .from('strategies')
+      .select('strategy_id')
+      .eq('strategy_id', strategyId)
+      .single();
+
+    if (existingStrategy) {
+      throw new Error('Strategy ID already exists');
+    }
+
+    // Insert the new strategy
+    const { data, error } = await supabase
+      .from('strategies')
+      .insert({
+        strategy_id: strategyId,
+        user_id: user.id,
+        title,
+        description,
+        hashtags,
+      })
+      .select()
+      .single();
+
+    if (error) {
+      console.error('Error creating strategy:', error);
+      throw new Error('Failed to create strategy');
+    }
+
+    return data;
+  } catch (error) {
+    console.error('Error in createStrategy:', error);
+    throw error;
   }
-
-  // Generate a unique strategy ID
-  const strategy_id = nanoid();
-
-  // Insert the strategy with the generated ID and user ID
-  const { data, error } = await supabase
-    .from('strategies')
-    .insert({
-      strategy_id,
-      user_id: user.id,
-      title,
-      description,
-      hashtags
-    })
-    .select()
-    .single();
-
-  if (error) {
-    console.error('Error creating strategy:', error);
-    throw new Error('Failed to create strategy');
-  }
-
-  return data;
 }
 
 /**
@@ -81,7 +105,7 @@ export async function connectAccount(params: ConnectAccountParams): Promise<{
   error?: string;
 }> {
   try {
-    const supabase = createClient();
+    const supabase = createClient(supabaseUrl, supabaseKey);
     
     // Get the current user
     const { data: { user }, error: userError } = await supabase.auth.getUser();
@@ -164,7 +188,7 @@ export async function updateStrategyMetrics(strategyId: string, accountId: strin
   error?: string;
 }> {
   try {
-    const supabase = createClient();
+    const supabase = createClient(supabaseUrl, supabaseKey);
     
     const response = await fetch(
       `https://metastats-api-v1.new-york.agiliumtrade.ai/accounts/${accountId}/metrics`,

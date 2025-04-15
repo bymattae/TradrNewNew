@@ -29,12 +29,16 @@ interface Metrics {
   duration: number;
 }
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string;
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string;
+// Validate environment variables at startup
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
 if (!supabaseUrl || !supabaseKey) {
-  throw new Error('Missing Supabase environment variables');
+  throw new Error('Missing required Supabase environment variables');
 }
+
+// Create a single Supabase client instance
+const supabase = createClient();
 
 /**
  * Creates a new strategy and returns the generated strategy_id
@@ -43,44 +47,19 @@ export async function createStrategy({
   title,
   description,
   hashtags
-}: {
-  title: string;
-  description: string;
-  hashtags: string[];
-}) {
+}: CreateStrategyParams) {
   try {
-    const cookieStore = cookies();
-    const supabase = createClient();
-
-    // Get the current user's ID from the session
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) {
-      throw new Error('User not authenticated');
-    }
-
-    // Generate a unique strategy ID
-    const strategyId = uuidv4();
-
-    // Check if strategy_id already exists
-    const { data: existingStrategy } = await supabase
-      .from('strategies')
-      .select('strategy_id')
-      .eq('strategy_id', strategyId)
-      .single();
-
-    if (existingStrategy) {
-      throw new Error('Strategy ID already exists');
-    }
-
-    // Insert the new strategy
+    const strategyId = nanoid();
+    
     const { data, error } = await supabase
       .from('strategies')
       .insert({
-        strategy_id: strategyId,
-        user_id: user.id,
+        id: strategyId,
         title,
         description,
         hashtags,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
       })
       .select()
       .single();
@@ -90,10 +69,10 @@ export async function createStrategy({
       throw new Error('Failed to create strategy');
     }
 
-    return data;
+    return { success: true, strategyId };
   } catch (error) {
-    console.error('Error in createStrategy:', error);
-    throw error;
+    console.error('Unexpected error in createStrategy:', error);
+    return { success: false, error: 'An unexpected error occurred' };
   }
 }
 

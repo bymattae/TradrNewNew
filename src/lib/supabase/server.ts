@@ -16,14 +16,22 @@ export const createClient = () => {
           try {
             cookieStore.set({ name, value, ...options })
           } catch (error) {
-            // Handle cookie errors
+            console.error('Error setting cookie:', error)
+            // Silently fail in production, log in development
+            if (process.env.NODE_ENV === 'development') {
+              throw error
+            }
           }
         },
         remove(name: string, options: CookieOptions) {
           try {
             cookieStore.set({ name, value: '', ...options })
           } catch (error) {
-            // Handle cookie errors
+            console.error('Error removing cookie:', error)
+            // Silently fail in production, log in development
+            if (process.env.NODE_ENV === 'development') {
+              throw error
+            }
           }
         },
       },

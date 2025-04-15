@@ -1,6 +1,6 @@
 'use server';
 
-import { createClient } from '@/lib/supabase/server';
+import { createClient } from '@/lib/supabase/client';
 import { StrategyInsert } from '@/lib/types/supabase'
 import { cookies } from 'next/headers';
 import { nanoid } from 'nanoid';
@@ -37,9 +37,6 @@ if (!supabaseUrl || !supabaseKey) {
   throw new Error('Missing required Supabase environment variables');
 }
 
-// Create a single Supabase client instance
-const supabase = createClient();
-
 /**
  * Creates a new strategy and returns the generated strategy_id
  */
@@ -48,32 +45,24 @@ export async function createStrategy({
   description,
   hashtags
 }: CreateStrategyParams) {
-  try {
-    const strategyId = nanoid();
-    
-    const { data, error } = await supabase
-      .from('strategies')
-      .insert({
-        id: strategyId,
-        title,
-        description,
-        hashtags,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
-      })
-      .select()
-      .single();
+  const supabase = createClient();
+  
+  const { data, error } = await supabase
+    .from('strategies')
+    .insert({
+      title,
+      description,
+      hashtags,
+      created_at: new Date().toISOString()
+    })
+    .select()
+    .single();
 
-    if (error) {
-      console.error('Error creating strategy:', error);
-      throw new Error('Failed to create strategy');
-    }
-
-    return { success: true, strategyId };
-  } catch (error) {
-    console.error('Unexpected error in createStrategy:', error);
-    return { success: false, error: 'An unexpected error occurred' };
+  if (error) {
+    throw error;
   }
+
+  return data;
 }
 
 /**
@@ -216,4 +205,35 @@ export async function updateStrategyMetrics(strategyId: string, accountId: strin
       error: error.message || 'Failed to update metrics'
     };
   }
+}
+
+export async function getStrategies() {
+  const supabase = createClient();
+  
+  const { data, error } = await supabase
+    .from('strategies')
+    .select('*')
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    throw error;
+  }
+
+  return data;
+}
+
+export async function getStrategy(id: string) {
+  const supabase = createClient();
+  
+  const { data, error } = await supabase
+    .from('strategies')
+    .select('*')
+    .eq('id', id)
+    .single();
+
+  if (error) {
+    throw error;
+  }
+
+  return data;
 }

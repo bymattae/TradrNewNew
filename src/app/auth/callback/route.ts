@@ -9,6 +9,7 @@ export async function GET(request: Request) {
   const code = requestUrl.searchParams.get('code')
   const error = requestUrl.searchParams.get('error')
   const error_description = requestUrl.searchParams.get('error_description')
+  const returnTo = requestUrl.searchParams.get('returnTo') || '/onboarding'
 
   if (error) {
     return NextResponse.redirect(
@@ -47,7 +48,7 @@ export async function GET(request: Request) {
     try {
       const { error } = await supabase.auth.exchangeCodeForSession(code)
       if (!error) {
-        return NextResponse.redirect(new URL('/onboarding', request.url))
+        return NextResponse.redirect(new URL(returnTo, request.url))
       }
       console.error('Exchange error:', error)
       return NextResponse.redirect(

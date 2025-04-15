@@ -38,9 +38,14 @@ export async function middleware(request: NextRequest) {
 
   const { data: { session } } = await supabase.auth.getSession()
 
+  // Allow access to the main strategy page
+  if (request.nextUrl.pathname === '/strategy') {
+    return response
+  }
+
   if (!session && (
     request.nextUrl.pathname.startsWith('/dashboard') ||
-    request.nextUrl.pathname.startsWith('/strategy') ||
+    request.nextUrl.pathname.startsWith('/strategy/') || // Only protect nested strategy routes
     request.nextUrl.pathname.startsWith('/onboarding')
   )) {
     return NextResponse.redirect(new URL('/auth/join', request.url))

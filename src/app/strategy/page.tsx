@@ -7,7 +7,7 @@ import { createStrategy } from '@/app/lib/actions/strategy';
 import { toast } from 'sonner';
 import { useAuth } from '@/app/lib/contexts/AuthContext';
 import { UserProfile } from '@/app/components/UserProfile';
-import { AuthForm } from '@/app/components/AuthForm';
+import Link from 'next/link';
 
 export default function StrategyPage() {
   const router = useRouter();
@@ -21,6 +21,12 @@ export default function StrategyPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!user) {
+      router.push('/auth/join');
+      return;
+    }
+
     setLoading(true);
     try {
       await createStrategy({
@@ -43,14 +49,6 @@ export default function StrategyPage() {
     }
   };
 
-  if (!user) {
-    return (
-      <div className="flex min-h-screen flex-col items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-        <AuthForm />
-      </div>
-    );
-  }
-
   return (
     <div className={layout.container}>
       {/* Header */}
@@ -70,9 +68,18 @@ export default function StrategyPage() {
         <div className="w-5"></div>
       </div>
 
-      {/* User Profile */}
+      {/* User Profile or Sign In Button */}
       <div className="absolute top-4 right-4">
-        <UserProfile />
+        {user ? (
+          <UserProfile />
+        ) : (
+          <Link 
+            href="/auth/join"
+            className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700"
+          >
+            Sign in
+          </Link>
+        )}
       </div>
 
       {/* Content */}
@@ -123,18 +130,6 @@ export default function StrategyPage() {
               placeholder="e.g. forex, scalping, momentum"
             />
           </div>
-
-          <button
-            type="submit"
-            disabled={loading}
-            className={`w-full py-2 px-4 rounded-lg text-white ${
-              loading
-                ? 'bg-blue-400 cursor-not-allowed'
-                : 'bg-blue-600 hover:bg-blue-700'
-            }`}
-          >
-            {loading ? 'Creating...' : 'Create Strategy'}
-          </button>
         </form>
       </div>
 
@@ -149,7 +144,7 @@ export default function StrategyPage() {
             <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
           ) : (
             <>
-              <span>Next step</span>
+              <span>{user ? 'Next step' : 'Sign in to continue'}</span>
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
               </svg>

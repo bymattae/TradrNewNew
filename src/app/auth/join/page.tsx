@@ -8,6 +8,7 @@ export default function JoinPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const error = searchParams.get('error');
+  const returnTo = searchParams.get('returnTo');
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState({ 
@@ -24,10 +25,11 @@ export default function JoinPage() {
     setMessage({ text: '', type: '' });
 
     try {
+      const redirectTo = `${window.location.origin}/auth/callback${returnTo ? `?returnTo=${returnTo}` : ''}`;
       const { error } = await supabase.auth.signInWithOtp({
         email,
         options: {
-          emailRedirectTo: `${window.location.origin}/auth/callback`,
+          emailRedirectTo: redirectTo,
           shouldCreateUser: true,
           data: {
             email

@@ -10,7 +10,7 @@ if (!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
   throw new Error('Missing env.NEXT_PUBLIC_SUPABASE_ANON_KEY');
 }
 
-export async function createClient() {
+export const createClient = () => {
   const cookieStore = cookies();
 
   return createServerClient(
@@ -38,6 +38,6 @@ export async function createClient() {
       },
     }
   );
-}
+};
 
 export default createClient; 

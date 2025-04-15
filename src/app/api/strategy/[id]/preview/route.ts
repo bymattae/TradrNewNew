@@ -18,12 +18,12 @@ export async function GET(
 ) {
   try {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const supabaseKey = process.env.SUPABASE_SERVICE_KEY;
+    const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
     const metaapiToken = process.env.METAAPI_TOKEN;
 
     if (!supabaseUrl || !supabaseKey) {
       return NextResponse.json(
-        { error: 'Missing required environment variables: NEXT_PUBLIC_SUPABASE_URL or SUPABASE_SERVICE_KEY' },
+        { error: 'Missing required environment variables: NEXT_PUBLIC_SUPABASE_URL or NEXT_PUBLIC_SUPABASE_ANON_KEY' },
         { status: 500 }
       );
     }

@@ -1,6 +1,7 @@
 'use client';
 
-import { createClient } from '@/app/lib/supabase/client';
+import { createClient } from '../supabase/server'
+import { StrategyInsert } from '@/lib/types/supabase'
 
 interface CreateStrategyParams {
   title: string;
@@ -28,79 +29,21 @@ interface Metrics {
 /**
  * Creates a new strategy and returns the generated strategy_id
  */
-export async function createStrategy(params: CreateStrategyParams): Promise<{
-  success: boolean;
-  strategy_id?: string;
-  error?: string;
-}> {
+export async function createStrategy(data: StrategyInsert) {
+  const supabase = createClient()
+
   try {
-    console.log('Creating strategy with params:', params);
-    const supabase = createClient();
-
-    // Generate a unique 6-character strategy ID (uppercase letters and numbers)
-    const generateStrategyId = () => {
-      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-      return Array.from({ length: 6 }, () => chars[Math.floor(Math.random() * chars.length)]).join('');
-    };
-
-    // Get the current user
-    const { data: { user }, error: userError } = await supabase.auth.getUser();
-    console.log('User data:', { user, userError });
-    
-    if (userError) {
-      console.error('User error:', userError);
-      throw new Error('Failed to get user');
-    }
-    
-    if (!user) {
-      console.error('No user found');
-      throw new Error('Not authenticated');
-    }
-
-    // Generate a unique strategy ID
-    const strategyId = generateStrategyId();
-    console.log('Generated strategy ID:', strategyId);
-
-    // Insert the new strategy
-    const { data: insertData, error: insertError } = await supabase
+    const { data: strategy, error } = await supabase
       .from('strategies')
-      .insert({
-        strategy_id: strategyId,
-        user_id: user.id,
-        title: params.title,
-        description: params.description,
-        hashtags: params.hashtags,
-        created_at: new Date().toISOString()
-      })
+      .insert([data])
       .select()
-      .single();
+      .single()
 
-    console.log('Strategy insert result:', { insertData, insertError });
-
-    if (insertError) {
-      console.error('Insert error:', insertError);
-      
-      // Check if the error is about the table not existing
-      const errorMessage = insertError.message || insertError.toString();
-      if (errorMessage.includes('relation "strategies" does not exist')) {
-        console.error('Strategies table does not exist. Please create it in your Supabase dashboard.');
-        throw new Error('Database not properly set up. Please contact support.');
-      }
-      
-      throw new Error(errorMessage);
-    }
-
-    return {
-      success: true,
-      strategy_id: strategyId
-    };
-
+    if (error) throw error
+    return { strategy, error: null }
   } catch (error: any) {
-    console.error('Create Strategy Error:', error);
-    return {
-      success: false,
-      error: error.message || 'Failed to create strategy'
-    };
+    console.error('Error creating strategy:', error)
+    return { strategy: null, error: error.message }
   }
 }
 

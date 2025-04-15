@@ -19,14 +19,14 @@ export const createClient = () => {
         get(name: string) {
           return cookieStore.get(name)?.value;
         },
-        set(name: string, value: string, options: any) {
+        set(name: string, value: string, options: { path?: string; maxAge?: number; domain?: string; secure?: boolean }) {
           try {
             cookieStore.set(name, value, options);
           } catch (error) {
             // Handle cookie errors
           }
         },
-        remove(name: string, options: any) {
+        remove(name: string, options: { path?: string; domain?: string }) {
           try {
             cookieStore.set(name, '', { ...options, maxAge: 0 });
           } catch (error) {
@@ -36,4 +36,6 @@ export const createClient = () => {
       },
     }
   );
-}; 
+};
+
+export default createClient; 

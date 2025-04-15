@@ -16,55 +16,27 @@ export default function StrategyPage() {
   const [strategyData, setStrategyData] = useState({
     name: '',
     bio: '',
-    tags: [] as string[],
+    tags: [] as string[]
   });
-  const [newTag, setNewTag] = useState('');
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && newTag.trim() && strategyData.tags.length < 2) {
-      const tagToAdd = newTag.startsWith('#') ? newTag : `#${newTag}`;
-      setStrategyData(prev => ({
-        ...prev,
-        tags: [...prev.tags, tagToAdd]
-      }));
-      setNewTag('');
-    }
-  };
-
-  const handleRemoveTag = (tagToRemove: string) => {
-    setStrategyData(prev => ({
-      ...prev,
-      tags: prev.tags.filter(tag => tag !== tagToRemove)
-    }));
-  };
-
-  const handleSubmit = async () => {
-    if (!strategyData.name.trim()) {
-      toast.error('Please enter a strategy name');
-      return;
-    }
-
-    if (!strategyData.bio.trim()) {
-      toast.error('Please enter a strategy description');
-      return;
-    }
-
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
     setLoading(true);
     try {
-      const result = await createStrategy({
+      await createStrategy({
         title: strategyData.name.trim(),
         description: strategyData.bio.trim(),
         hashtags: strategyData.tags
       });
-
-      if (result.success && result.strategy_id) {
-        toast.success('Strategy created successfully');
-        router.push(`/strategy/${result.strategy_id}/connect`);
-      } else {
-        throw new Error(result.error || 'Failed to create strategy');
-      }
+      
+      toast.success('Strategy created successfully');
+      // Reset form
+      setStrategyData({
+        name: '',
+        bio: '',
+        tags: []
+      });
     } catch (error: any) {
-      console.error('Error creating strategy:', error);
       toast.error(error.message || 'Failed to create strategy');
     } finally {
       setLoading(false);
@@ -105,60 +77,65 @@ export default function StrategyPage() {
 
       {/* Content */}
       <div className="flex-1 px-4 py-8 space-y-8 overflow-y-auto scrollbar-hide max-w-2xl mx-auto w-full">
-        <div className="space-y-2">
-          <label className="text-sm font-medium">Strategy name</label>
-          <input
-            type="text"
-            value={strategyData.name}
-            onChange={(e) => setStrategyData(prev => ({ ...prev, name: e.target.value }))}
-            placeholder="e.g. London Breakout"
-            className="w-full bg-zinc-900/50 border border-zinc-800/50 rounded-xl px-4 py-3.5 text-base text-white placeholder:text-gray-500 focus:outline-none focus:border-indigo-500/50 backdrop-blur-xl"
-          />
-        </div>
-
-        <div className="space-y-2">
-          <label className="text-sm font-medium">Strategy bio</label>
-          <textarea
-            value={strategyData.bio}
-            onChange={(e) => setStrategyData(prev => ({ ...prev, bio: e.target.value }))}
-            placeholder="Keep it sharp and simple."
-            className="w-full bg-zinc-900/50 border border-zinc-800/50 rounded-xl px-4 py-3.5 text-base text-white placeholder:text-gray-500 focus:outline-none focus:border-indigo-500/50 backdrop-blur-xl min-h-[120px] resize-none"
-            maxLength={120}
-          />
-        </div>
-
-        <div className="space-y-2">
-          <div className="flex justify-between items-center">
-            <label className="text-sm font-medium">Tags</label>
-            <span className="text-xs text-gray-500">{strategyData.tags.length}/2</span>
+        <h1 className="text-2xl font-bold mb-6">Create Strategy</h1>
+        
+        <form onSubmit={handleSubmit} className="max-w-md space-y-6">
+          <div className="space-y-2">
+            <label htmlFor="name" className="block text-sm font-medium">
+              Strategy Name
+            </label>
+            <input
+              id="name"
+              type="text"
+              value={strategyData.name}
+              onChange={(e) => setStrategyData(prev => ({ ...prev, name: e.target.value }))}
+              className="w-full px-3 py-2 border rounded-lg"
+              required
+            />
           </div>
-          <div className="flex flex-wrap gap-2">
-            {strategyData.tags.map((tag, index) => (
-              <div
-                key={index}
-                className="group relative bg-indigo-600/20 border border-indigo-500/30 text-white px-3 py-1.5 rounded-lg text-sm backdrop-blur-xl"
-              >
-                {tag}
-                <button
-                  onClick={() => handleRemoveTag(tag)}
-                  className="absolute -top-1.5 -right-1.5 hidden group-hover:flex bg-red-500 rounded-full w-4 h-4 items-center justify-center text-xs shadow-lg"
-                >
-                  ×
-                </button>
-              </div>
-            ))}
-            {strategyData.tags.length < 2 && (
-              <input
-                type="text"
-                value={newTag}
-                onChange={(e) => setNewTag(e.target.value)}
-                onKeyDown={handleKeyDown}
-                placeholder="+ Add tag"
-                className="bg-zinc-900/50 border border-zinc-800/50 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:border-indigo-500/50 w-24 backdrop-blur-xl placeholder:text-gray-500"
-              />
-            )}
+
+          <div className="space-y-2">
+            <label htmlFor="bio" className="block text-sm font-medium">
+              Description
+            </label>
+            <textarea
+              id="bio"
+              value={strategyData.bio}
+              onChange={(e) => setStrategyData(prev => ({ ...prev, bio: e.target.value }))}
+              className="w-full px-3 py-2 border rounded-lg"
+              rows={4}
+            />
           </div>
-        </div>
+
+          <div className="space-y-2">
+            <label htmlFor="tags" className="block text-sm font-medium">
+              Tags (comma separated)
+            </label>
+            <input
+              id="tags"
+              type="text"
+              value={strategyData.tags.join(', ')}
+              onChange={(e) => setStrategyData(prev => ({ 
+                ...prev, 
+                tags: e.target.value.split(',').map(tag => tag.trim()).filter(Boolean)
+              }))}
+              className="w-full px-3 py-2 border rounded-lg"
+              placeholder="e.g. forex, scalping, momentum"
+            />
+          </div>
+
+          <button
+            type="submit"
+            disabled={loading}
+            className={`w-full py-2 px-4 rounded-lg text-white ${
+              loading
+                ? 'bg-blue-400 cursor-not-allowed'
+                : 'bg-blue-600 hover:bg-blue-700'
+            }`}
+          >
+            {loading ? 'Creating...' : 'Create Strategy'}
+          </button>
+        </form>
       </div>
 
       {/* Footer */}

@@ -2,6 +2,8 @@
 
 import { createClient } from '../supabase/server'
 import { StrategyInsert } from '@/lib/types/supabase'
+import { cookies } from 'next/headers';
+import { nanoid } from 'nanoid';
 
 interface CreateStrategyParams {
   title: string;
@@ -29,22 +31,45 @@ interface Metrics {
 /**
  * Creates a new strategy and returns the generated strategy_id
  */
-export async function createStrategy(data: StrategyInsert) {
-  const supabase = createClient()
-
-  try {
-    const { data: strategy, error } = await supabase
-      .from('strategies')
-      .insert([data])
-      .select()
-      .single()
-
-    if (error) throw error
-    return { strategy, error: null }
-  } catch (error: any) {
-    console.error('Error creating strategy:', error)
-    return { strategy: null, error: error.message }
+export async function createStrategy({
+  title,
+  description,
+  hashtags
+}: {
+  title: string;
+  description?: string;
+  hashtags?: string[];
+}) {
+  const supabase = createClient();
+  
+  // Get the current user's ID from the session
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) {
+    throw new Error('User not authenticated');
   }
+
+  // Generate a unique strategy ID
+  const strategy_id = nanoid();
+
+  // Insert the strategy with the generated ID and user ID
+  const { data, error } = await supabase
+    .from('strategies')
+    .insert({
+      strategy_id,
+      user_id: user.id,
+      title,
+      description,
+      hashtags
+    })
+    .select()
+    .single();
+
+  if (error) {
+    console.error('Error creating strategy:', error);
+    throw new Error('Failed to create strategy');
+  }
+
+  return data;
 }
 
 /**

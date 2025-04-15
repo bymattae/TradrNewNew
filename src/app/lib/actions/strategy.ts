@@ -1,6 +1,6 @@
 'use server';
 
-import { createClient } from '@supabase/supabase-js';
+import { createClient } from '@/lib/supabase/server';
 import { StrategyInsert } from '@/lib/types/supabase'
 import { cookies } from 'next/headers';
 import { nanoid } from 'nanoid';
@@ -29,8 +29,12 @@ interface Metrics {
   duration: number;
 }
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string;
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string;
+
+if (!supabaseUrl || !supabaseKey) {
+  throw new Error('Missing Supabase environment variables');
+}
 
 /**
  * Creates a new strategy and returns the generated strategy_id
@@ -46,18 +50,7 @@ export async function createStrategy({
 }) {
   try {
     const cookieStore = cookies();
-    const supabase = createClient(supabaseUrl, supabaseKey, {
-      auth: {
-        persistSession: false
-      },
-      global: {
-        headers: {
-          'Cookie': cookieStore.getAll()
-            .map(cookie => `${cookie.name}=${cookie.value}`)
-            .join('; ')
-        }
-      }
-    });
+    const supabase = createClient();
 
     // Get the current user's ID from the session
     const { data: { user } } = await supabase.auth.getUser();
@@ -113,7 +106,7 @@ export async function connectAccount(params: ConnectAccountParams): Promise<{
   error?: string;
 }> {
   try {
-    const supabase = createClient(supabaseUrl, supabaseKey);
+    const supabase = createClient();
     
     // Get the current user
     const { data: { user }, error: userError } = await supabase.auth.getUser();
@@ -196,7 +189,7 @@ export async function updateStrategyMetrics(strategyId: string, accountId: strin
   error?: string;
 }> {
   try {
-    const supabase = createClient(supabaseUrl, supabaseKey);
+    const supabase = createClient();
     
     const response = await fetch(
       `https://metastats-api-v1.new-york.agiliumtrade.ai/accounts/${accountId}/metrics`,

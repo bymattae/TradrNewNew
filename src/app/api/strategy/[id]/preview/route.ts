@@ -3,14 +3,28 @@ import { createClient } from '@supabase/supabase-js';
 import fetch from 'node-fetch';
 import https from 'https';
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_KEY!
-);
+// Validate environment variables
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseKey = process.env.SUPABASE_SERVICE_KEY;
+
+if (!supabaseUrl || !supabaseKey) {
+  throw new Error('Missing required environment variables: NEXT_PUBLIC_SUPABASE_URL or SUPABASE_SERVICE_KEY');
+}
+
+const supabase = createClient(supabaseUrl, supabaseKey, {
+  auth: {
+    autoRefreshToken: false,
+    persistSession: false
+  }
+});
 
 const METAAPI_URL = 'https://mt-provisioning-api-v1.agiliumtrade.ai';
 const METASTATS_URL = 'https://metastats-api-v1.agiliumtrade.ai';
-const METAAPI_TOKEN = process.env.METAAPI_TOKEN || 'your-token-here';
+const METAAPI_TOKEN = process.env.METAAPI_TOKEN;
+
+if (!METAAPI_TOKEN) {
+  throw new Error('Missing required environment variable: METAAPI_TOKEN');
+}
 
 const httpsAgent = new https.Agent({
   rejectUnauthorized: false,

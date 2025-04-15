@@ -8,7 +8,7 @@ export async function GET(request: Request) {
   const code = requestUrl.searchParams.get('code');
 
   if (code) {
-    const supabase = createClient();
+    const supabase = await createClient();
 
     try {
       const { error } = await supabase.auth.exchangeCodeForSession(code);
@@ -22,15 +22,13 @@ export async function GET(request: Request) {
       // Successfully exchanged code for session
       return NextResponse.redirect(`${requestUrl.origin}/onboarding`);
     } catch (error: any) {
-      console.error('Callback error:', error);
+      console.error('Exchange error:', error);
       return NextResponse.redirect(
-        `${requestUrl.origin}/auth/join?error=${encodeURIComponent('Something unexpected happened')}`
+        `${requestUrl.origin}/auth/join?error=${encodeURIComponent(error.message)}`
       );
     }
   }
 
-  // No code provided
-  return NextResponse.redirect(
-    `${requestUrl.origin}/auth/join?error=${encodeURIComponent('No code provided')}`
-  );
+  // Return the user to an error page with instructions
+  return NextResponse.redirect(`${requestUrl.origin}/auth/join?error=no_code_provided`);
 } 

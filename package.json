@@ -23,7 +23,6 @@
     "nanoid": "^5.1.5",
     "next": "14.2.7",
     "node-fetch": "^2.7.0",
-    "openai": "^4.94.0",
     "react": "^18",
     "react-dom": "^18",
     "react-markdown": "^9.0.1",

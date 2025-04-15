@@ -1,33 +1,72 @@
-import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs';
-import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
+import { createServerClient, type CookieOptions } from '@supabase/ssr'
+import { NextResponse, type NextRequest } from 'next/server'
 
 export async function middleware(request: NextRequest) {
-  try {
-    const res = NextResponse.next();
-    const supabase = createMiddlewareClient({ req: request, res });
+  let response = NextResponse.next({
+    request: {
+      headers: request.headers,
+    },
+  })
 
-    // Refresh session if expired
-    const { data: { session }, error } = await supabase.auth.getSession();
-
-    // If there's no session and we're on a protected route, redirect to login
-    if (!session && error?.status === 401) {
-      return NextResponse.redirect(new URL('/auth/join', request.url));
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        get(name: string) {
+          return request.cookies.get(name)?.value
+        },
+        set(name: string, value: string, options: CookieOptions) {
+          request.cookies.set({
+            name,
+            value,
+            ...options,
+          })
+          response = NextResponse.next({
+            request: {
+              headers: request.headers,
+            },
+          })
+          response.cookies.set({
+            name,
+            value,
+            ...options,
+          })
+        },
+        remove(name: string, options: CookieOptions) {
+          request.cookies.set({
+            name,
+            value: '',
+            ...options,
+          })
+          response = NextResponse.next({
+            request: {
+              headers: request.headers,
+            },
+          })
+          response.cookies.set({
+            name,
+            value: '',
+            ...options,
+          })
+        },
+      },
     }
+  )
 
-    return res;
-  } catch (error) {
-    console.error('Middleware error:', error);
-    // On error, redirect to login
-    return NextResponse.redirect(new URL('/auth/join', request.url));
-  }
+  await supabase.auth.getSession()
+
+  return response
 }
 
-// Only run middleware on auth-required routes
 export const config = {
   matcher: [
-    '/dashboard/:path*',
-    '/strategy/:path*',
-    '/onboarding/:path*'
+    /*
+     * Match all request paths except for the ones starting with:
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     */
+    '/((?!_next/static|_next/image|favicon.ico).*)',
   ],
-}; 
+} 

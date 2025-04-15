@@ -10,7 +10,7 @@ if (!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
   throw new Error('Missing env.NEXT_PUBLIC_SUPABASE_ANON_KEY');
 }
 
-export const createClient = () => {
+export function createClient() {
   const cookieStore = cookies();
 
   return createServerClient(
@@ -21,16 +21,16 @@ export const createClient = () => {
         get(name: string) {
           return cookieStore.get(name)?.value;
         },
-        set(name: string, value: string, options: { path?: string; maxAge?: number; domain?: string; secure?: boolean }) {
+        set(name: string, value: string, options: any) {
           try {
-            cookieStore.set(name, value, options);
+            cookieStore.set({ name, value, ...options });
           } catch (error) {
             // Handle cookie errors
           }
         },
-        remove(name: string, options: { path?: string; domain?: string }) {
+        remove(name: string, options: any) {
           try {
-            cookieStore.set(name, '', { ...options, maxAge: 0 });
+            cookieStore.set({ name, value: '', ...options });
           } catch (error) {
             // Handle cookie errors
           }
@@ -38,6 +38,6 @@ export const createClient = () => {
       },
     }
   );
-};
+}
 
 export default createClient; 

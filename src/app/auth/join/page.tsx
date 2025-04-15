@@ -1,14 +1,19 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 
 export default function JoinPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const error = searchParams.get('error');
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState({ text: '', type: '' });
+  const [message, setMessage] = useState({ 
+    text: error || '', 
+    type: error ? 'error' : '' 
+  });
   const supabase = createClientComponentClient();
 
   const handleSubmit = async (e: React.FormEvent) => {

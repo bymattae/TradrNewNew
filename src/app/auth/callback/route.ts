@@ -49,9 +49,15 @@ export async function GET(request: Request) {
       if (!error) {
         return NextResponse.redirect(new URL('/onboarding', request.url))
       }
-    } catch (error) {
-      // Handle exchange error silently
       console.error('Exchange error:', error)
+      return NextResponse.redirect(
+        new URL(`/auth/join?error=${error.message}`, request.url)
+      )
+    } catch (error: any) {
+      console.error('Exchange error:', error)
+      return NextResponse.redirect(
+        new URL(`/auth/join?error=${error.message}`, request.url)
+      )
     }
   }
 

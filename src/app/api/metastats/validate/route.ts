@@ -1,108 +1,76 @@
 import { NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_KEY!
-);
 
 export async function POST(req: Request) {
   try {
-    const { login, password, server, strategy_id, platform, hashtags, cta_title, cta_link } = await req.json();
+    const { login, password, server, platform } = await req.json();
 
     // Validate required fields
-    if (!login || !password || !server || !strategy_id || !platform) {
+    if (!login || !password || !server || !platform) {
       return NextResponse.json(
         { error: 'Missing required fields' },
         { status: 400 }
       );
     }
 
-    // Validate login format (should be numeric)
-    if (!/^\d+$/.test(login)) {
+    // Validate platform
+    if (platform !== 'mt4' && platform !== 'mt5') {
       return NextResponse.json(
-        { error: 'Login must be a numeric value' },
+        { error: 'Invalid platform. Must be mt4 or mt5' },
         { status: 400 }
       );
     }
 
-    // Validate server format
-    if (!server.includes('.')) {
+    // Get MetaAPI token from environment variables
+    const token = process.env.METAAPI_TOKEN;
+    if (!token) {
       return NextResponse.json(
-        { error: 'Invalid server format' },
-        { status: 400 }
+        { error: 'MetaAPI token not configured' },
+        { status: 500 }
       );
     }
 
-    // Get user_id from auth context
-    const { data: { user }, error: userError } = await supabase.auth.getUser();
-    if (userError || !user) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
-    }
-
-    // Update profile with hashtags and CTA
-    if (hashtags || cta_title || cta_link) {
-      const { error: profileError } = await supabase
-        .from('profiles')
-        .upsert({
-          id: user.id,
-          hashtags: hashtags || [],
-          cta_title,
-          cta_link,
-          updated_at: new Date().toISOString()
-        });
-
-      if (profileError) throw profileError;
-    }
-
-    // Update or create trading account
-    const { error: accountError } = await supabase
-      .from('trading_accounts')
-      .upsert({
-        strategy_id,
-        user_id: user.id,
+    // Call MetaAPI to validate the account
+    const response = await fetch('https://mt-provisioning-api-v1.agiliumtrade.agiliumtrade.ai/users/current/accounts', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'auth-token': token
+      },
+      body: JSON.stringify({
+        name: `${platform.toUpperCase()} Account`,
+        type: 'cloud',
         login,
+        password,
         server,
         platform,
-        last_updated: new Date().toISOString()
-      });
+        magic: 0,
+        connectionStatus: 'disconnected'
+      })
+    });
 
-    if (accountError) throw accountError;
+    const data = await response.json();
 
-    // Get cached metrics
-    const { data: cachedMetrics } = await supabase
-      .from('trading_stats')
-      .select('*')
-      .eq('strategy_id', strategy_id)
-      .single();
+    if (!response.ok) {
+      return NextResponse.json(
+        { error: data.message || 'Failed to validate account' },
+        { status: response.status }
+      );
+    }
 
     return NextResponse.json({
       success: true,
-      strategy_id,
       account: {
+        id: data._id,
         login,
         server,
         platform
-      },
-      profile: {
-        hashtags,
-        cta_title,
-        cta_link
-      },
-      metrics: {
-        profitPercentage: cachedMetrics?.profit_percentage || 0,
-        winRate: cachedMetrics?.win_rate || 0,
-        totalTrades: cachedMetrics?.total_trades || 0
       }
     });
 
   } catch (error: any) {
-    console.error('Validation Error:', error);
+    console.error('Error validating MetaAPI account:', error);
     return NextResponse.json(
-      { error: error.message || 'Failed to validate credentials' },
+      { error: error.message || 'Internal server error' },
       { status: 500 }
     );
   }

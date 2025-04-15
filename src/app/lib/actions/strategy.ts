@@ -1,4 +1,4 @@
-'use client';
+'use server';
 
 import { createClient } from '../supabase/server'
 import { StrategyInsert } from '@/lib/types/supabase'

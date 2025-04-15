@@ -18,19 +18,44 @@ export function useAuth() {
     }
   }, [supabase.auth])
 
-  const signInWithGoogle = async () => {
+  const signInWithEmail = async (email: string, password: string) => {
     try {
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password
+      })
+      if (error) throw error
+    } catch (error) {
+      console.error('Error signing in with email:', error)
+      throw error
+    }
+  }
+
+  const signUpWithEmail = async (email: string, password: string) => {
+    try {
+      const { error } = await supabase.auth.signUp({
+        email,
+        password,
         options: {
-          redirectTo: `${window.location.origin}/auth/callback`
+          emailRedirectTo: `${window.location.origin}/auth/callback`
         }
       })
       if (error) throw error
     } catch (error) {
-      console.error('Error signing in with Google:', error)
+      console.error('Error signing up with email:', error)
+      throw error
     }
   }
 
-  return { user, loading, signInWithGoogle }
+  const signOut = async () => {
+    try {
+      const { error } = await supabase.auth.signOut()
+      if (error) throw error
+    } catch (error) {
+      console.error('Error signing out:', error)
+      throw error
+    }
+  }
+
+  return { user, loading, signInWithEmail, signUpWithEmail, signOut }
 }

@@ -35,7 +35,15 @@ const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 /**
  * Creates a new strategy and returns the generated strategy_id
  */
-export async function createStrategy(title: string, description: string, hashtags: string[]) {
+export async function createStrategy({
+  title,
+  description,
+  hashtags
+}: {
+  title: string;
+  description: string;
+  hashtags: string[];
+}) {
   try {
     const cookieStore = cookies();
     const supabase = createClient(supabaseUrl, supabaseKey, {

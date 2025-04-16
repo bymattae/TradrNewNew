@@ -34,7 +34,7 @@ export async function GET(request: Request) {
       new URL(profile ? '/dashboard' : '/onboarding', request.url)
     )
 
-    // Set the Supabase cookies
+    // Set the Supabase cookies with proper options
     response.cookies.set('sb-access-token', data.session.access_token, {
       path: '/',
       httpOnly: true,

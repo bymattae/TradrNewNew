@@ -3,6 +3,7 @@ import { NextResponse, type NextRequest } from 'next/server'
 
 export async function middleware(request: NextRequest) {
   const requestUrl = new URL(request.url)
+  const path = request.nextUrl.pathname
 
   // Create response early to handle cookie setting
   let response = NextResponse.next({
@@ -10,9 +11,6 @@ export async function middleware(request: NextRequest) {
       headers: request.headers,
     },
   })
-
-  // Get the current pathname
-  const path = request.nextUrl.pathname
 
   // Public paths that don't require session checks
   const publicPaths = [
@@ -43,7 +41,7 @@ export async function middleware(request: NextRequest) {
             name,
             value,
             ...options,
-            sameSite: options.sameSite as 'lax' | 'strict' | 'none' | undefined
+            sameSite: 'lax'
           })
         },
         remove(name: string, options: CookieOptions) {
@@ -51,7 +49,7 @@ export async function middleware(request: NextRequest) {
             name,
             value: '',
             ...options,
-            sameSite: options.sameSite as 'lax' | 'strict' | 'none' | undefined
+            sameSite: 'lax'
           })
         },
       },
@@ -67,18 +65,11 @@ export async function middleware(request: NextRequest) {
       return NextResponse.redirect(new URL('/auth/join', requestUrl))
     }
 
-    // Special handling for onboarding - allow if we have a session
-    if (path === '/onboarding') {
-      if (session) {
-        return response
-      }
-      return NextResponse.redirect(new URL('/auth/join', requestUrl))
-    }
-
-    // Protected routes - require auth
+    // If no session and trying to access protected route, redirect to join
     if (!session && (
       path.startsWith('/dashboard') ||
-      path.startsWith('/strategy/') // Only protect nested strategy routes
+      path.startsWith('/onboarding') ||
+      path.startsWith('/strategy/')
     )) {
       return NextResponse.redirect(new URL('/auth/join', requestUrl))
     }

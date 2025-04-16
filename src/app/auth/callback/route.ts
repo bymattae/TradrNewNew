@@ -47,12 +47,6 @@ export async function GET(request: Request) {
     response.cookies.set('sb-access-token', data.session.access_token, cookieOptions)
     response.cookies.set('sb-refresh-token', data.session.refresh_token!, cookieOptions)
 
-    // Set user cookie for client-side access
-    response.cookies.set('sb-user', JSON.stringify(data.session.user), {
-      ...cookieOptions,
-      httpOnly: false // Allow client-side access
-    })
-
     return response
 
   } catch (error) {

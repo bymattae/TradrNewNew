@@ -4,8 +4,6 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 
-const VERCEL_URL = process.env.NEXT_PUBLIC_VERCEL_URL || 'https://tradr-v1.vercel.app';
-
 export default function JoinPage() {
   const router = useRouter();
   const [email, setEmail] = useState('');
@@ -22,11 +20,10 @@ export default function JoinPage() {
     setMessage({ text: '', type: '' });
 
     try {
-      // Always send magic link regardless of user status
       const { error } = await supabase.auth.signInWithOtp({
         email,
         options: {
-          emailRedirectTo: `${VERCEL_URL}/auth/callback`,
+          emailRedirectTo: `${window.location.origin}/auth/callback`,
         },
       });
 

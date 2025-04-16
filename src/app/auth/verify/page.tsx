@@ -13,38 +13,23 @@ export default function VerifyPage() {
       try {
         const { data: { session }, error } = await supabase.auth.getSession();
         
-        if (error) throw error;
-        
-        if (session) {
-          // Get user verification status
-          const { data: status, error: statusError } = await supabase
-            .from('user_status')
-            .select('email_verified')
-            .eq('user_id', session.user.id)
-            .single();
-
-          if (statusError) {
-            console.error('Error checking verification status:', statusError);
-          }
-
-          // Check if user has a profile
-          const { data: profile } = await supabase
-            .from('profiles')
-            .select('*')
-            .eq('id', session.user.id)
-            .single();
-
-          // Show success message briefly before redirecting
-          setTimeout(() => {
-            // If no profile exists, redirect to onboarding
-            if (!profile) {
-              router.push('/onboarding');
-            } else {
-              // If profile exists, redirect to dashboard
-              router.push('/dashboard');
-            }
-          }, 2000);
+        if (error) {
+          console.error('Session error:', error);
+          router.push('/auth/join');
+          return;
         }
+        
+        if (!session) {
+          console.error('No session found');
+          router.push('/auth/join');
+          return;
+        }
+
+        // Show success message briefly before redirecting
+        setTimeout(() => {
+          router.push('/onboarding');
+        }, 2000);
+        
       } catch (error) {
         console.error('Error:', error);
         router.push('/auth/join');

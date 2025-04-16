@@ -86,6 +86,25 @@ export default function OnboardingPage() {
         throw new Error('No user found');
       }
 
+      // Log the user data
+      console.log('User data:', {
+        id: user.id,
+        email: user.email
+      });
+
+      // First check if profile already exists
+      const { data: existingProfile, error: profileError } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', user.id)
+        .single();
+
+      if (profileError) {
+        console.log('Error checking existing profile:', profileError);
+      }
+
+      console.log('Existing profile:', existingProfile);
+
       console.log('Submitting profile with data:', {
         id: user.id,
         username,
@@ -94,7 +113,7 @@ export default function OnboardingPage() {
         avatar_url: avatarUrl,
       });
 
-      const { error } = await supabase
+      const { data: newProfile, error } = await supabase
         .from('profiles')
         .upsert({
           id: user.id,
@@ -103,14 +122,16 @@ export default function OnboardingPage() {
           tags,
           avatar_url: avatarUrl,
           updated_at: new Date().toISOString(),
-        });
+        })
+        .select()
+        .single();
 
       if (error) {
         console.error('Error upserting profile:', error);
         throw error;
       }
 
-      console.log('Profile created successfully!');
+      console.log('Profile created successfully:', newProfile);
       router.push('/dashboard');
     } catch (error) {
       console.error('Error:', error);

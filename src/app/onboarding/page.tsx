@@ -1,9 +1,10 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import Image from 'next/image';
+import { toast } from 'sonner';
 
 export default function OnboardingPage() {
   const router = useRouter();
@@ -17,10 +18,78 @@ export default function OnboardingPage() {
   const [uploading, setUploading] = useState(false);
   const [isEditingUsername, setIsEditingUsername] = useState(false);
   const [tempUsername, setTempUsername] = useState('');
+  const [isSaving, setIsSaving] = useState(false);
+  const [autoSaveStatus, setAutoSaveStatus] = useState<'saved' | 'saving' | 'error'>('saved');
   const fileInputRef = useRef<HTMLInputElement>(null);
   const supabase = createClientComponentClient();
-  const [isSavingBio, setIsSavingBio] = useState(false);
-  const [isSavingUsername, setIsSavingUsername] = useState(false);
+  const autoSaveTimeoutRef = useRef<NodeJS.Timeout>();
+
+  // Load existing profile data
+  useEffect(() => {
+    const loadProfile = async () => {
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) return;
+
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', user.id)
+          .single();
+
+        if (profile) {
+          setUsername(profile.username || '');
+          setBio(profile.bio || '');
+          setTags(profile.tags || []);
+          setAvatarUrl(profile.avatar_url || '');
+        }
+      } catch (error) {
+        console.error('Error loading profile:', error);
+      }
+    };
+
+    loadProfile();
+  }, [supabase]);
+
+  // Auto-save functionality
+  useEffect(() => {
+    if (autoSaveTimeoutRef.current) {
+      clearTimeout(autoSaveTimeoutRef.current);
+    }
+
+    if (username || bio || tags.length > 0 || avatarUrl) {
+      setAutoSaveStatus('saving');
+      autoSaveTimeoutRef.current = setTimeout(async () => {
+        try {
+          const { data: { user } } = await supabase.auth.getUser();
+          if (!user) throw new Error('No user found');
+
+          const { error } = await supabase
+            .from('profiles')
+            .upsert({
+              id: user.id,
+              username,
+              bio,
+              tags,
+              avatar_url: avatarUrl,
+              updated_at: new Date().toISOString(),
+            });
+
+          if (error) throw error;
+          setAutoSaveStatus('saved');
+        } catch (error) {
+          console.error('Auto-save error:', error);
+          setAutoSaveStatus('error');
+        }
+      }, 2000); // Auto-save after 2 seconds of no changes
+    }
+
+    return () => {
+      if (autoSaveTimeoutRef.current) {
+        clearTimeout(autoSaveTimeoutRef.current);
+      }
+    };
+  }, [username, bio, tags, avatarUrl, supabase]);
 
   const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     try {
@@ -47,6 +116,7 @@ export default function OnboardingPage() {
       setAvatarUrl(publicUrl);
     } catch (error) {
       console.error('Error uploading avatar:', error);
+      toast.error('Failed to upload avatar');
     } finally {
       setUploading(false);
     }
@@ -71,49 +141,13 @@ export default function OnboardingPage() {
     }
   };
 
-  const handleSubmit = async () => {
+  const handleSave = async () => {
     try {
-      console.log('Starting profile submission...');
-      const { data: { user }, error: userError } = await supabase.auth.getUser();
-      
-      if (userError) {
-        console.error('Error getting user:', userError);
-        throw userError;
-      }
-      
-      if (!user) {
-        console.error('No user found');
-        throw new Error('No user found');
-      }
+      setIsSaving(true);
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error('No user found');
 
-      // Log the user data
-      console.log('User data:', {
-        id: user.id,
-        email: user.email
-      });
-
-      // First check if profile already exists
-      const { data: existingProfile, error: profileError } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', user.id)
-        .single();
-
-      if (profileError) {
-        console.log('Error checking existing profile:', profileError);
-      }
-
-      console.log('Existing profile:', existingProfile);
-
-      console.log('Submitting profile with data:', {
-        id: user.id,
-        username,
-        bio,
-        tags,
-        avatar_url: avatarUrl,
-      });
-
-      const { data: newProfile, error } = await supabase
+      const { error } = await supabase
         .from('profiles')
         .upsert({
           id: user.id,
@@ -122,20 +156,21 @@ export default function OnboardingPage() {
           tags,
           avatar_url: avatarUrl,
           updated_at: new Date().toISOString(),
-        })
-        .select()
-        .single();
+        });
 
-      if (error) {
-        console.error('Error upserting profile:', error);
-        throw error;
-      }
-
-      console.log('Profile created successfully:', newProfile);
-      router.push('/dashboard');
+      if (error) throw error;
+      toast.success('Profile saved successfully');
     } catch (error) {
-      console.error('Error:', error);
+      console.error('Error saving profile:', error);
+      toast.error('Failed to save profile');
+    } finally {
+      setIsSaving(false);
     }
+  };
+
+  const handleFinish = async () => {
+    await handleSave();
+    router.push('/dashboard');
   };
 
   const handleEditUsername = () => {
@@ -144,12 +179,11 @@ export default function OnboardingPage() {
   };
 
   const handleSaveUsername = async () => {
-    setIsSavingUsername(true);
+    setIsSaving(true);
     setUsername(tempUsername);
     setIsEditingUsername(false);
-    // Simulate a small delay for the animation
-    await new Promise(resolve => setTimeout(resolve, 800));
-    setIsSavingUsername(false);
+    await handleSave();
+    setIsSaving(false);
   };
 
   const handleEditBio = () => {
@@ -158,16 +192,45 @@ export default function OnboardingPage() {
   };
 
   const handleSaveBio = async () => {
-    setIsSavingBio(true);
+    setIsSaving(true);
     setBio(tempBio);
     setIsEditingBio(false);
-    // Simulate a small delay for the animation
-    await new Promise(resolve => setTimeout(resolve, 800));
-    setIsSavingBio(false);
+    await handleSave();
+    setIsSaving(false);
   };
 
   return (
     <div className="h-[100dvh] bg-black text-white flex flex-col">
+      {/* Header with save status and button */}
+      <div className="fixed top-0 left-0 right-0 flex items-center justify-between px-4 py-3 bg-black/50 backdrop-blur-lg border-b border-zinc-800/50">
+        <div className="flex items-center gap-2">
+          {autoSaveStatus === 'saving' && (
+            <span className="text-zinc-400 text-sm">Saving...</span>
+          )}
+          {autoSaveStatus === 'saved' && (
+            <span className="text-zinc-400 text-sm">All changes saved</span>
+          )}
+          {autoSaveStatus === 'error' && (
+            <span className="text-red-400 text-sm">Failed to save</span>
+          )}
+        </div>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={handleSave}
+            disabled={isSaving || autoSaveStatus === 'saving'}
+            className="px-4 py-1.5 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-black disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {isSaving ? 'Saving...' : 'Save'}
+          </button>
+          <button
+            onClick={handleFinish}
+            className="px-4 py-1.5 text-sm font-medium text-white bg-purple-600 rounded-lg hover:bg-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-black"
+          >
+            Finish
+          </button>
+        </div>
+      </div>
+
       {/* Progress bar */}
       <div className="fixed top-0 left-0 right-0 h-0.5 bg-zinc-800">
         <div className="h-full bg-indigo-500 w-[25%] transition-all duration-300"></div>
@@ -187,15 +250,15 @@ export default function OnboardingPage() {
             </button>
             <button
               onClick={handleSaveBio}
-              disabled={isSavingBio}
+              disabled={isSaving}
               className={`relative text-sm font-medium transition-all duration-200 ${
-                isSavingBio ? 'w-8' : 'text-indigo-400 hover:text-indigo-300'
+                isSaving ? 'w-8' : 'text-indigo-400 hover:text-indigo-300'
               }`}
             >
-              <span className={`transition-all duration-200 ${isSavingBio ? 'opacity-0' : 'opacity-100'}`}>
+              <span className={`transition-all duration-200 ${isSaving ? 'opacity-0' : 'opacity-100'}`}>
                 Save
               </span>
-              {isSavingBio && (
+              {isSaving && (
                 <span className="absolute inset-0 flex items-center justify-center">
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor" 
                     className="w-5 h-5 text-emerald-500 animate-[checkmark_0.2s_ease-in-out_both]"
@@ -244,15 +307,15 @@ export default function OnboardingPage() {
             </button>
             <button
               onClick={handleSaveUsername}
-              disabled={isSavingUsername}
+              disabled={isSaving}
               className={`relative text-sm font-medium transition-all duration-200 ${
-                isSavingUsername ? 'w-8' : 'text-indigo-400 hover:text-indigo-300'
+                isSaving ? 'w-8' : 'text-indigo-400 hover:text-indigo-300'
               }`}
             >
-              <span className={`transition-all duration-200 ${isSavingUsername ? 'opacity-0' : 'opacity-100'}`}>
+              <span className={`transition-all duration-200 ${isSaving ? 'opacity-0' : 'opacity-100'}`}>
                 Save
               </span>
-              {isSavingUsername && (
+              {isSaving && (
                 <span className="absolute inset-0 flex items-center justify-center">
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor" 
                     className="w-5 h-5 text-emerald-500 animate-[checkmark_0.2s_ease-in-out_both]"
@@ -498,7 +561,7 @@ export default function OnboardingPage() {
         {/* Floating Continue button */}
         <div className="sticky bottom-0 left-0 right-0 p-4 border-t border-zinc-800/50 bg-black/80 backdrop-blur-xl max-w-2xl mx-auto w-full">
           <button
-            onClick={handleSubmit}
+            onClick={handleSave}
             className="w-full py-3 bg-indigo-600 text-white font-medium rounded-xl hover:bg-indigo-500 transition-all flex items-center justify-center gap-2"
           >
             <span>Continue</span>

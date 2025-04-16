@@ -41,7 +41,7 @@ export async function middleware(request: NextRequest) {
             name,
             value,
             ...options,
-            sameSite: 'lax'
+            sameSite: 'lax' as const
           })
         },
         remove(name: string, options: CookieOptions) {
@@ -49,7 +49,7 @@ export async function middleware(request: NextRequest) {
             name,
             value: '',
             ...options,
-            sameSite: 'lax'
+            sameSite: 'lax' as const
           })
         },
       },
@@ -72,6 +72,16 @@ export async function middleware(request: NextRequest) {
       path.startsWith('/strategy/')
     )) {
       return NextResponse.redirect(new URL('/auth/join', requestUrl))
+    }
+
+    // If we have a session, ensure the user cookie is set
+    if (session) {
+      response.cookies.set('sb-user', JSON.stringify(session.user), {
+        path: '/',
+        httpOnly: false,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax' as const
+      })
     }
 
     return response

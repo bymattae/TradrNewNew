@@ -1,5 +1,6 @@
 import { createClient } from '@/app/lib/supabase/server'
 import { NextResponse } from 'next/server'
+import { cookies } from 'next/headers'
 
 export const dynamic = 'force-dynamic'
 
@@ -34,19 +35,22 @@ export async function GET(request: Request) {
       new URL(profile ? '/dashboard' : '/onboarding', request.url)
     )
 
-    // Set the Supabase cookies with proper options
-    response.cookies.set('sb-access-token', data.session.access_token, {
+    // Set all required cookies
+    const cookieOptions = {
       path: '/',
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax'
-    })
+      sameSite: 'lax' as const
+    }
 
-    response.cookies.set('sb-refresh-token', data.session.refresh_token!, {
-      path: '/',
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax'
+    // Set Supabase cookies
+    response.cookies.set('sb-access-token', data.session.access_token, cookieOptions)
+    response.cookies.set('sb-refresh-token', data.session.refresh_token!, cookieOptions)
+
+    // Set user cookie for client-side access
+    response.cookies.set('sb-user', JSON.stringify(data.session.user), {
+      ...cookieOptions,
+      httpOnly: false // Allow client-side access
     })
 
     return response

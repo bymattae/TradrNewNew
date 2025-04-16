@@ -29,22 +29,41 @@ export async function GET(request: Request) {
       .eq('id', data.session.user.id)
       .single()
 
-    // Create response with session cookie
+    // Create response with redirect
     const response = NextResponse.redirect(
       new URL(profile ? '/dashboard' : '/onboarding', request.url)
     )
 
     // Set cookie expiry to match session expiry
     const sessionExpiresIn = new Date(data.session.expires_at! * 1000)
-    
-    // Set the auth cookie
-    response.cookies.set('sb-token', data.session.access_token, {
+
+    // Set the Supabase cookies
+    response.cookies.set('sb-access-token', data.session.access_token, {
       path: '/',
       expires: sessionExpiresIn,
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax'
     })
+
+    response.cookies.set('sb-refresh-token', data.session.refresh_token!, {
+      path: '/',
+      expires: sessionExpiresIn,
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax'
+    })
+
+    // Also set the provider token if it exists
+    if (data.session.provider_token) {
+      response.cookies.set('sb-provider-token', data.session.provider_token, {
+        path: '/',
+        expires: sessionExpiresIn,
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax'
+      })
+    }
 
     return response
 

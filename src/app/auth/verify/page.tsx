@@ -16,9 +16,22 @@ export default function VerifyPage() {
         if (error) throw error;
         
         if (session) {
+          // Check if user has a profile
+          const { data: profile } = await supabase
+            .from('profiles')
+            .select('*')
+            .eq('id', session.user.id)
+            .single();
+
           // Show success message briefly before redirecting
           setTimeout(() => {
-            router.push('/onboarding');
+            // If no profile exists, redirect to onboarding
+            if (!profile) {
+              router.push('/onboarding');
+            } else {
+              // If profile exists, redirect to dashboard
+              router.push('/dashboard');
+            }
           }, 2000);
         }
       } catch (error) {
@@ -28,7 +41,7 @@ export default function VerifyPage() {
     };
 
     handleAuth();
-  }, [router, supabase.auth]);
+  }, [router, supabase]);
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-black px-4 py-12">

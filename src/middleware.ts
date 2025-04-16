@@ -14,11 +14,8 @@ export async function middleware(request: NextRequest) {
 
   // Public paths that don't require session checks
   const publicPaths = [
-    '/strategy',
     '/auth/join',
-    '/auth/login',
     '/auth/callback',
-    '/auth/verify',
     '/auth/magic-link-sent'
   ]
 
@@ -66,22 +63,21 @@ export async function middleware(request: NextRequest) {
     }
 
     // If no session and trying to access protected route, redirect to join
-    if (!session && (
-      path.startsWith('/dashboard') ||
-      path.startsWith('/onboarding') ||
-      path.startsWith('/strategy/')
-    )) {
+    if (!session) {
       return NextResponse.redirect(new URL('/auth/join', requestUrl))
     }
 
-    // If we have a session, ensure the user cookie is set
-    if (session) {
-      response.cookies.set('sb-user', JSON.stringify(session.user), {
-        path: '/',
-        httpOnly: false,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax' as const
-      })
+    // If user has a profile and tries to access onboarding, redirect to dashboard
+    if (path === '/onboarding') {
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', session.user.id)
+        .single()
+
+      if (profile) {
+        return NextResponse.redirect(new URL('/dashboard', requestUrl))
+      }
     }
 
     return response

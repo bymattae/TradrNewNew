@@ -23,16 +23,9 @@ export async function GET(request: Request) {
       return NextResponse.redirect(new URL('/auth/join', request.url))
     }
 
-    // Get the user's profile
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('*')
-      .eq('id', data.session.user.id)
-      .single()
-
-    // Create response with redirect
+    // Create response with redirect to onboarding
     const response = NextResponse.redirect(
-      new URL(profile ? '/dashboard' : '/onboarding', request.url)
+      new URL('/onboarding', request.url)
     )
 
     // Set all required cookies

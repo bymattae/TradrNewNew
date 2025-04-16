@@ -3,16 +3,39 @@
 import { useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { signInWithGithub } from '@/lib/auth/github';
+import { useAuth } from '@/app/lib/contexts/AuthContext';
 
 export default function JoinPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const error = searchParams.get('error');
   const [loading, setLoading] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [message, setMessage] = useState({ 
     text: error || '', 
     type: error ? 'error' : '' 
   });
+  const { signInWithEmail, signUpWithEmail } = useAuth();
+
+  const handleEmailSignIn = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setMessage({ text: '', type: '' });
+
+    try {
+      await signInWithEmail(email, password);
+      router.push('/');
+    } catch (error: any) {
+      console.error('Error:', error);
+      setMessage({
+        text: error.message || 'Failed to sign in. Please try again.',
+        type: 'error'
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleGithubSignIn = async () => {
     setLoading(true);
@@ -48,7 +71,61 @@ export default function JoinPage() {
           </div>
         )}
 
-        <div className="mt-8">
+        <form className="mt-8 space-y-6" onSubmit={handleEmailSignIn}>
+          <div className="space-y-4">
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                Email address
+              </label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                autoComplete="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+              />
+            </div>
+            <div>
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                Password
+              </label>
+              <input
+                id="password"
+                name="password"
+                type="password"
+                autoComplete="current-password"
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+              />
+            </div>
+          </div>
+
+          <div>
+            <button
+              type="submit"
+              disabled={loading}
+              className="group relative flex w-full justify-center rounded-md bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:opacity-50"
+            >
+              {loading ? 'Signing in...' : 'Sign in with Email'}
+            </button>
+          </div>
+        </form>
+
+        <div className="relative">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-gray-300" />
+          </div>
+          <div className="relative flex justify-center text-sm">
+            <span className="bg-gray-50 px-2 text-gray-500">Or continue with</span>
+          </div>
+        </div>
+
+        <div>
           <button
             onClick={handleGithubSignIn}
             disabled={loading}

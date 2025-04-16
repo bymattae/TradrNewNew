@@ -9,8 +9,11 @@ export default function VerifyPage() {
   const supabase = createClientComponentClient();
 
   useEffect(() => {
+    let redirectTimer: NodeJS.Timeout;
+
     const handleAuth = async () => {
       try {
+        console.log('Checking session...');
         const { data: { session }, error } = await supabase.auth.getSession();
         
         if (error) {
@@ -25,9 +28,12 @@ export default function VerifyPage() {
           return;
         }
 
-        // Show success message briefly before redirecting
-        setTimeout(() => {
-          router.push('/onboarding');
+        console.log('Session found, setting up redirect timer...');
+        
+        // Force redirect to onboarding after 2 seconds
+        redirectTimer = setTimeout(() => {
+          console.log('Redirecting to onboarding...');
+          window.location.href = '/onboarding';
         }, 2000);
         
       } catch (error) {
@@ -37,6 +43,13 @@ export default function VerifyPage() {
     };
 
     handleAuth();
+
+    // Cleanup timer on unmount
+    return () => {
+      if (redirectTimer) {
+        clearTimeout(redirectTimer);
+      }
+    };
   }, [router, supabase]);
 
   return (

@@ -38,25 +38,36 @@ export async function middleware(request: NextRequest) {
 
   const { data: { session } } = await supabase.auth.getSession()
 
-  // Public routes that don't require auth
-  const publicRoutes = ['/strategy', '/auth/verify', '/auth/callback']
-  if (publicRoutes.some(route => request.nextUrl.pathname === route)) {
-    return response
-  }
+  // Get the current pathname
+  const path = request.nextUrl.pathname
 
-  // Auth routes - redirect to dashboard if already logged in
-  const authRoutes = ['/auth/join', '/auth/login']
-  if (session && authRoutes.some(route => request.nextUrl.pathname === route)) {
-    return NextResponse.redirect(new URL('/dashboard', request.url))
+  // Auth-related paths that should always be accessible
+  const publicPaths = [
+    '/strategy',
+    '/auth/verify',
+    '/auth/callback',
+    '/auth/join',
+    '/auth/login',
+    '/auth/magic-link-sent'
+  ]
+
+  // If the path is public, allow access
+  if (publicPaths.includes(path)) {
+    return response
   }
 
   // Protected routes - require auth
   if (!session && (
-    request.nextUrl.pathname.startsWith('/dashboard') ||
-    request.nextUrl.pathname.startsWith('/strategy/') || // Only protect nested strategy routes
-    request.nextUrl.pathname.startsWith('/onboarding')
+    path.startsWith('/dashboard') ||
+    path.startsWith('/strategy/') || // Only protect nested strategy routes
+    path.startsWith('/onboarding')
   )) {
     return NextResponse.redirect(new URL('/auth/join', request.url))
+  }
+
+  // If user is logged in and tries to access auth pages, redirect to dashboard
+  if (session && (path === '/auth/join' || path === '/auth/login')) {
+    return NextResponse.redirect(new URL('/dashboard', request.url))
   }
 
   return response

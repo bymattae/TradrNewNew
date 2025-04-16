@@ -16,7 +16,8 @@ export async function middleware(request: NextRequest) {
   const publicPaths = [
     '/auth/join',
     '/auth/callback',
-    '/auth/magic-link-sent'
+    '/auth/magic-link-sent',
+    '/onboarding'  // Make onboarding public to prevent redirect loops
   ]
 
   // If it's a public path, allow access
@@ -57,33 +58,15 @@ export async function middleware(request: NextRequest) {
     // Get session
     const { data: { session }, error } = await supabase.auth.getSession()
 
-    if (error) {
-      console.error('Session error:', error)
-      return NextResponse.redirect(new URL('/onboarding', requestUrl))
-    }
-
-    // If no session and trying to access protected route, redirect to onboarding
+    // For all protected routes (not public), require a session
     if (!session) {
-      return NextResponse.redirect(new URL('/onboarding', requestUrl))
-    }
-
-    // If user has a profile and tries to access onboarding, redirect to dashboard
-    if (path === '/onboarding') {
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', session.user.id)
-        .single()
-
-      if (profile) {
-        return NextResponse.redirect(new URL('/dashboard', requestUrl))
-      }
+      return NextResponse.redirect(new URL('/auth/join', requestUrl))
     }
 
     return response
   } catch (error) {
     console.error('Middleware error:', error)
-    return NextResponse.redirect(new URL('/onboarding', requestUrl))
+    return NextResponse.redirect(new URL('/auth/join', requestUrl))
   }
 }
 

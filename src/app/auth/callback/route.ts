@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server'
+import { createClient } from '@/app/lib/supabase/server'
 import { NextResponse } from 'next/server'
 
 export const dynamic = 'force-dynamic'
@@ -22,7 +22,7 @@ export async function GET(request: Request) {
       return NextResponse.redirect(new URL('/auth/join', request.url))
     }
 
-    // Use the session we just got from the exchange
+    // Get the user's profile
     const { data: profile } = await supabase
       .from('profiles')
       .select('*')
@@ -34,13 +34,9 @@ export async function GET(request: Request) {
       new URL(profile ? '/dashboard' : '/onboarding', request.url)
     )
 
-    // Set cookie expiry to match session expiry
-    const sessionExpiresIn = new Date(data.session.expires_at! * 1000)
-
     // Set the Supabase cookies
     response.cookies.set('sb-access-token', data.session.access_token, {
       path: '/',
-      expires: sessionExpiresIn,
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax'
@@ -48,22 +44,10 @@ export async function GET(request: Request) {
 
     response.cookies.set('sb-refresh-token', data.session.refresh_token!, {
       path: '/',
-      expires: sessionExpiresIn,
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax'
     })
-
-    // Also set the provider token if it exists
-    if (data.session.provider_token) {
-      response.cookies.set('sb-provider-token', data.session.provider_token, {
-        path: '/',
-        expires: sessionExpiresIn,
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax'
-      })
-    }
 
     return response
 

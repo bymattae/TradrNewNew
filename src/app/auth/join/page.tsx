@@ -22,10 +22,11 @@ export default function JoinPage() {
     setMessage({ text: '', type: '' });
 
     try {
+      // Always send magic link regardless of user status
       const { error } = await supabase.auth.signInWithOtp({
         email,
         options: {
-          emailRedirectTo: `${VERCEL_URL}/auth/verify`,
+          emailRedirectTo: `${VERCEL_URL}/auth/callback`,
         },
       });
 

@@ -41,18 +41,13 @@ export async function middleware(request: NextRequest) {
   // Get the current pathname
   const path = request.nextUrl.pathname
 
-  // Auth-related paths that should always be accessible
-  const publicPaths = [
-    '/strategy',
-    '/auth/verify',
-    '/auth/callback',
-    '/auth/join',
-    '/auth/login',
-    '/auth/magic-link-sent'
-  ]
+  // Allow all auth-related paths
+  if (path.startsWith('/auth/')) {
+    return response
+  }
 
-  // If the path is public, allow access
-  if (publicPaths.includes(path)) {
+  // Allow public paths
+  if (path === '/strategy') {
     return response
   }
 
@@ -63,11 +58,6 @@ export async function middleware(request: NextRequest) {
     path.startsWith('/onboarding')
   )) {
     return NextResponse.redirect(new URL('/auth/join', request.url))
-  }
-
-  // If user is logged in and tries to access auth pages, redirect to dashboard
-  if (session && (path === '/auth/join' || path === '/auth/login')) {
-    return NextResponse.redirect(new URL('/dashboard', request.url))
   }
 
   return response

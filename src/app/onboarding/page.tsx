@@ -73,8 +73,26 @@ export default function OnboardingPage() {
 
   const handleSubmit = async () => {
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error('No user found');
+      console.log('Starting profile submission...');
+      const { data: { user }, error: userError } = await supabase.auth.getUser();
+      
+      if (userError) {
+        console.error('Error getting user:', userError);
+        throw userError;
+      }
+      
+      if (!user) {
+        console.error('No user found');
+        throw new Error('No user found');
+      }
+
+      console.log('Submitting profile with data:', {
+        id: user.id,
+        username,
+        bio,
+        tags,
+        avatar_url: avatarUrl,
+      });
 
       const { error } = await supabase
         .from('profiles')
@@ -87,7 +105,12 @@ export default function OnboardingPage() {
           updated_at: new Date().toISOString(),
         });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error upserting profile:', error);
+        throw error;
+      }
+
+      console.log('Profile created successfully!');
       router.push('/dashboard');
     } catch (error) {
       console.error('Error:', error);
@@ -102,6 +125,7 @@ export default function OnboardingPage() {
   const handleSaveUsername = async () => {
     setIsSavingUsername(true);
     setUsername(tempUsername);
+    setIsEditingUsername(false);
     // Simulate a small delay for the animation
     await new Promise(resolve => setTimeout(resolve, 800));
     setIsSavingUsername(false);
@@ -115,6 +139,7 @@ export default function OnboardingPage() {
   const handleSaveBio = async () => {
     setIsSavingBio(true);
     setBio(tempBio);
+    setIsEditingBio(false);
     // Simulate a small delay for the animation
     await new Promise(resolve => setTimeout(resolve, 800));
     setIsSavingBio(false);

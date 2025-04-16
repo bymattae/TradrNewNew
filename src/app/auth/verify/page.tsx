@@ -16,6 +16,17 @@ export default function VerifyPage() {
         if (error) throw error;
         
         if (session) {
+          // Get user verification status
+          const { data: status, error: statusError } = await supabase
+            .from('user_status')
+            .select('email_verified')
+            .eq('user_id', session.user.id)
+            .single();
+
+          if (statusError) {
+            console.error('Error checking verification status:', statusError);
+          }
+
           // Check if user has a profile
           const { data: profile } = await supabase
             .from('profiles')

@@ -38,11 +38,19 @@ export async function middleware(request: NextRequest) {
 
   const { data: { session } } = await supabase.auth.getSession()
 
-  // Allow access to the main strategy page
-  if (request.nextUrl.pathname === '/strategy') {
+  // Public routes that don't require auth
+  const publicRoutes = ['/strategy', '/auth/verify', '/auth/callback']
+  if (publicRoutes.some(route => request.nextUrl.pathname === route)) {
     return response
   }
 
+  // Auth routes - redirect to dashboard if already logged in
+  const authRoutes = ['/auth/join', '/auth/login']
+  if (session && authRoutes.some(route => request.nextUrl.pathname === route)) {
+    return NextResponse.redirect(new URL('/dashboard', request.url))
+  }
+
+  // Protected routes - require auth
   if (!session && (
     request.nextUrl.pathname.startsWith('/dashboard') ||
     request.nextUrl.pathname.startsWith('/strategy/') || // Only protect nested strategy routes

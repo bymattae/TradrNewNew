@@ -8,7 +8,6 @@ export async function GET(request: Request) {
   const code = requestUrl.searchParams.get('code')
   const error = requestUrl.searchParams.get('error')
   const error_description = requestUrl.searchParams.get('error_description')
-  const returnTo = requestUrl.searchParams.get('returnTo') || '/onboarding'
 
   if (error) {
     return NextResponse.redirect(
@@ -22,16 +21,36 @@ export async function GET(request: Request) {
     try {
       const { error } = await supabase.auth.exchangeCodeForSession(code)
       if (!error) {
-        return NextResponse.redirect(new URL(returnTo, request.url))
+        // Get the user session
+        const { data: { session } } = await supabase.auth.getSession()
+        
+        if (session) {
+          // Check if user has a profile
+          const { data: profile } = await supabase
+            .from('profiles')
+            .select('*')
+            .eq('id', session.user.id)
+            .single()
+
+          // If no profile exists, redirect to onboarding
+          if (!profile) {
+            return NextResponse.redirect(new URL('/auth/verify', request.url))
+          }
+
+          // If profile exists, redirect to dashboard
+          return NextResponse.redirect(new URL('/dashboard', request.url))
+        }
       }
-      console.error('Exchange error:', error)
+
+      // Handle error case
+      const errorMessage = error?.message || 'An error occurred during authentication'
       return NextResponse.redirect(
-        new URL(`/auth/join?error=${error.message}`, request.url)
+        new URL(`/auth/join?error=${errorMessage}`, request.url)
       )
     } catch (error: any) {
-      console.error('Exchange error:', error)
+      const errorMessage = error?.message || 'An error occurred during authentication'
       return NextResponse.redirect(
-        new URL(`/auth/join?error=${error.message}`, request.url)
+        new URL(`/auth/join?error=${errorMessage}`, request.url)
       )
     }
   }

@@ -36,26 +36,39 @@ export async function middleware(request: NextRequest) {
     }
   )
 
-  const { data: { session } } = await supabase.auth.getSession()
-
   // Get the current pathname
   const path = request.nextUrl.pathname
 
-  // Allow all auth-related paths
-  if (path.startsWith('/auth/')) {
+  // Public paths that don't require session checks
+  const publicPaths = [
+    '/strategy',
+    '/auth/join',
+    '/auth/login',
+    '/auth/callback',
+    '/auth/verify',
+    '/auth/magic-link-sent'
+  ]
+
+  // If it's a public path, allow access
+  if (publicPaths.includes(path)) {
     return response
   }
 
-  // Allow public paths
-  if (path === '/strategy') {
-    return response
+  // For all other paths, check session
+  const { data: { session } } = await supabase.auth.getSession()
+
+  // Special handling for onboarding - allow if we have a session
+  if (path === '/onboarding') {
+    if (session) {
+      return response
+    }
+    return NextResponse.redirect(new URL('/auth/join', request.url))
   }
 
   // Protected routes - require auth
   if (!session && (
     path.startsWith('/dashboard') ||
-    path.startsWith('/strategy/') || // Only protect nested strategy routes
-    path.startsWith('/onboarding')
+    path.startsWith('/strategy/') // Only protect nested strategy routes
   )) {
     return NextResponse.redirect(new URL('/auth/join', request.url))
   }

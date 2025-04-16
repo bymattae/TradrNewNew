@@ -1,34 +1,9 @@
 'use client';
 
-import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 
-export default function VerifyPage() {
+export default function MagicLinkSentPage() {
   const router = useRouter();
-  const supabase = createClientComponentClient();
-
-  useEffect(() => {
-    const handleAuth = async () => {
-      try {
-        const { data: { session }, error } = await supabase.auth.getSession();
-        
-        if (error) throw error;
-        
-        if (session) {
-          // Show success message briefly before redirecting
-          setTimeout(() => {
-            router.push('/onboarding');
-          }, 2000);
-        }
-      } catch (error) {
-        console.error('Error:', error);
-        router.push('/auth/join');
-      }
-    };
-
-    handleAuth();
-  }, [router, supabase.auth]);
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-black px-4 py-12">
@@ -45,15 +20,15 @@ export default function VerifyPage() {
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth={2}
-                d="M5 13l4 4L19 7"
+                d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
               />
             </svg>
           </div>
           <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-white">
-            Your account is verified
+            Check your email
           </h2>
           <p className="mt-2 text-center text-sm text-gray-400">
-            Redirecting you to create your profile...
+            We&apos;ve sent you a magic link to sign in. Click the link in your email to continue.
           </p>
         </div>
       </div>

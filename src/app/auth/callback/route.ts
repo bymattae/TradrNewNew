@@ -9,7 +9,7 @@ export async function GET(request: Request) {
   const code = requestUrl.searchParams.get('code')
 
   if (!code) {
-    return NextResponse.redirect(new URL('/auth/join', request.url))
+    return NextResponse.redirect(new URL('/onboarding', request.url))
   }
 
   try {
@@ -20,7 +20,7 @@ export async function GET(request: Request) {
 
     if (error || !data.session) {
       console.error('Auth error:', error)
-      return NextResponse.redirect(new URL('/auth/join', request.url))
+      return NextResponse.redirect(new URL('/onboarding', request.url))
     }
 
     // Create response with redirect to onboarding
@@ -44,6 +44,6 @@ export async function GET(request: Request) {
 
   } catch (error) {
     console.error('Error:', error)
-    return NextResponse.redirect(new URL('/auth/join', request.url))
+    return NextResponse.redirect(new URL('/onboarding', request.url))
   }
 } 

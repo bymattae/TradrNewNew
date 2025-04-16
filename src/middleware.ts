@@ -59,12 +59,12 @@ export async function middleware(request: NextRequest) {
 
     if (error) {
       console.error('Session error:', error)
-      return NextResponse.redirect(new URL('/auth/join', requestUrl))
+      return NextResponse.redirect(new URL('/onboarding', requestUrl))
     }
 
-    // If no session and trying to access protected route, redirect to join
+    // If no session and trying to access protected route, redirect to onboarding
     if (!session) {
-      return NextResponse.redirect(new URL('/auth/join', requestUrl))
+      return NextResponse.redirect(new URL('/onboarding', requestUrl))
     }
 
     // If user has a profile and tries to access onboarding, redirect to dashboard
@@ -83,7 +83,7 @@ export async function middleware(request: NextRequest) {
     return response
   } catch (error) {
     console.error('Middleware error:', error)
-    return NextResponse.redirect(new URL('/auth/join', requestUrl))
+    return NextResponse.redirect(new URL('/onboarding', requestUrl))
   }
 }
 

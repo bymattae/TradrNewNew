@@ -1,6 +1,6 @@
-import { createClient } from '@/app/lib/supabase/server'
-import { NextResponse } from 'next/server'
+import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
+import { NextResponse } from 'next/server'
 
 export const dynamic = 'force-dynamic'
 
@@ -16,9 +16,26 @@ export async function GET(request: Request) {
     return NextResponse.redirect(new URL('/auth/join', request.url))
   }
 
+  const cookieStore = cookies()
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        get(name: string) {
+          return cookieStore.get(name)?.value
+        },
+        set(name: string, value: string, options: any) {
+          cookieStore.set({ name, value, ...options })
+        },
+        remove(name: string, options: any) {
+          cookieStore.set({ name, value: '', ...options })
+        },
+      },
+    }
+  )
+
   try {
-    const supabase = createClient()
-    
     console.log('Exchanging code for session...')
     const { data, error } = await supabase.auth.exchangeCodeForSession(code)
     

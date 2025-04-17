@@ -27,26 +27,30 @@ export default function OnboardingPage() {
 
   // Initialize and maintain session
   useEffect(() => {
+    let mounted = true;
+
     const initializeSession = async () => {
       const { data: { session: initialSession } } = await supabase.auth.getSession();
-      setSession(initialSession);
+      if (mounted) {
+        setSession(initialSession);
+      }
     };
 
     initializeSession();
 
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (_event, session) => {
-      setSession(session);
-      
-      // Only redirect if we're certain there's no session
-      if (_event === 'SIGNED_OUT') {
-        router.push('/auth/join');
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (mounted) {
+        setSession(session);
       }
     });
 
-    return () => subscription.unsubscribe();
-  }, [supabase.auth, router]);
+    return () => {
+      mounted = false;
+      subscription.unsubscribe();
+    };
+  }, [supabase.auth]);
 
   // Protect the page
   useEffect(() => {

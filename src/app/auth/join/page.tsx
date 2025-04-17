@@ -20,15 +20,10 @@ export default function JoinPage() {
     setMessage({ text: '', type: '' });
 
     try {
-      // Get the base URL for redirects
-      const redirectBase = process.env.NODE_ENV === 'production' 
-        ? 'https://tradr-v1.vercel.app'
-        : window.location.origin;
-
       const { error } = await supabase.auth.signInWithOtp({
         email,
         options: {
-          emailRedirectTo: `${redirectBase}/auth/callback`,
+          emailRedirectTo: 'https://tradr-v1.vercel.app/auth/callback',
         },
       });
 

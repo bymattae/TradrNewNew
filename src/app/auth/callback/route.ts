@@ -74,6 +74,14 @@ export async function GET(request: Request) {
       refresh_token: data.session.refresh_token!
     })
 
+    // Verify the session was set correctly
+    const { data: { session: verifiedSession } } = await supabase.auth.getSession()
+    if (!verifiedSession) {
+      console.error('Failed to verify session after setting')
+      return NextResponse.redirect(new URL('/auth/join', request.url))
+    }
+
+    console.log('Session verified successfully')
     console.log('Returning response with redirect to /onboarding')
     return response
 

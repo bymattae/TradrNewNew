@@ -23,7 +23,7 @@ export default function JoinPage() {
       const { error } = await supabase.auth.signInWithOtp({
         email,
         options: {
-          emailRedirectTo: 'https://tradr-v1.vercel.app/auth/callback',
+          emailRedirectTo: `${window.location.origin}/auth/callback`,
         },
       });
 

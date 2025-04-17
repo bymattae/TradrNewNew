@@ -17,7 +17,7 @@ export async function middleware(req: NextRequest) {
   const pathname = req.nextUrl.pathname;
 
   // Define public routes that don't require auth
-  const publicRoutes = ['/auth/join', '/auth/callback', '/auth/magic-link-sent', '/onboarding'];
+  const publicRoutes = ['/auth/join', '/auth/callback', '/auth/magic-link-sent'];
   const isPublicRoute = publicRoutes.includes(pathname);
 
   console.log('Middleware - Is public route:', isPublicRoute);

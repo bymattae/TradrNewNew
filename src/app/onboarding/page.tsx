@@ -25,6 +25,7 @@ export default function OnboardingPage() {
   const supabase = createClient();
   const autoSaveTimeoutRef = useRef<NodeJS.Timeout>();
   const [session, setSession] = useState<any>(null);
+  const [lastSaved, setLastSaved] = useState<string>('');
 
   // Initialize and maintain session
   useEffect(() => {
@@ -147,16 +148,22 @@ export default function OnboardingPage() {
           if (error) {
             console.error('Auto-save error:', error);
             setAutoSaveStatus('error');
-            toast.error('Failed to save profile: ' + error.message);
+            toast.error('Failed to save profile', {
+              position: 'top-right',
+              duration: 2000,
+            });
             return;
           }
 
           setAutoSaveStatus('saved');
-          toast.success('Profile saved successfully');
+          setLastSaved(new Date().toLocaleTimeString());
         } catch (error) {
           console.error('Auto-save error:', error);
           setAutoSaveStatus('error');
-          toast.error('Failed to save profile');
+          toast.error('Failed to save profile', {
+            position: 'top-right',
+            duration: 2000,
+          });
         }
       }, 2000);
     }
@@ -267,14 +274,20 @@ export default function OnboardingPage() {
 
       if (error) {
         console.error('Supabase error:', error);
-        toast.error(`Failed to save profile: ${error.message}`);
+        toast.error('Failed to save profile', {
+          position: 'top-right',
+          duration: 2000,
+        });
         return;
       }
 
-      toast.success('Profile saved successfully');
+      setLastSaved(new Date().toLocaleTimeString());
     } catch (error) {
       console.error('Error saving profile:', error);
-      toast.error('Failed to save profile. Please try again.');
+      toast.error('Failed to save profile', {
+        position: 'top-right',
+        duration: 2000,
+      });
     } finally {
       setIsSaving(false);
     }
@@ -325,10 +338,13 @@ export default function OnboardingPage() {
       <div className="fixed top-0 left-0 right-0 flex items-center justify-between px-4 py-3 bg-black/50 backdrop-blur-lg border-b border-zinc-800/50">
         <div className="flex items-center gap-2">
           {autoSaveStatus === 'saving' && (
-            <span className="text-zinc-400 text-sm">Saving...</span>
+            <div className="flex items-center gap-2">
+              <div className="animate-spin rounded-full h-3 w-3 border border-zinc-500 border-t-white"></div>
+              <span className="text-zinc-400 text-sm">Saving...</span>
+            </div>
           )}
-          {autoSaveStatus === 'saved' && (
-            <span className="text-zinc-400 text-sm">All changes saved</span>
+          {autoSaveStatus === 'saved' && lastSaved && (
+            <span className="text-zinc-400 text-sm">Last saved at {lastSaved}</span>
           )}
           {autoSaveStatus === 'error' && (
             <span className="text-red-400 text-sm">Failed to save</span>

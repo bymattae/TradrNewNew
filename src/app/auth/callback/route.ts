@@ -17,7 +17,6 @@ export async function GET(request: Request) {
   }
 
   try {
-    const cookieStore = cookies()
     const supabase = createClient()
     
     console.log('Exchanging code for session...')

@@ -100,7 +100,7 @@ export default function OnboardingPage() {
 
   // Auto-save functionality
   useEffect(() => {
-    if (!session?.user?.id) return;
+    if (!session?.user?.id || !session?.user?.email) return;
 
     if (autoSaveTimeoutRef.current) {
       clearTimeout(autoSaveTimeoutRef.current);
@@ -136,6 +136,7 @@ export default function OnboardingPage() {
             .from('profiles')
             .upsert({
               id: session.user.id,
+              email: session.user.email,
               username,
               bio,
               tags,
@@ -146,13 +147,16 @@ export default function OnboardingPage() {
           if (error) {
             console.error('Auto-save error:', error);
             setAutoSaveStatus('error');
+            toast.error('Failed to save profile: ' + error.message);
             return;
           }
 
           setAutoSaveStatus('saved');
+          toast.success('Profile saved successfully');
         } catch (error) {
           console.error('Auto-save error:', error);
           setAutoSaveStatus('error');
+          toast.error('Failed to save profile');
         }
       }, 2000);
     }
@@ -215,7 +219,7 @@ export default function OnboardingPage() {
   };
 
   const handleSave = async () => {
-    if (!session?.user?.id) {
+    if (!session?.user?.id || !session?.user?.email) {
       toast.error('Please sign in to save your profile');
       return;
     }
@@ -253,6 +257,7 @@ export default function OnboardingPage() {
         .from('profiles')
         .upsert({
           id: session.user.id,
+          email: session.user.email,
           username,
           bio,
           tags,

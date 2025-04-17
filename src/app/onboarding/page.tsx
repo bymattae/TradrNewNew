@@ -52,18 +52,6 @@ export default function OnboardingPage() {
     };
   }, [supabase.auth]);
 
-  // Protect the page
-  useEffect(() => {
-    const checkSession = async () => {
-      const { data: { session: currentSession } } = await supabase.auth.getSession();
-      if (!currentSession) {
-        router.push('/auth/join');
-      }
-    };
-
-    checkSession();
-  }, [router, supabase.auth]);
-
   // Load existing profile data
   useEffect(() => {
     const loadProfile = async () => {

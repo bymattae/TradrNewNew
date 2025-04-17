@@ -334,6 +334,98 @@ export default function OnboardingPage() {
 
   return (
     <div className="h-[100dvh] bg-black text-white flex flex-col">
+      {/* Bio edit modal */}
+      {isEditingBio && (
+        <div className="fixed inset-0 bg-black z-50 flex flex-col h-[100dvh]">
+          <div className="flex items-center justify-between p-4 border-b border-zinc-800/50">
+            <button 
+              onClick={() => setIsEditingBio(false)}
+              className="text-gray-400 hover:text-white transition-colors"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+              </svg>
+            </button>
+            <button
+              onClick={handleSaveBio}
+              disabled={isSaving}
+              className="text-indigo-400 hover:text-indigo-300 transition-colors text-sm font-medium disabled:opacity-50"
+            >
+              {isSaving ? 'Saving...' : 'Save'}
+            </button>
+          </div>
+
+          <div className="flex-1 px-4 py-6 flex flex-col">
+            <div className="space-y-1 mb-6">
+              <h1 className="text-2xl font-bold">Your Tradr bio</h1>
+              <p className="text-gray-500">Make it short. Make it sharp.</p>
+            </div>
+
+            <div className="flex-1">
+              <textarea
+                value={tempBio}
+                onChange={(e) => setTempBio(e.target.value)}
+                placeholder="Example: London scalper based in Germany.."
+                maxLength={120}
+                className="w-full h-32 bg-zinc-900/50 border border-zinc-800/50 rounded-xl px-4 py-3 text-base text-white focus:outline-none focus:border-indigo-500/50 backdrop-blur-xl resize-none"
+              />
+              <div className="mt-2 flex justify-between items-center text-sm">
+                <p className="text-gray-500">Keep it under 120 characters</p>
+                <p className="text-gray-500">{tempBio.length}/120</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Username edit modal */}
+      {isEditingUsername && (
+        <div className="fixed inset-0 bg-black z-50 flex flex-col h-[100dvh]">
+          <div className="flex items-center justify-between p-4 border-b border-zinc-800/50">
+            <button 
+              onClick={() => setIsEditingUsername(false)}
+              className="text-gray-400 hover:text-white transition-colors"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+              </svg>
+            </button>
+            <button
+              onClick={handleSaveUsername}
+              disabled={isSaving}
+              className="text-indigo-400 hover:text-indigo-300 transition-colors text-sm font-medium disabled:opacity-50"
+            >
+              {isSaving ? 'Saving...' : 'Save'}
+            </button>
+          </div>
+
+          <div className="flex-1 px-4 py-6 flex flex-col">
+            <div className="space-y-1 mb-6">
+              <h1 className="text-2xl font-bold">Choose your @handle</h1>
+              <p className="text-gray-500">This is your public Tradr link.</p>
+            </div>
+
+            <div className="flex bg-zinc-900/50 rounded-xl overflow-hidden border border-zinc-800/50 backdrop-blur-xl">
+              <div className="flex items-center pl-4 text-gray-400">
+                <span className="text-lg">@</span>
+              </div>
+              <input
+                type="text"
+                value={tempUsername}
+                onChange={(e) => setTempUsername(e.target.value)}
+                className="w-full bg-transparent py-3 px-2 text-base text-white focus:outline-none"
+                placeholder="username"
+              />
+            </div>
+
+            <div className="mt-4 text-center">
+              <p className="text-gray-500 text-sm">Your profile will be available at</p>
+              <p className="text-white text-base mt-1">tradr.co/@{tempUsername || 'username'}</p>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="flex-1 flex flex-col max-h-[100dvh] overflow-hidden">
         <div className="p-4 border-b border-zinc-800/50 flex items-center justify-between">
           <button 

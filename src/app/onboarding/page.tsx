@@ -334,168 +334,7 @@ export default function OnboardingPage() {
 
   return (
     <div className="h-[100dvh] bg-black text-white flex flex-col">
-      {/* Header with save status and button */}
-      <div className="fixed top-0 left-0 right-0 flex items-center justify-between px-4 py-3 bg-black/50 backdrop-blur-lg border-b border-zinc-800/50">
-        <div className="flex items-center gap-2">
-          {autoSaveStatus === 'saving' && (
-            <div className="flex items-center gap-2">
-              <div className="animate-spin rounded-full h-3 w-3 border border-zinc-500 border-t-white"></div>
-              <span className="text-zinc-400 text-sm">Saving...</span>
-            </div>
-          )}
-          {autoSaveStatus === 'saved' && lastSaved && (
-            <span className="text-zinc-400 text-sm">Last saved at {lastSaved}</span>
-          )}
-          {autoSaveStatus === 'error' && (
-            <span className="text-red-400 text-sm">Failed to save</span>
-          )}
-        </div>
-        <div className="flex items-center gap-3">
-          <button
-            onClick={handleSave}
-            disabled={isSaving || autoSaveStatus === 'saving'}
-            className="px-4 py-1.5 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-black disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {isSaving ? 'Saving...' : 'Save'}
-          </button>
-          <button
-            onClick={handleFinish}
-            className="px-4 py-1.5 text-sm font-medium text-white bg-purple-600 rounded-lg hover:bg-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-black"
-          >
-            Finish
-          </button>
-        </div>
-      </div>
-
-      {/* Progress bar */}
-      <div className="fixed top-0 left-0 right-0 h-0.5 bg-zinc-800">
-        <div className="h-full bg-indigo-500 w-[25%] transition-all duration-300"></div>
-      </div>
-
-      {/* Bio edit modal */}
-      {isEditingBio && (
-        <div className="fixed inset-0 bg-black z-50 flex flex-col h-[100dvh]">
-          <div className="flex items-center justify-between p-4 border-b border-zinc-800/50">
-            <button 
-              onClick={() => setIsEditingBio(false)}
-              className="text-gray-400 hover:text-white transition-colors"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
-              </svg>
-            </button>
-            <button
-              onClick={handleSaveBio}
-              disabled={isSaving}
-              className={`relative text-sm font-medium transition-all duration-200 ${
-                isSaving ? 'w-8' : 'text-indigo-400 hover:text-indigo-300'
-              }`}
-            >
-              <span className={`transition-all duration-200 ${isSaving ? 'opacity-0' : 'opacity-100'}`}>
-                Save
-              </span>
-              {isSaving && (
-                <span className="absolute inset-0 flex items-center justify-center">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor" 
-                    className="w-5 h-5 text-emerald-500 animate-[checkmark_0.2s_ease-in-out_both]"
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-                  </svg>
-                </span>
-              )}
-            </button>
-          </div>
-
-          <div className="flex-1 px-4 py-6 flex flex-col">
-            <div className="space-y-1 mb-6">
-              <h1 className="text-2xl font-bold">Your Tradr bio</h1>
-              <p className="text-gray-500">Make it short. Make it sharp.</p>
-            </div>
-
-            <div className="flex-1">
-              <textarea
-                value={tempBio}
-                onChange={(e) => setTempBio(e.target.value)}
-                placeholder="Example: London scalper based in Germany.."
-                maxLength={120}
-                className="w-full h-32 bg-zinc-900/50 border border-zinc-800/50 rounded-xl px-4 py-3 text-base text-white focus:outline-none focus:border-indigo-500/50 backdrop-blur-xl resize-none"
-              />
-              <div className="mt-2 flex justify-between items-center text-sm">
-                <p className="text-gray-500">Keep it under 120 characters</p>
-                <p className="text-gray-500">{tempBio.length}/120</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Username edit modal */}
-      {isEditingUsername && (
-        <div className="fixed inset-0 bg-black z-50 flex flex-col h-[100dvh]">
-          <div className="flex items-center justify-between p-4 border-b border-zinc-800/50">
-            <button 
-              onClick={() => setIsEditingUsername(false)}
-              className="text-gray-400 hover:text-white transition-colors"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
-              </svg>
-            </button>
-            <button
-              onClick={handleSaveUsername}
-              disabled={isSaving}
-              className={`relative text-sm font-medium transition-all duration-200 ${
-                isSaving ? 'w-8' : 'text-indigo-400 hover:text-indigo-300'
-              }`}
-            >
-              <span className={`transition-all duration-200 ${isSaving ? 'opacity-0' : 'opacity-100'}`}>
-                Save
-              </span>
-              {isSaving && (
-                <span className="absolute inset-0 flex items-center justify-center">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor" 
-                    className="w-5 h-5 text-emerald-500 animate-[checkmark_0.2s_ease-in-out_both]"
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-                  </svg>
-                </span>
-              )}
-            </button>
-          </div>
-
-          <div className="flex-1 px-4 py-6 flex flex-col">
-            <div className="space-y-1 mb-6">
-              <h1 className="text-2xl font-bold">Choose your @handle</h1>
-              <p className="text-gray-500">This is your public Tradr link.</p>
-            </div>
-
-            <div className="flex bg-zinc-900/50 rounded-xl overflow-hidden border border-zinc-800/50 backdrop-blur-xl">
-              <div className="flex items-center pl-4 text-gray-400">
-                <span className="text-lg">@</span>
-              </div>
-              <input
-                type="text"
-                value={tempUsername}
-                onChange={(e) => setTempUsername(e.target.value)}
-                className="w-full bg-transparent py-3 px-2 text-base text-white focus:outline-none"
-                placeholder="username"
-              />
-              <div className="flex items-center pr-4 text-emerald-500">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </div>
-            </div>
-
-            <div className="mt-4 text-center">
-              <p className="text-gray-500 text-sm">Your profile will be available at</p>
-              <p className="text-white text-base mt-1">tradr.co/@{tempUsername || 'username'}</p>
-            </div>
-          </div>
-        </div>
-      )}
-
-      <div className="flex-1 flex flex-col max-h-[calc(100dvh-64px)] overflow-hidden">
+      <div className="flex-1 flex flex-col max-h-[100dvh] overflow-hidden">
         <div className="p-4 border-b border-zinc-800/50 flex items-center justify-between">
           <button 
             onClick={() => router.back()}
@@ -507,17 +346,24 @@ export default function OnboardingPage() {
           </button>
           <div className="text-center">
             <h1 className="text-xl font-bold">Build your profile</h1>
-            <p className="text-sm text-gray-400 mt-1">1/4 steps • Basic info</p>
+            <div className="flex items-center justify-center gap-2 mt-1">
+              <p className="text-sm text-gray-400">1/4 steps • Basic info</p>
+              {autoSaveStatus === 'saving' && (
+                <div className="flex items-center gap-1.5">
+                  <div className="animate-spin rounded-full h-2 w-2 border border-zinc-500 border-t-white"></div>
+                  <span className="text-xs text-zinc-500">Saving...</span>
+                </div>
+              )}
+              {autoSaveStatus === 'saved' && lastSaved && (
+                <span className="text-xs text-zinc-500">• Saved {lastSaved}</span>
+              )}
+            </div>
           </div>
           <button 
-            onClick={() => router.push(`/@${username}`)}
+            onClick={() => router.push('/dashboard')}
             className="text-gray-400 hover:text-white transition-colors flex items-center gap-1.5"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
-              <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-            </svg>
-            <span className="text-sm">Preview</span>
+            Done
           </button>
         </div>
 

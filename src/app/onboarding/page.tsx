@@ -20,6 +20,7 @@ export default function OnboardingPage() {
   const [tempUsername, setTempUsername] = useState('');
   const [isSaving, setIsSaving] = useState(false);
   const [autoSaveStatus, setAutoSaveStatus] = useState<'saved' | 'saving' | 'error'>('saved');
+  const [isLoading, setIsLoading] = useState(true);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const supabase = createClientComponentClient();
   const autoSaveTimeoutRef = useRef<NodeJS.Timeout>();
@@ -30,9 +31,20 @@ export default function OnboardingPage() {
     let mounted = true;
 
     const initializeSession = async () => {
-      const { data: { session: initialSession } } = await supabase.auth.getSession();
-      if (mounted) {
-        setSession(initialSession);
+      try {
+        const { data: { session: initialSession } } = await supabase.auth.getSession();
+        if (mounted) {
+          setSession(initialSession);
+          if (!initialSession) {
+            router.push('/auth/join');
+          }
+        }
+      } catch (error) {
+        console.error('Error initializing session:', error);
+      } finally {
+        if (mounted) {
+          setIsLoading(false);
+        }
       }
     };
 
@@ -43,6 +55,9 @@ export default function OnboardingPage() {
     } = supabase.auth.onAuthStateChange((_event, session) => {
       if (mounted) {
         setSession(session);
+        if (!session) {
+          router.push('/auth/join');
+        }
       }
     });
 
@@ -50,7 +65,7 @@ export default function OnboardingPage() {
       mounted = false;
       subscription.unsubscribe();
     };
-  }, [supabase.auth]);
+  }, [supabase.auth, router]);
 
   // Load existing profile data
   useEffect(() => {
@@ -286,6 +301,18 @@ export default function OnboardingPage() {
     setIsEditingBio(false);
     await handleSave();
   };
+
+  if (isLoading) {
+    return (
+      <div className="h-[100dvh] bg-black text-white flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-2 border-indigo-500 border-t-transparent"></div>
+      </div>
+    );
+  }
+
+  if (!session) {
+    return null;
+  }
 
   return (
     <div className="h-[100dvh] bg-black text-white flex flex-col">

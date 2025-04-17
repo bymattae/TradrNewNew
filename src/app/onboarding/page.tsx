@@ -27,21 +27,38 @@ export default function OnboardingPage() {
 
   // Initialize and maintain session
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-    });
+    const initializeSession = async () => {
+      const { data: { session: initialSession } } = await supabase.auth.getSession();
+      setSession(initialSession);
+    };
+
+    initializeSession();
 
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
+    } = supabase.auth.onAuthStateChange(async (_event, session) => {
       setSession(session);
-      if (!session) {
+      
+      // Only redirect if we're certain there's no session
+      if (_event === 'SIGNED_OUT') {
         router.push('/auth/join');
       }
     });
 
     return () => subscription.unsubscribe();
   }, [supabase.auth, router]);
+
+  // Protect the page
+  useEffect(() => {
+    const checkSession = async () => {
+      const { data: { session: currentSession } } = await supabase.auth.getSession();
+      if (!currentSession) {
+        router.push('/auth/join');
+      }
+    };
+
+    checkSession();
+  }, [router, supabase.auth]);
 
   // Load existing profile data
   useEffect(() => {

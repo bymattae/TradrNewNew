@@ -23,19 +23,42 @@ export default function OnboardingPage() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const supabase = createClientComponentClient();
   const autoSaveTimeoutRef = useRef<NodeJS.Timeout>();
+  const [session, setSession] = useState<any>(null);
+
+  // Initialize and maintain session
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+    });
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+      if (!session) {
+        router.push('/auth/join');
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, [supabase.auth, router]);
 
   // Load existing profile data
   useEffect(() => {
     const loadProfile = async () => {
-      try {
-        const { data: { user } } = await supabase.auth.getUser();
-        if (!user) return;
+      if (!session?.user?.id) return;
 
-        const { data: profile } = await supabase
+      try {
+        const { data: profile, error } = await supabase
           .from('profiles')
           .select('*')
-          .eq('id', user.id)
+          .eq('id', session.user.id)
           .single();
+
+        if (error) {
+          console.error('Error loading profile:', error);
+          return;
+        }
 
         if (profile) {
           setUsername(profile.username || '');
@@ -49,10 +72,12 @@ export default function OnboardingPage() {
     };
 
     loadProfile();
-  }, [supabase]);
+  }, [session, supabase]);
 
   // Auto-save functionality
   useEffect(() => {
+    if (!session?.user?.id) return;
+
     if (autoSaveTimeoutRef.current) {
       clearTimeout(autoSaveTimeoutRef.current);
     }
@@ -61,12 +86,6 @@ export default function OnboardingPage() {
       setAutoSaveStatus('saving');
       autoSaveTimeoutRef.current = setTimeout(async () => {
         try {
-          const { data: { user } } = await supabase.auth.getUser();
-          if (!user) {
-            setAutoSaveStatus('error');
-            return;
-          }
-
           // Validate username if it exists
           if (username) {
             const usernameRegex = /^[a-zA-Z0-9_]+$/;
@@ -80,7 +99,7 @@ export default function OnboardingPage() {
               .from('profiles')
               .select('id')
               .eq('username', username)
-              .neq('id', user.id)
+              .neq('id', session.user.id)
               .single();
 
             if (existingUser) {
@@ -92,7 +111,7 @@ export default function OnboardingPage() {
           const { error } = await supabase
             .from('profiles')
             .upsert({
-              id: user.id,
+              id: session.user.id,
               username,
               bio,
               tags,
@@ -111,7 +130,7 @@ export default function OnboardingPage() {
           console.error('Auto-save error:', error);
           setAutoSaveStatus('error');
         }
-      }, 2000); // Auto-save after 2 seconds of no changes
+      }, 2000);
     }
 
     return () => {
@@ -119,7 +138,7 @@ export default function OnboardingPage() {
         clearTimeout(autoSaveTimeoutRef.current);
       }
     };
-  }, [username, bio, tags, avatarUrl, supabase]);
+  }, [username, bio, tags, avatarUrl, session, supabase]);
 
   const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     try {
@@ -172,13 +191,13 @@ export default function OnboardingPage() {
   };
 
   const handleSave = async () => {
+    if (!session?.user?.id) {
+      toast.error('Please sign in to save your profile');
+      return;
+    }
+
     try {
       setIsSaving(true);
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) {
-        toast.error('No user found. Please sign in again.');
-        return;
-      }
 
       // Validate required fields
       if (!username) {
@@ -198,7 +217,7 @@ export default function OnboardingPage() {
         .from('profiles')
         .select('id')
         .eq('username', username)
-        .neq('id', user.id)
+        .neq('id', session.user.id)
         .single();
 
       if (existingUser) {
@@ -209,7 +228,7 @@ export default function OnboardingPage() {
       const { error } = await supabase
         .from('profiles')
         .upsert({
-          id: user.id,
+          id: session.user.id,
           username,
           bio,
           tags,

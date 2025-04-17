@@ -8,16 +8,13 @@ export default function JoinPage() {
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState({ 
-    text: '', 
-    type: '' 
-  });
+  const [message, setMessage] = useState('');
   const supabase = createClient();
 
   const handleEmailSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setMessage({ text: '', type: '' });
+    setMessage('');
 
     try {
       const { error } = await supabase.auth.signInWithOtp({
@@ -28,15 +25,9 @@ export default function JoinPage() {
       });
 
       if (error) throw error;
-
-      // Redirect to magic link sent page
       router.push('/auth/magic-link-sent');
     } catch (error: any) {
-      console.error('Error:', error);
-      setMessage({
-        text: error.message || 'Failed to send magic link. Please try again.',
-        type: 'error'
-      });
+      setMessage(error.message);
     } finally {
       setLoading(false);
     }
@@ -54,11 +45,9 @@ export default function JoinPage() {
           </p>
         </div>
         
-        {message.text && (
-          <div className={`rounded-md p-4 ${
-            message.type === 'error' ? 'bg-red-900/50 text-red-200' : 'bg-green-900/50 text-green-200'
-          }`}>
-            {message.text}
+        {message && (
+          <div className="rounded-md bg-red-900/50 p-4 text-red-200">
+            {message}
           </div>
         )}
 

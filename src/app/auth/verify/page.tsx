@@ -18,10 +18,10 @@ export default function VerifyPage() {
         
         if (error) {
           console.error('Session error:', error);
-          router.push('/auth/join');
-          return;
-        }
-        
+      router.push('/auth/join');
+      return;
+    }
+    
         if (!session) {
           console.error('No session found');
           router.push('/auth/join');

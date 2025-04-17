@@ -62,7 +62,32 @@ export default function OnboardingPage() {
       autoSaveTimeoutRef.current = setTimeout(async () => {
         try {
           const { data: { user } } = await supabase.auth.getUser();
-          if (!user) throw new Error('No user found');
+          if (!user) {
+            setAutoSaveStatus('error');
+            return;
+          }
+
+          // Validate username if it exists
+          if (username) {
+            const usernameRegex = /^[a-zA-Z0-9_]+$/;
+            if (!usernameRegex.test(username)) {
+              setAutoSaveStatus('error');
+              return;
+            }
+
+            // Check if username is already taken
+            const { data: existingUser } = await supabase
+              .from('profiles')
+              .select('id')
+              .eq('username', username)
+              .neq('id', user.id)
+              .single();
+
+            if (existingUser) {
+              setAutoSaveStatus('error');
+              return;
+            }
+          }
 
           const { error } = await supabase
             .from('profiles')
@@ -75,7 +100,12 @@ export default function OnboardingPage() {
               updated_at: new Date().toISOString(),
             });
 
-          if (error) throw error;
+          if (error) {
+            console.error('Auto-save error:', error);
+            setAutoSaveStatus('error');
+            return;
+          }
+
           setAutoSaveStatus('saved');
         } catch (error) {
           console.error('Auto-save error:', error);
@@ -145,7 +175,36 @@ export default function OnboardingPage() {
     try {
       setIsSaving(true);
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error('No user found');
+      if (!user) {
+        toast.error('No user found. Please sign in again.');
+        return;
+      }
+
+      // Validate required fields
+      if (!username) {
+        toast.error('Username is required');
+        return;
+      }
+
+      // Validate username format
+      const usernameRegex = /^[a-zA-Z0-9_]+$/;
+      if (!usernameRegex.test(username)) {
+        toast.error('Username can only contain letters, numbers, and underscores');
+        return;
+      }
+
+      // Check if username is already taken
+      const { data: existingUser } = await supabase
+        .from('profiles')
+        .select('id')
+        .eq('username', username)
+        .neq('id', user.id)
+        .single();
+
+      if (existingUser) {
+        toast.error('Username is already taken');
+        return;
+      }
 
       const { error } = await supabase
         .from('profiles')
@@ -158,11 +217,16 @@ export default function OnboardingPage() {
           updated_at: new Date().toISOString(),
         });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Supabase error:', error);
+        toast.error(`Failed to save profile: ${error.message}`);
+        return;
+      }
+
       toast.success('Profile saved successfully');
     } catch (error) {
       console.error('Error saving profile:', error);
-      toast.error('Failed to save profile');
+      toast.error('Failed to save profile. Please try again.');
     } finally {
       setIsSaving(false);
     }
@@ -179,11 +243,9 @@ export default function OnboardingPage() {
   };
 
   const handleSaveUsername = async () => {
-    setIsSaving(true);
     setUsername(tempUsername);
     setIsEditingUsername(false);
     await handleSave();
-    setIsSaving(false);
   };
 
   const handleEditBio = () => {
@@ -192,11 +254,9 @@ export default function OnboardingPage() {
   };
 
   const handleSaveBio = async () => {
-    setIsSaving(true);
     setBio(tempBio);
     setIsEditingBio(false);
     await handleSave();
-    setIsSaving(false);
   };
 
   return (

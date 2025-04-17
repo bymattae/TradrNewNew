@@ -42,12 +42,10 @@ export async function GET(request: Request) {
       return NextResponse.redirect(new URL('/auth/join', request.url))
     }
 
-    // Create response with redirect to onboarding
     const response = NextResponse.redirect(
       new URL('/onboarding', request.url)
     )
 
-    // Set all required cookies
     const cookieOptions = {
       path: '/',
       httpOnly: true,
@@ -56,20 +54,8 @@ export async function GET(request: Request) {
       maxAge: 60 * 60 * 24 * 7 // 1 week
     }
 
-    // Set Supabase cookies
     response.cookies.set('sb-access-token', data.session.access_token, cookieOptions)
     response.cookies.set('sb-refresh-token', data.session.refresh_token!, cookieOptions)
-
-    // Set additional session cookie
-    response.cookies.set(
-      'sb-auth-token',
-      JSON.stringify({
-        access_token: data.session.access_token,
-        refresh_token: data.session.refresh_token,
-        expires_at: Date.now() + 1000 * 60 * 60 * 24 * 7, // 1 week from now
-      }),
-      cookieOptions
-    )
 
     return response
 

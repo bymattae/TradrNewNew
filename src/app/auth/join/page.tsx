@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { createClient } from '@/lib/supabase/client';
 
 export default function JoinPage() {
   const router = useRouter();
@@ -12,7 +12,7 @@ export default function JoinPage() {
     text: '', 
     type: '' 
   });
-  const supabase = createClientComponentClient();
+  const supabase = createClient();
 
   const handleEmailSignUp = async (e: React.FormEvent) => {
     e.preventDefault();

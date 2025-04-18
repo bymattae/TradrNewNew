@@ -6,8 +6,7 @@ import { createClient } from '@/lib/supabase/client';
 import Image from 'next/image';
 import { toast } from 'sonner';
 
-const MAX_FILE_SIZE = 1024 * 1024; // Keep this for type validation
-const TARGET_FILE_SIZE = 1024; // 1KB limit for Supabase
+const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB limit
 
 const compressImage = async (file: File): Promise<Blob> => {
   return new Promise((resolve, reject) => {
@@ -18,8 +17,8 @@ const compressImage = async (file: File): Promise<Blob> => {
       img.src = event.target?.result as string;
       img.onload = () => {
         const canvas = document.createElement('canvas');
-        const MAX_WIDTH = 150; // Reduced from 800
-        const MAX_HEIGHT = 150; // Reduced from 800
+        const MAX_WIDTH = 400; // Reasonable size for profile picture
+        const MAX_HEIGHT = 400;
         let width = img.width;
         let height = img.height;
 
@@ -43,28 +42,13 @@ const compressImage = async (file: File): Promise<Blob> => {
         canvas.toBlob(
           (blob) => {
             if (blob) {
-              if (blob.size > TARGET_FILE_SIZE) {
-                // If still too large, compress more
-                canvas.toBlob(
-                  (finalBlob) => {
-                    if (finalBlob) {
-                      resolve(finalBlob);
-                    } else {
-                      reject(new Error('Final compression failed'));
-                    }
-                  },
-                  'image/jpeg',
-                  0.1 // Much higher compression
-                );
-              } else {
-                resolve(blob);
-              }
+              resolve(blob);
             } else {
               reject(new Error('Canvas to Blob conversion failed'));
             }
           },
           'image/jpeg',
-          0.5 // Initial compression quality
+          0.8 // High quality compression
         );
       };
       img.onerror = reject;
@@ -264,14 +248,14 @@ export default function OnboardingPage() {
         return;
       }
 
-      // Compress the image
-      const compressedImage = await compressImage(file);
-      console.log('Compressed image size:', compressedImage.size, 'bytes');
-
-      if (compressedImage.size > TARGET_FILE_SIZE) {
-        toast.error(`Image still too large after compression. Please use a smaller image. Maximum size is ${TARGET_FILE_SIZE / 1024}KB`);
+      if (file.size > MAX_FILE_SIZE) {
+        toast.error(`File too large. Maximum size is ${MAX_FILE_SIZE / (1024 * 1024)}MB`);
         return;
       }
+
+      // Compress the image to a reasonable size while maintaining quality
+      const compressedImage = await compressImage(file);
+      console.log('Compressed image size:', compressedImage.size, 'bytes');
 
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) {
@@ -281,7 +265,7 @@ export default function OnboardingPage() {
 
       // Create a unique filename
       const timestamp = Date.now();
-      const filePath = `${user.id}/${timestamp}.jpg`; // Always use jpg for compressed images
+      const filePath = `${user.id}/${timestamp}.jpg`;
 
       // Upload the compressed image
       const { error: uploadError } = await supabase.storage

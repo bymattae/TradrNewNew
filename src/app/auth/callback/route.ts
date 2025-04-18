@@ -14,11 +14,25 @@ export async function GET(request: Request) {
     }
 
     const supabase = createRouteHandlerClient({ cookies })
-    await supabase.auth.exchangeCodeForSession(code)
+    
+    // Exchange the code and wait for session
+    const { data: { session }, error } = await supabase.auth.exchangeCodeForSession(code)
+    
+    if (error || !session) {
+      console.error('Session error:', error)
+      return NextResponse.redirect(new URL('/auth/join', request.url))
+    }
 
-    // After exchanging code for session, redirect to onboarding
-    // The middleware will check if they need onboarding or can go to dashboard
-    const response = NextResponse.redirect(new URL('/onboarding', request.url))
+    // Check if user has a profile
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('id')
+      .eq('id', session.user.id)
+      .single()
+
+    // Decide where to send them based on profile
+    const redirectTo = profile ? '/dashboard' : '/onboarding'
+    const response = NextResponse.redirect(new URL(redirectTo, request.url))
     response.headers.set('Cache-Control', 'no-store, max-age=0')
     return response
 

@@ -418,6 +418,10 @@ export default function OnboardingPage() {
   };
 
   const handleFinish = async () => {
+    if (!validateFields()) {
+      toast.error('All required fields must be filled');
+      return;
+    }
     await handleSave();
     router.push('/dashboard');
   };
@@ -698,7 +702,7 @@ export default function OnboardingPage() {
 
             {/* Tags */}
             <div className="space-y-3">
-              <div className={`flex flex-wrap gap-2 items-center ${errors.tags ? 'p-4 border border-red-500/50 rounded-xl' : ''}`}>
+              <div className={`flex flex-wrap gap-2 items-center p-4 bg-zinc-900/50 border ${errors.tags ? 'border-red-500/50' : 'border-zinc-800/50'} rounded-xl`}>
                 {tags.map((tag, index) => (
                   <div
                     key={index}
@@ -715,8 +719,28 @@ export default function OnboardingPage() {
                     </button>
                   </div>
                 ))}
+                {tags.length < 3 && (
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="text"
+                      value={newTag}
+                      onChange={(e) => setNewTag(e.target.value)}
+                      onKeyPress={(e) => e.key === 'Enter' && handleAddTag()}
+                      placeholder="Add hashtag"
+                      className="bg-transparent text-white placeholder-gray-500 focus:outline-none text-sm"
+                    />
+                    <button
+                      onClick={handleAddTag}
+                      className="text-indigo-400 hover:text-indigo-300 transition-colors"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
+                        <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
+                      </svg>
+                    </button>
+                  </div>
+                )}
                 {errors.tags && (
-                  <p className="text-xs text-red-500">At least one hashtag is required</p>
+                  <p className="text-xs text-red-500 w-full">At least one hashtag is required</p>
                 )}
               </div>
             </div>
@@ -753,10 +777,10 @@ export default function OnboardingPage() {
         {/* Floating Continue button */}
         <div className="sticky bottom-0 left-0 right-0 p-4 border-t border-zinc-800/50 bg-black/80 backdrop-blur-xl max-w-2xl mx-auto w-full">
           <button
-            onClick={handleSave}
+            onClick={handleFinish}
             className="w-full py-3 bg-indigo-600 text-white font-medium rounded-xl hover:bg-indigo-500 transition-all flex items-center justify-center gap-2"
           >
-            <span>Continue</span>
+            <span>Done</span>
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
               <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
             </svg>

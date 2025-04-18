@@ -269,7 +269,9 @@ export default function OnboardingPage() {
       const response = await fetch(croppedImage);
       const blob = await response.blob();
 
-      const fileName = `${session.user.id}-${Date.now()}.jpg`;
+      // Create file path with user ID as the folder name
+      const fileName = `${session.user.id}/avatar-${Date.now()}.jpg`;
+      
       const { data: uploadData, error: uploadError } = await supabase.storage
         .from('avatars')
         .upload(fileName, blob, {
@@ -278,6 +280,7 @@ export default function OnboardingPage() {
         });
 
       if (uploadError) {
+        console.error('Upload error:', uploadError);
         throw uploadError;
       }
 
@@ -287,9 +290,9 @@ export default function OnboardingPage() {
 
       setAvatarUrl(publicUrl);
       toast.success('Avatar updated successfully');
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error uploading avatar:', error);
-      toast.error('Error uploading avatar');
+      toast.error(error?.message || 'Error uploading avatar');
     } finally {
       setUploading(false);
       if (selectedImage) {

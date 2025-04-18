@@ -9,38 +9,16 @@ export async function GET(request: Request) {
     const requestUrl = new URL(request.url)
     const code = requestUrl.searchParams.get('code')
 
-    // If no code in URL, redirect to join
     if (!code) {
       return NextResponse.redirect(new URL('/auth/join', request.url))
     }
 
     const supabase = createRouteHandlerClient({ cookies })
+    await supabase.auth.exchangeCodeForSession(code)
 
-    // Exchange the code for a session
-    const { data: { session }, error: sessionError } = await supabase.auth.exchangeCodeForSession(code)
-    
-    if (sessionError || !session) {
-      console.error('Session error:', sessionError)
-      return NextResponse.redirect(new URL('/auth/join', request.url))
-    }
-
-    // Check if user has a profile
-    const { data: profile, error: profileError } = await supabase
-      .from('profiles')
-      .select('id')
-      .eq('id', session.user.id)
-      .single()
-
-    // If error checking profile or no profile exists, send to onboarding
-    if (profileError || !profile) {
-      const response = NextResponse.redirect(new URL('/onboarding', request.url))
-      // Add cache headers to prevent caching
-      response.headers.set('Cache-Control', 'no-store, max-age=0')
-      return response
-    }
-
-    // If they have a profile, send to dashboard
-    const response = NextResponse.redirect(new URL('/dashboard', request.url))
+    // After exchanging code for session, redirect to onboarding
+    // The middleware will check if they need onboarding or can go to dashboard
+    const response = NextResponse.redirect(new URL('/onboarding', request.url))
     response.headers.set('Cache-Control', 'no-store, max-age=0')
     return response
 

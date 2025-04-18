@@ -87,6 +87,7 @@ export default function OnboardingPage() {
     tags?: boolean;
     avatar?: boolean;
   }>({});
+  const [showValidation, setShowValidation] = useState(false);
 
   // Initialize and maintain session
   useEffect(() => {
@@ -418,6 +419,7 @@ export default function OnboardingPage() {
   };
 
   const handleFinish = async () => {
+    setShowValidation(true);
     if (!validateFields()) {
       toast.error('All required fields must be filled');
       return;
@@ -597,7 +599,7 @@ export default function OnboardingPage() {
               <div className="relative w-24 h-24">
                 <button 
                   onClick={() => fileInputRef.current?.click()}
-                  className={`absolute inset-0 rounded-full bg-zinc-900/50 border-2 border-dashed ${validateFields() && errors.avatar ? 'border-red-500/50' : 'border-zinc-800/50'} overflow-hidden flex items-center justify-center hover:border-indigo-500/50 transition-all group backdrop-blur-xl`}
+                  className={`absolute inset-0 rounded-full bg-zinc-900/50 border-2 border-dashed ${showValidation && errors.avatar ? 'border-red-500/50' : 'border-zinc-800/50'} overflow-hidden flex items-center justify-center hover:border-indigo-500/50 transition-all group backdrop-blur-xl`}
                 >
                   {avatarUrl ? (
                     <Image
@@ -627,7 +629,7 @@ export default function OnboardingPage() {
                   </svg>
                 </div>
               </div>
-              {errors.avatar && (
+              {showValidation && errors.avatar && (
                 <p className="mt-2 text-xs text-red-500">Profile picture is required</p>
               )}
               <input
@@ -641,7 +643,7 @@ export default function OnboardingPage() {
 
             {/* Username input */}
             <div className="space-y-3">
-              <div className={`relative flex items-center bg-zinc-900/50 border ${validateFields() && errors.username ? 'border-red-500/50' : 'border-zinc-800/50'} rounded-xl px-4 py-4 hover:border-zinc-700/50 transition-all group`}>
+              <div className={`relative flex items-center bg-zinc-900/50 border ${showValidation && errors.username ? 'border-red-500/50' : 'border-zinc-800/50'} rounded-xl px-4 py-4 hover:border-zinc-700/50 transition-all group`}>
                 <span className="text-gray-400 text-lg">@</span>
                 <div className="flex-1 ml-1">
                   <p onClick={handleEditUsername} className="text-lg text-white cursor-pointer">
@@ -657,7 +659,7 @@ export default function OnboardingPage() {
                   </svg>
                 </button>
               </div>
-              {errors.username && (
+              {showValidation && errors.username && (
                 <p className="text-xs text-red-500">Username is required</p>
               )}
 
@@ -683,7 +685,7 @@ export default function OnboardingPage() {
 
             {/* Bio input */}
             <div className="mb-8">
-              <div className={`relative bg-zinc-900/50 border ${validateFields() && errors.bio ? 'border-red-500/50' : 'border-zinc-800/50'} rounded-xl px-4 py-4 hover:border-zinc-700/50 transition-all group`}>
+              <div className={`relative bg-zinc-900/50 border ${showValidation && errors.bio ? 'border-red-500/50' : 'border-zinc-800/50'} rounded-xl px-4 py-4 hover:border-zinc-700/50 transition-all group`}>
                 <div className="flex-1 pr-8">
                   <p onClick={handleEditBio} className="text-[15px] text-white cursor-pointer min-h-[4rem]">
                     {bio || <span className="text-gray-500">Tell us about your strategy…</span>}
@@ -698,14 +700,14 @@ export default function OnboardingPage() {
                   </svg>
                 </button>
               </div>
-              {errors.bio && (
+              {showValidation && errors.bio && (
                 <p className="mt-2 text-xs text-red-500">Bio is required</p>
               )}
             </div>
 
             {/* Tags */}
             <div className="space-y-3">
-              <div className={`flex flex-wrap gap-2 items-center p-4 bg-zinc-900/50 border ${validateFields() && errors.tags ? 'border-red-500/50' : 'border-zinc-800/50'} rounded-xl`}>
+              <div className={`flex flex-wrap gap-2 items-center p-4 bg-zinc-900/50 border ${showValidation && errors.tags ? 'border-red-500/50' : 'border-zinc-800/50'} rounded-xl`}>
                 {tags.length === 0 ? (
                   <button
                     onClick={() => setIsEditingTag(true)}
@@ -766,7 +768,7 @@ export default function OnboardingPage() {
                   </div>
                 )}
               </div>
-              {validateFields() && errors.tags && (
+              {showValidation && errors.tags && (
                 <p className="text-xs text-red-500 w-full">At least one hashtag is required</p>
               )}
             </div>

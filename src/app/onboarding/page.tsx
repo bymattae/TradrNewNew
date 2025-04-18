@@ -213,6 +213,24 @@ export default function OnboardingPage() {
       const timestamp = Date.now();
       const filePath = `${user.id}/${timestamp}.${fileExt}`;
 
+      // Try to create the bucket if it doesn't exist
+      try {
+        const { data: bucketData, error: createBucketError } = await supabase.storage
+          .createBucket('avatars', {
+            public: true,
+            allowedMimeTypes: ['image/png', 'image/jpeg', 'image/gif'],
+            fileSizeLimit: 5242880 // 5MB in bytes
+          });
+
+        if (createBucketError && !createBucketError.message.includes('already exists')) {
+          console.error('Error creating bucket:', createBucketError);
+          toast.error('Failed to configure storage. Please contact support.');
+          return;
+        }
+      } catch (bucketError) {
+        console.error('Bucket creation error:', bucketError);
+      }
+
       // Upload the file
       const { error: uploadError } = await supabase.storage
         .from('avatars')
@@ -226,7 +244,7 @@ export default function OnboardingPage() {
         
         // Check if it's a bucket not found error
         if (uploadError.message?.includes('bucket not found')) {
-          toast.error('Storage bucket not configured. Please contact support.');
+          toast.error('Storage not properly configured. Please contact support.');
           return;
         }
         

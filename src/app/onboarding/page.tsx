@@ -228,6 +228,8 @@ export default function OnboardingPage() {
       // Create file path with user ID as the folder name
       const fileName = `${session.user.id}/avatar-${Date.now()}.jpg`;
       
+      console.log('Uploading avatar to:', fileName);
+      
       const { data: uploadData, error: uploadError } = await supabase.storage
         .from('avatars')
         .upload(fileName, blob, {
@@ -240,15 +242,20 @@ export default function OnboardingPage() {
         throw uploadError;
       }
 
-      // Get the public URL and update the avatar URL state
+      console.log('Upload successful:', uploadData);
+
+      // Get the public URL
       const { data: { publicUrl } } = supabase.storage
         .from('avatars')
         .getPublicUrl(fileName);
 
+      console.log('Public URL:', publicUrl);
+
       // Force a re-render by appending a timestamp to the URL
       const urlWithTimestamp = `${publicUrl}?t=${Date.now()}`;
-      setAvatarUrl(urlWithTimestamp);
+      console.log('Final avatar URL:', urlWithTimestamp);
       
+      setAvatarUrl(urlWithTimestamp);
       toast.success('Avatar updated successfully');
     } catch (error: any) {
       console.error('Error uploading avatar:', error);
@@ -544,6 +551,12 @@ export default function OnboardingPage() {
                         className="object-cover rounded-full"
                         sizes="96px"
                         priority
+                        onError={(e) => {
+                          console.error('Error loading avatar:', e);
+                          const target = e.target as HTMLImageElement;
+                          target.style.display = 'none';
+                          setAvatarUrl('');
+                        }}
                       />
                     </div>
                   ) : (

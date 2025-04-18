@@ -4,6 +4,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import getSupabaseBrowserClient from '@/lib/supabase/client';
 import { toast } from 'sonner';
+import Image from 'next/image';
 
 export default function JoinPage() {
   const [email, setEmail] = useState('');
@@ -110,29 +111,33 @@ export default function JoinPage() {
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-br from-gray-900 to-black px-4 py-12">
-      <div className="w-full max-w-md space-y-8 bg-white/5 backdrop-blur-xl p-8 rounded-2xl border border-white/10">
-        <div>
-          <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-white">
-            Join Tradr
+      <div className="w-full max-w-md space-y-6">
+        <div className="flex flex-col items-center">
+          <div className="mb-6">
+            <Image
+              src="https://wphqgmcoqneazpbviprp.supabase.co/storage/v1/object/public/assets//Untitled%20design%20(40).png"
+              alt="Tradr Logo"
+              width={64}
+              height={64}
+              priority
+              className="w-16 h-16"
+            />
+          </div>
+          <h2 className="text-center text-2xl font-semibold text-white mb-8">
+            Sign in to Tradr
           </h2>
-          <p className="mt-2 text-center text-sm text-gray-400">
-            Enter your email to get started with your trading journey
-          </p>
         </div>
 
-        <form className="mt-8 space-y-6" onSubmit={handleEmailSignUp}>
+        <form className="space-y-4" onSubmit={handleEmailSignUp}>
           <div>
-            <label htmlFor="email-address" className="sr-only">
-              Email address
-            </label>
             <input
               id="email-address"
               name="email"
               type="email"
               autoComplete="email"
               required
-              className="relative block w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 sm:text-sm"
-              placeholder="Enter your email address"
+              className="relative block w-full rounded-lg border border-white/10 bg-white/5 px-4 py-3.5 text-white placeholder:text-gray-400 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 sm:text-sm"
+              placeholder="Your email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               disabled={loading}
@@ -140,33 +145,78 @@ export default function JoinPage() {
           </div>
 
           {message && (
-            <div className="rounded-xl bg-red-900/50 border border-red-500/50 p-4">
+            <div className="rounded-lg bg-red-900/50 border border-red-500/50 p-4">
               <div className="text-sm text-red-200">{message}</div>
             </div>
           )}
 
-          <div>
-            <button
-              type="submit"
-              disabled={loading}
-              className={`group relative flex w-full justify-center rounded-xl bg-indigo-600 px-4 py-3 text-sm font-semibold text-white transition-all hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 ${
-                loading ? 'opacity-50 cursor-not-allowed' : ''
-              }`}
-            >
-              {loading ? (
-                <span className="flex items-center">
-                  <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                  </svg>
-                  Sending magic link...
-                </span>
-              ) : (
-                'Continue with Email'
-              )}
-            </button>
-          </div>
+          <button
+            type="submit"
+            disabled={loading}
+            className={`group relative flex w-full justify-center rounded-lg bg-indigo-600 px-4 py-3.5 text-sm font-medium text-white transition-all hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 ${
+              loading ? 'opacity-50 cursor-not-allowed' : ''
+            }`}
+          >
+            {loading ? (
+              <span className="flex items-center">
+                <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Sending magic link...
+              </span>
+            ) : (
+              'Continue'
+            )}
+          </button>
         </form>
+
+        <div className="mt-6 text-center">
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-white/10"></div>
+            </div>
+            <div className="relative flex justify-center text-sm">
+              <span className="bg-gradient-to-br from-gray-900 to-black px-4 text-gray-400">or</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-6 grid grid-cols-5 gap-3">
+          <button className="flex justify-center items-center h-12 w-full rounded-lg border border-white/10 bg-white/5 hover:bg-white/10 transition-colors">
+            <Image src="/discord.svg" alt="Discord" width={24} height={24} />
+          </button>
+          <button className="flex justify-center items-center h-12 w-full rounded-lg border border-white/10 bg-white/5 hover:bg-white/10 transition-colors">
+            <Image src="/google.svg" alt="Google" width={24} height={24} />
+          </button>
+          <button className="flex justify-center items-center h-12 w-full rounded-lg border border-white/10 bg-white/5 hover:bg-white/10 transition-colors">
+            <Image src="/ethereum.svg" alt="Ethereum" width={24} height={24} />
+          </button>
+          <button className="flex justify-center items-center h-12 w-full rounded-lg border border-white/10 bg-white/5 hover:bg-white/10 transition-colors">
+            <Image src="/twitter.svg" alt="Twitter" width={24} height={24} />
+          </button>
+          <button className="flex justify-center items-center h-12 w-full rounded-lg border border-white/10 bg-white/5 hover:bg-white/10 transition-colors">
+            <Image src="/apple.svg" alt="Apple" width={24} height={24} />
+          </button>
+        </div>
+
+        <p className="mt-6 text-center text-sm text-gray-400">
+          By signing up, you agree to our{' '}
+          <a href="/terms" className="text-indigo-400 hover:text-indigo-300">
+            Terms
+          </a>{' '}
+          &{' '}
+          <a href="/privacy" className="text-indigo-400 hover:text-indigo-300">
+            Privacy
+          </a>
+        </p>
+
+        <p className="text-center text-sm text-gray-400">
+          New to Tradr?{' '}
+          <a href="/auth/signup" className="text-indigo-400 hover:text-indigo-300">
+            Create an account
+          </a>
+        </p>
       </div>
     </div>
   );

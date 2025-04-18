@@ -17,19 +17,25 @@ export default function JoinPage() {
     setMessage('');
 
     try {
+      const redirectTo = `${window.location.origin}/auth/callback`;
+      console.log('Sending magic link with redirectTo:', redirectTo);
+
       const { error } = await supabase.auth.signInWithOtp({
         email,
         options: {
-          emailRedirectTo: `${window.location.origin}/auth/callback`,
+          emailRedirectTo: redirectTo,
         },
       });
 
       if (error) {
+        console.error('Magic link error:', error);
         throw error;
       }
 
+      console.log('Magic link sent successfully');
       router.push('/auth/magic-link-sent');
     } catch (error: any) {
+      console.error('Error in handleEmailSignUp:', error);
       setMessage(error.message || 'Failed to send magic link. Please try again.');
     } finally {
       setLoading(false);

@@ -618,15 +618,12 @@ export default function OnboardingPage() {
             </div>
 
             {/* Username input */}
-            <div className="mb-8">
+            <div className="space-y-3">
               <div className="relative flex items-center bg-zinc-900/50 border border-zinc-800/50 rounded-xl px-4 py-4 hover:border-zinc-700/50 transition-all group">
                 <span className="text-gray-400 text-lg">@</span>
                 <div className="flex-1 ml-1">
                   <p onClick={handleEditUsername} className="text-lg text-white cursor-pointer">
                     {username || <span className="text-gray-500">yourusername</span>}
-                  </p>
-                  <p className="text-sm text-gray-500 mt-1 group-hover:text-gray-400 transition-colors">
-                    tradr.co/{username || 'yourusername'}
                   </p>
                 </div>
                 <button
@@ -637,6 +634,25 @@ export default function OnboardingPage() {
                     <path d="M21.731 2.269a2.625 2.625 0 00-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 000-3.712zM19.513 8.199l-3.712-3.712-12.15 12.15a5.25 5.25 0 00-1.32 2.214l-.8 2.685a.75.75 0 00.933.933l2.685-.8a5.25 5.25 0 002.214-1.32L19.513 8.2z" />
                   </svg>
                 </button>
+              </div>
+
+              {/* Personalized link box */}
+              <div className="bg-zinc-900/30 border border-zinc-800/30 rounded-xl px-4 py-3 group cursor-pointer backdrop-blur-xl">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4 text-indigo-400">
+                      <path fillRule="evenodd" d="M9.493 2.853a.75.75 0 00-1.486-.205L7.545 6H4.198a.75.75 0 000 1.5h3.14l-.69 5H3.302a.75.75 0 000 1.5h3.14l-.435 3.148a.75.75 0 001.486.205L7.955 14h2.986l-.434 3.148a.75.75 0 001.486.205L12.456 14h3.346a.75.75 0 000-1.5h-3.14l.69-5h3.346a.75.75 0 000-1.5h-3.14l.435-3.147a.75.75 0 00-1.486-.205L12.045 6H9.059l.434-3.147zM8.852 7.5l-.69 5h2.986l.69-5H8.852z" />
+                    </svg>
+                    <p className="text-sm text-gray-400">Your personalized link</p>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-sm text-gray-400 group-hover:text-white transition-colors">tradr.co/{username || 'yourusername'}</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4 text-gray-500 group-hover:text-indigo-400 transition-colors">
+                      <path d="M7 3.5A1.5 1.5 0 018.5 2h3.879a1.5 1.5 0 011.06.44l3.122 3.12A1.5 1.5 0 0117 6.622V12.5a1.5 1.5 0 01-1.5 1.5h-1v-3.379a3 3 0 00-.879-2.121L10.5 5.379A3 3 0 008.379 4.5H7v-1z" />
+                      <path d="M4.5 6A1.5 1.5 0 003 7.5v9A1.5 1.5 0 004.5 18h7a1.5 1.5 0 001.5-1.5v-5.879a1.5 1.5 0 00-.44-1.06L9.44 6.439A1.5 1.5 0 008.378 6H4.5z" />
+                    </svg>
+                  </div>
+                </div>
               </div>
             </div>
 

@@ -213,23 +213,6 @@ export default function OnboardingPage() {
       const timestamp = Date.now();
       const filePath = `${user.id}/${timestamp}.${fileExt}`;
 
-      // First check if we can list buckets (this verifies our permissions)
-      const { data: buckets, error: listError } = await supabase.storage.listBuckets();
-      
-      if (listError) {
-        console.error('Error listing buckets:', listError);
-        toast.error('Unable to access storage. Please check your permissions.');
-        return;
-      }
-
-      // Check if avatars bucket exists
-      const avatarsBucket = buckets.find(b => b.name === 'avatars');
-      
-      if (!avatarsBucket) {
-        toast.error('Storage not configured. Please contact support to set up the avatars storage.');
-        return;
-      }
-
       // Upload the file
       const { error: uploadError } = await supabase.storage
         .from('avatars')
@@ -240,6 +223,11 @@ export default function OnboardingPage() {
 
       if (uploadError) {
         console.error('Upload error:', uploadError);
+        
+        if (uploadError.message?.includes('bucket not found')) {
+          toast.error('Storage not configured. Please contact support.');
+          return;
+        }
         
         if (uploadError.message?.includes('permission denied')) {
           toast.error('Permission denied. Please check your access rights.');

@@ -11,18 +11,28 @@ export async function middleware(request: NextRequest) {
   const { data: { session } } = await supabase.auth.getSession();
 
   const pathname = new URL(request.url).pathname;
-  const isPublicRoute = publicRoutes.some(route => pathname.startsWith(route));
 
   // Allow access to public routes regardless of session
-  if (isPublicRoute) {
+  if (publicRoutes.some(route => pathname.startsWith(route))) {
     return res;
   }
 
-  // If not a public route and no session, redirect to join
+  // If no session, redirect to join page (except for public routes)
   if (!session) {
-    return NextResponse.redirect(new URL('/auth/join', request.url));
+    const response = NextResponse.redirect(new URL('/auth/join', request.url));
+    response.headers.set('Cache-Control', 'no-store, max-age=0');
+    return response;
   }
 
+  // If we have a session and they're trying to access join page, redirect to dashboard
+  if (session && pathname === '/auth/join') {
+    const response = NextResponse.redirect(new URL('/dashboard', request.url));
+    response.headers.set('Cache-Control', 'no-store, max-age=0');
+    return response;
+  }
+
+  // For all other cases, allow access
+  res.headers.set('Cache-Control', 'no-store, max-age=0');
   return res;
 }
 

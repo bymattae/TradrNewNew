@@ -99,13 +99,35 @@ export default function OnboardingPage() {
         const { data: { session: initialSession } } = await supabase.auth.getSession();
         if (mounted) {
           setSession(initialSession);
-          // Only redirect if there's no session and we're not already on the join page
-          if (!initialSession && !window.location.pathname.includes('/auth/join')) {
+          
+          if (!initialSession) {
             router.push('/auth/join');
+            return;
+          }
+
+          // Check if user has already completed onboarding
+          const { data: profile } = await supabase
+            .from('profiles')
+            .select('username, bio, avatar_url, tags')
+            .eq('id', initialSession.user.id)
+            .single();
+
+          // Check if profile exists and has any data
+          const isProfileEmpty = !profile || (
+            !profile.username &&
+            !profile.bio &&
+            !profile.avatar_url &&
+            (!profile.tags || profile.tags.length === 0)
+          );
+
+          // Only stay on onboarding if profile is completely empty
+          if (!isProfileEmpty) {
+            router.push('/dashboard');
           }
         }
       } catch (error) {
         console.error('Error initializing session:', error);
+        router.push('/auth/join');
       } finally {
         if (mounted) {
           setIsLoading(false);
@@ -120,8 +142,7 @@ export default function OnboardingPage() {
     } = supabase.auth.onAuthStateChange((_event, session) => {
       if (mounted) {
         setSession(session);
-        // Only redirect if there's no session and we're not already on the join page
-        if (!session && !window.location.pathname.includes('/auth/join')) {
+        if (!session) {
           router.push('/auth/join');
         }
       }
@@ -131,7 +152,7 @@ export default function OnboardingPage() {
       mounted = false;
       subscription.unsubscribe();
     };
-  }, [supabase.auth, router]);
+  }, [router, supabase]);
 
   // Load existing profile data
   useEffect(() => {
@@ -492,7 +513,7 @@ export default function OnboardingPage() {
               <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
             </svg>
           </button>
-            <h1 className="text-xl font-bold">Build your profile</h1>
+            <h1 className="text-xl font-bold">Build your profile</h1>You
           <button 
             onClick={() => setIsPreviewOpen(true)}
             className="text-gray-400 hover:text-white transition-colors flex items-center gap-1.5"

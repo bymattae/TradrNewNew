@@ -1,8 +1,9 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import getSupabaseBrowserClient from '@/lib/supabase/client';
+import { toast } from 'sonner';
 
 export default function JoinPage() {
   const [email, setEmail] = useState('');
@@ -10,6 +11,7 @@ export default function JoinPage() {
   const [message, setMessage] = useState('');
   const [isCheckingSession, setIsCheckingSession] = useState(true);
   const router = useRouter();
+  const searchParams = useSearchParams();
   const supabase = getSupabaseBrowserClient();
 
   useEffect(() => {
@@ -17,7 +19,27 @@ export default function JoinPage() {
       try {
         const { data: { session } } = await supabase.auth.getSession();
         if (session?.user) {
-          router.replace('/onboarding');
+          // Check if user has completed onboarding
+          const { data: profile } = await supabase
+            .from('profiles')
+            .select('username, bio, avatar_url, tags')
+            .eq('id', session.user.id)
+            .single();
+
+          // Check if profile exists and has any data
+          const isProfileEmpty = !profile || (
+            !profile.username &&
+            !profile.bio &&
+            !profile.avatar_url &&
+            (!profile.tags || profile.tags.length === 0)
+          );
+
+          // Only redirect to onboarding if profile is completely empty
+          if (isProfileEmpty) {
+            router.replace('/onboarding');
+          } else {
+            router.replace('/dashboard');
+          }
         }
       } catch (error) {
         console.error('Session check error:', error);
@@ -27,7 +49,25 @@ export default function JoinPage() {
     };
 
     checkSession();
-  }, [router, supabase.auth]);
+
+    // Check for error in URL params
+    const error = searchParams.get('error');
+    if (error) {
+      switch (error) {
+        case 'invalid_code':
+          toast.error('Invalid magic link. Please try again.');
+          break;
+        case 'no_user':
+          toast.error('User not found. Please try again.');
+          break;
+        case 'server_error':
+          toast.error('Server error. Please try again.');
+          break;
+        default:
+          toast.error('An error occurred. Please try again.');
+      }
+    }
+  }, [router, supabase, searchParams]);
 
   const handleEmailSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -47,11 +87,13 @@ export default function JoinPage() {
 
       if (error) {
         setMessage(error.message);
+        toast.error(error.message);
       } else {
         router.push('/auth/magic-link-sent');
       }
     } catch (error) {
       setMessage('An unexpected error occurred. Please try again.');
+      toast.error('An unexpected error occurred. Please try again.');
     } finally {
       setLoading(false);
     }

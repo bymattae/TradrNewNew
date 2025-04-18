@@ -1,58 +1,35 @@
-import { createServerClient } from '@supabase/ssr'
+import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs'
 import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'
-import type { NextRequest } from 'next/server'
 
 export const dynamic = 'force-dynamic'
 
-export async function GET(request: NextRequest) {
+export async function GET(request: Request) {
   const requestUrl = new URL(request.url)
   const code = requestUrl.searchParams.get('code')
   
-  if (!code) {
-    console.error('No code found in callback URL')
-    return NextResponse.redirect(new URL('/auth/join', request.url))
-  }
+  if (code) {
+    const cookieStore = cookies()
+    const supabase = createRouteHandlerClient({ cookies: () => cookieStore })
 
-  const cookieStore = cookies()
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        get(name: string) {
-          return cookieStore.get(name)?.value
-        },
-        set(name: string, value: string, options: any) {
-          cookieStore.set({ name, value, ...options })
-        },
-        remove(name: string, options: any) {
-          cookieStore.set({ name, value: '', ...options })
-        },
-      },
-    }
-  )
+    // Exchange the code for a session
+    await supabase.auth.exchangeCodeForSession(code)
 
-  try {
-    const { error } = await supabase.auth.exchangeCodeForSession(code)
-    
-    if (error) {
-      console.error('Error exchanging code for session:', error)
-      return NextResponse.redirect(new URL('/auth/join', request.url))
-    }
-
-    // Get the session to verify it was created
+    // Check if user has a profile
     const { data: { session } } = await supabase.auth.getSession()
-    
-    if (!session) {
-      console.error('No session created after code exchange')
-      return NextResponse.redirect(new URL('/auth/join', request.url))
+    if (session) {
+      const { data: profile } = await supabase.from('profiles').select('*').eq('id', session.user.id).single()
+      
+      // If no profile exists, redirect to onboarding
+      if (!profile) {
+        return NextResponse.redirect(new URL('/onboarding', request.url))
+      }
+      
+      // If profile exists, redirect to dashboard
+      return NextResponse.redirect(new URL('/dashboard', request.url))
     }
-
-    console.log('Successfully exchanged code for session, redirecting to verify page')
-    return NextResponse.redirect(new URL('/auth/verify', request.url))
-  } catch (error) {
-    console.error('Unexpected error in callback:', error)
-    return NextResponse.redirect(new URL('/auth/join', request.url))
   }
+
+  // If no code or session, redirect to join page
+  return NextResponse.redirect(new URL('/auth/join', request.url))
 } 

@@ -17,7 +17,7 @@ export async function middleware(req: NextRequest) {
   const pathname = req.nextUrl.pathname;
 
   // Define public routes that don't require auth
-  const publicRoutes = ['/auth/join', '/auth/callback', '/auth/magic-link-sent', '/onboarding'];
+  const publicRoutes = ['/auth/join', '/auth/callback', '/auth/magic-link-sent', '/auth/verify'];
   const isPublicRoute = publicRoutes.includes(pathname);
 
   console.log('Middleware - Is public route:', isPublicRoute);
@@ -34,10 +34,19 @@ export async function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL('/auth/join', req.url));
   }
 
+  // If there's a session but no profile, redirect to onboarding
+  if (session && pathname !== '/onboarding') {
+    const { data: profile } = await supabase.from('profiles').select('*').eq('id', session.user.id).single();
+    if (!profile) {
+      console.log('Middleware - No profile found, redirecting to /onboarding');
+      return NextResponse.redirect(new URL('/onboarding', req.url));
+    }
+  }
+
   // If there's a session and trying to access auth pages (except callback)
   if (session && pathname.startsWith('/auth') && pathname !== '/auth/callback') {
-    console.log('Middleware - Session exists, redirecting from auth page to /onboarding');
-    return NextResponse.redirect(new URL('/onboarding', req.url));
+    console.log('Middleware - Session exists, redirecting from auth page to /dashboard');
+    return NextResponse.redirect(new URL('/dashboard', req.url));
   }
 
   console.log('Middleware - Proceeding with request');

@@ -219,11 +219,15 @@ export default function OnboardingPage() {
         throw uploadError;
       }
 
+      // Get the public URL and update the avatar URL state
       const { data: { publicUrl } } = supabase.storage
         .from('avatars')
         .getPublicUrl(fileName);
 
-      setAvatarUrl(publicUrl);
+      // Force a re-render by appending a timestamp to the URL
+      const urlWithTimestamp = `${publicUrl}?t=${Date.now()}`;
+      setAvatarUrl(urlWithTimestamp);
+      
       toast.success('Avatar updated successfully');
     } catch (error: any) {
       console.error('Error uploading avatar:', error);

@@ -362,11 +362,6 @@ export default function OnboardingPage() {
       return;
     }
 
-    if (!validateFields()) {
-      toast.error('All required fields must be filled');
-      return;
-    }
-
     try {
       setIsSaving(true);
 
@@ -424,6 +419,27 @@ export default function OnboardingPage() {
       toast.error('All required fields must be filled');
       return;
     }
+    
+    // Only validate username format and uniqueness on final submission
+    const usernameRegex = /^[a-zA-Z0-9_]+$/;
+    if (!usernameRegex.test(username)) {
+      toast.error('Username can only contain letters, numbers, and underscores');
+      return;
+    }
+
+    // Check if username is already taken
+    const { data: existingUser } = await supabase
+      .from('profiles')
+      .select('id')
+      .eq('username', username)
+      .neq('id', session.user.id)
+      .single();
+
+    if (existingUser) {
+      toast.error('Username is already taken');
+      return;
+    }
+
     await handleSave();
     router.push('/dashboard');
   };

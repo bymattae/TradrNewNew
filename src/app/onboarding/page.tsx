@@ -222,7 +222,12 @@ export default function OnboardingPage() {
         });
 
       if (uploadError) {
-        console.error('Upload error:', uploadError);
+        // Log detailed error information
+        console.error('Upload error details:', {
+          message: uploadError.message,
+          name: uploadError.name,
+          error: uploadError
+        });
         
         if (uploadError.message?.includes('bucket not found')) {
           toast.error('Storage not configured. Please contact support.');
@@ -234,7 +239,8 @@ export default function OnboardingPage() {
           return;
         }
 
-        toast.error('Failed to upload avatar. Please try again.');
+        // Show the actual error message to help with debugging
+        toast.error(`Failed to upload avatar: ${uploadError.message}`);
         return;
       }
 

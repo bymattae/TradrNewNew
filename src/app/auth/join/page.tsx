@@ -1,15 +1,40 @@
 'use client';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 
 export default function JoinPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
   const supabase = createClient();
+
+  useEffect(() => {
+    const accessToken = searchParams.get('access_token');
+    if (accessToken) {
+      handleAccessToken(accessToken);
+    }
+  }, [searchParams]);
+
+  const handleAccessToken = async (token: string) => {
+    try {
+      const { data: { session }, error } = await supabase.auth.getSession();
+      
+      if (error) {
+        throw error;
+      }
+
+      if (session) {
+        router.push('/onboarding');
+      }
+    } catch (error: any) {
+      console.error('Error handling access token:', error);
+      setMessage(error.message || 'Failed to authenticate. Please try again.');
+    }
+  };
 
   const handleEmailSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -17,25 +42,19 @@ export default function JoinPage() {
     setMessage('');
 
     try {
-      const redirectTo = `${window.location.origin}/auth/callback`;
-      console.log('Sending magic link with redirectTo:', redirectTo);
-
       const { error } = await supabase.auth.signInWithOtp({
         email,
         options: {
-          emailRedirectTo: redirectTo,
+          emailRedirectTo: `${window.location.origin}/auth/callback`,
         },
       });
 
       if (error) {
-        console.error('Magic link error:', error);
         throw error;
       }
 
-      console.log('Magic link sent successfully');
       router.push('/auth/magic-link-sent');
     } catch (error: any) {
-      console.error('Error in handleEmailSignUp:', error);
       setMessage(error.message || 'Failed to send magic link. Please try again.');
     } finally {
       setLoading(false);

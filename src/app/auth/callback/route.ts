@@ -14,22 +14,11 @@ export async function GET(request: Request) {
 
     // Exchange the code for a session
     await supabase.auth.exchangeCodeForSession(code)
-
-    // Check if user has a profile
-    const { data: { session } } = await supabase.auth.getSession()
-    if (session) {
-      const { data: profile } = await supabase.from('profiles').select('*').eq('id', session.user.id).single()
-      
-      // If no profile exists, redirect to onboarding
-      if (!profile) {
-        return NextResponse.redirect(new URL('/onboarding', request.url))
-      }
-      
-      // If profile exists, redirect to dashboard
-      return NextResponse.redirect(new URL('/dashboard', request.url))
-    }
+    
+    // Always redirect to onboarding after successful auth
+    return NextResponse.redirect(new URL('/onboarding', request.url))
   }
 
-  // If no code or session, redirect to join page
+  // If no code, redirect to join page
   return NextResponse.redirect(new URL('/auth/join', request.url))
 } 

@@ -562,7 +562,10 @@ export default function OnboardingPage() {
             onClick={() => router.push('/dashboard')}
             className="text-gray-400 hover:text-white transition-colors flex items-center gap-1.5"
           >
-            Done
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
           </button>
         </div>
 
@@ -594,7 +597,7 @@ export default function OnboardingPage() {
               <div className="relative w-24 h-24">
                 <button 
                   onClick={() => fileInputRef.current?.click()}
-                  className={`absolute inset-0 rounded-full bg-zinc-900/50 border-2 border-dashed ${errors.avatar ? 'border-red-500/50' : 'border-zinc-800/50'} overflow-hidden flex items-center justify-center hover:border-indigo-500/50 transition-all group backdrop-blur-xl`}
+                  className={`absolute inset-0 rounded-full bg-zinc-900/50 border-2 border-dashed ${validateFields() && errors.avatar ? 'border-red-500/50' : 'border-zinc-800/50'} overflow-hidden flex items-center justify-center hover:border-indigo-500/50 transition-all group backdrop-blur-xl`}
                 >
                   {avatarUrl ? (
                     <Image
@@ -638,7 +641,7 @@ export default function OnboardingPage() {
 
             {/* Username input */}
             <div className="space-y-3">
-              <div className={`relative flex items-center bg-zinc-900/50 border ${errors.username ? 'border-red-500/50' : 'border-zinc-800/50'} rounded-xl px-4 py-4 hover:border-zinc-700/50 transition-all group`}>
+              <div className={`relative flex items-center bg-zinc-900/50 border ${validateFields() && errors.username ? 'border-red-500/50' : 'border-zinc-800/50'} rounded-xl px-4 py-4 hover:border-zinc-700/50 transition-all group`}>
                 <span className="text-gray-400 text-lg">@</span>
                 <div className="flex-1 ml-1">
                   <p onClick={handleEditUsername} className="text-lg text-white cursor-pointer">
@@ -680,7 +683,7 @@ export default function OnboardingPage() {
 
             {/* Bio input */}
             <div className="mb-8">
-              <div className={`relative bg-zinc-900/50 border ${errors.bio ? 'border-red-500/50' : 'border-zinc-800/50'} rounded-xl px-4 py-4 hover:border-zinc-700/50 transition-all group`}>
+              <div className={`relative bg-zinc-900/50 border ${validateFields() && errors.bio ? 'border-red-500/50' : 'border-zinc-800/50'} rounded-xl px-4 py-4 hover:border-zinc-700/50 transition-all group`}>
                 <div className="flex-1 pr-8">
                   <p onClick={handleEditBio} className="text-[15px] text-white cursor-pointer min-h-[4rem]">
                     {bio || <span className="text-gray-500">Tell us about your strategy…</span>}
@@ -702,47 +705,70 @@ export default function OnboardingPage() {
 
             {/* Tags */}
             <div className="space-y-3">
-              <div className={`flex flex-wrap gap-2 items-center p-4 bg-zinc-900/50 border ${errors.tags ? 'border-red-500/50' : 'border-zinc-800/50'} rounded-xl`}>
-                {tags.map((tag, index) => (
-                  <div
-                    key={index}
-                    className="group relative bg-indigo-600/20 border border-indigo-500/30 text-white px-3 py-1.5 rounded-full text-sm backdrop-blur-xl flex items-center gap-1.5"
+              <div className={`flex flex-wrap gap-2 items-center p-4 bg-zinc-900/50 border ${validateFields() && errors.tags ? 'border-red-500/50' : 'border-zinc-800/50'} rounded-xl`}>
+                {tags.length === 0 ? (
+                  <button
+                    onClick={() => setIsEditingTag(true)}
+                    className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors group"
                   >
-                    {tag}
-                    <button
-                      onClick={() => handleRemoveTag(tag)}
-                      className="text-indigo-300/70 hover:text-indigo-300 transition-colors"
-                    >
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3.5 h-3.5">
-                        <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
-                      </svg>
-                    </button>
-                  </div>
-                ))}
-                {tags.length < 3 && (
+                    <span className="text-sm">Add hashtag</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 text-gray-400 group-hover:text-indigo-400">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                    </svg>
+                  </button>
+                ) : (
+                  <>
+                    {tags.map((tag, index) => (
+                      <div
+                        key={index}
+                        className="group relative bg-indigo-600/20 border border-indigo-500/30 text-white px-3 py-1.5 rounded-full text-sm backdrop-blur-xl flex items-center gap-1.5"
+                      >
+                        {tag}
+                        <button
+                          onClick={() => handleRemoveTag(tag)}
+                          className="text-indigo-300/70 hover:text-indigo-300 transition-colors"
+                        >
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3.5 h-3.5">
+                            <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
+                          </svg>
+                        </button>
+                      </div>
+                    ))}
+                    {tags.length < 3 && (
+                      <button
+                        onClick={() => setIsEditingTag(true)}
+                        className="flex items-center justify-center w-7 h-7 rounded-full border border-zinc-800/50 hover:border-indigo-500/50 transition-all text-gray-400 hover:text-indigo-400"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                        </svg>
+                      </button>
+                    )}
+                  </>
+                )}
+                {isEditingTag && (
                   <div className="flex items-center gap-2">
                     <input
                       type="text"
                       value={newTag}
                       onChange={(e) => setNewTag(e.target.value)}
                       onKeyPress={(e) => e.key === 'Enter' && handleAddTag()}
-                      placeholder="Add hashtag"
+                      placeholder="Type and press enter"
                       className="bg-transparent text-white placeholder-gray-500 focus:outline-none text-sm"
+                      autoFocus
+                      onBlur={() => {
+                        if (newTag) {
+                          handleAddTag();
+                        }
+                        setIsEditingTag(false);
+                      }}
                     />
-                    <button
-                      onClick={handleAddTag}
-                      className="text-indigo-400 hover:text-indigo-300 transition-colors"
-                    >
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
-                        <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
-                      </svg>
-                    </button>
                   </div>
                 )}
-                {errors.tags && (
-                  <p className="text-xs text-red-500 w-full">At least one hashtag is required</p>
-                )}
               </div>
+              {validateFields() && errors.tags && (
+                <p className="text-xs text-red-500 w-full">At least one hashtag is required</p>
+              )}
             </div>
 
             {/* Additional Fields Section */}

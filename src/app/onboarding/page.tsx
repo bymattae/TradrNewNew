@@ -234,12 +234,15 @@ export default function OnboardingPage() {
         return;
       }
 
-      // Log file details for debugging
-      console.log('Original file details:', {
-        name: file.name,
-        type: file.type,
-        size: file.size,
-        sizeInKB: Math.round(file.size / 1024)
+      // Detailed logging for debugging
+      console.log('File size check:', {
+        maxFileSize: MAX_FILE_SIZE,
+        maxFileSizeInKB: Math.round(MAX_FILE_SIZE / 1024),
+        actualFileSize: file.size,
+        actualFileSizeInKB: Math.round(file.size / 1024),
+        isOverLimit: file.size > MAX_FILE_SIZE,
+        fileType: file.type,
+        fileName: file.name
       });
 
       // Validate file type first
@@ -261,30 +264,21 @@ export default function OnboardingPage() {
         return;
       }
 
-      // Only compress if file is larger than 1MB
-      let fileToUpload: Blob = file;
-      if (file.size > MAX_FILE_SIZE) {
-        try {
-          fileToUpload = await compressImage(file);
-          console.log('Compressed file size:', Math.round(fileToUpload.size / 1024), 'KB');
-        } catch (compressionError) {
-          console.error('Compression error:', compressionError);
-          toast.error('Failed to process image. Please try a different file.');
-          return;
-        }
-      }
-
       // Create a unique filename
       const timestamp = Date.now();
       const filePath = `${user.id}/${timestamp}.${fileExt}`; // Preserve original extension
 
-      // Upload the file
+      // Try to upload with a different approach
+      const buffer = await file.arrayBuffer();
+      const fileData = new Uint8Array(buffer);
+
+      // Upload the file using raw bytes
       const { error: uploadError } = await supabase.storage
         .from('avatars')
-        .upload(filePath, fileToUpload, {
+        .upload(filePath, fileData, {
           cacheControl: '3600',
-          contentType: file.type, // Use original content type
-          upsert: false
+          contentType: file.type,
+          upsert: true // Change to true to overwrite if exists
         });
 
       if (uploadError) {
@@ -292,16 +286,29 @@ export default function OnboardingPage() {
         console.error('Upload error details:', {
           message: uploadError.message,
           name: uploadError.name,
-          error: uploadError
+          error: uploadError,
+          requestDetails: {
+            filePath,
+            fileSize: file.size,
+            contentType: file.type,
+            maxAllowedSize: MAX_FILE_SIZE,
+            actualSizeInKB: Math.round(file.size / 1024)
+          }
         });
         
         if (uploadError.message?.includes('bucket not found')) {
+          console.error('Bucket not found. Bucket details:', await supabase.storage.getBucket('avatars'));
           toast.error('Storage not configured. Please contact support.');
           return;
         }
         
         if (uploadError.message?.includes('permission denied')) {
           toast.error('Permission denied. Please check your access rights.');
+          return;
+        }
+
+        if (uploadError.message?.includes('size')) {
+          toast.error('The file size limit is set to 1MB on Supabase. Please try a smaller image.');
           return;
         }
 

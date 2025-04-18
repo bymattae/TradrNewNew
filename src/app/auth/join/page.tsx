@@ -19,7 +19,7 @@ export default function JoinPage() {
           console.error('Error checking session:', error.message);
           return;
         }
-        if (session?.user) {
+        if (session?.user && window.location.pathname !== '/onboarding') {
           console.log('Session found, redirecting to onboarding');
           router.push('/onboarding');
         }
@@ -61,19 +61,19 @@ export default function JoinPage() {
   };
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-black px-4 py-12">
-      <div className="w-full max-w-md space-y-8">
+    <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-br from-gray-900 to-black px-4 py-12">
+      <div className="w-full max-w-md space-y-8 bg-white/5 backdrop-blur-xl p-8 rounded-2xl border border-white/10">
         <div>
           <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-white">
             Join Tradr
           </h2>
           <p className="mt-2 text-center text-sm text-gray-400">
-            Enter your email to get started
+            Enter your email to get started with your trading journey
           </p>
         </div>
 
         <form className="mt-8 space-y-6" onSubmit={handleEmailSignUp}>
-          <div className="-space-y-px rounded-md shadow-sm">
+          <div className="-space-y-px">
             <div>
               <label htmlFor="email-address" className="sr-only">
                 Email address
@@ -84,8 +84,8 @@ export default function JoinPage() {
                 type="email"
                 autoComplete="email"
                 required
-                className="relative block w-full rounded-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 px-3"
-                placeholder="Email address"
+                className="relative block w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 sm:text-sm"
+                placeholder="Enter your email address"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 disabled={loading}
@@ -94,8 +94,8 @@ export default function JoinPage() {
           </div>
 
           {message && (
-            <div className="rounded-md bg-red-50 p-4">
-              <div className="text-sm text-red-700">{message}</div>
+            <div className="rounded-xl bg-red-900/50 border border-red-500/50 p-4">
+              <div className="text-sm text-red-200">{message}</div>
             </div>
           )}
 
@@ -103,11 +103,21 @@ export default function JoinPage() {
             <button
               type="submit"
               disabled={loading}
-              className={`group relative flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 ${
+              className={`group relative flex w-full justify-center rounded-xl bg-indigo-600 px-4 py-3 text-sm font-semibold text-white transition-all hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 ${
                 loading ? 'opacity-50 cursor-not-allowed' : ''
               }`}
             >
-              {loading ? 'Sending magic link...' : 'Continue with Email'}
+              {loading ? (
+                <span className="flex items-center">
+                  <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  Sending magic link...
+                </span>
+              ) : (
+                'Continue with Email'
+              )}
             </button>
           </div>
         </form>

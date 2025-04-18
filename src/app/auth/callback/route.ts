@@ -5,14 +5,11 @@ import { NextResponse } from 'next/server'
 export const dynamic = 'force-dynamic'
 
 export async function GET(request: Request) {
-  console.log('Callback route hit');
   const requestUrl = new URL(request.url)
   const code = requestUrl.searchParams.get('code')
   
-  console.log('Auth code present:', !!code);
-  
+  // If no code present, redirect to join page
   if (!code) {
-    console.log('No code found, redirecting to /auth/join');
     return NextResponse.redirect(new URL('/auth/join', request.url))
   }
 
@@ -20,15 +17,14 @@ export async function GET(request: Request) {
   const supabase = createRouteHandlerClient({ cookies: () => cookieStore })
 
   try {
-    console.log('Attempting to exchange code for session');
-    const { data, error } = await supabase.auth.exchangeCodeForSession(code)
-    console.log('Exchange result:', { data: !!data, error });
+    // Exchange the code for a session
+    await supabase.auth.exchangeCodeForSession(code)
     
-    if (error) throw error;
-    console.log('Success, redirecting to /onboarding');
+    // After successful exchange, redirect to onboarding
     return NextResponse.redirect(new URL('/onboarding', request.url))
   } catch (error) {
     console.error('Auth error:', error)
+    // On error, redirect back to join page
     return NextResponse.redirect(new URL('/auth/join', request.url))
   }
 } 

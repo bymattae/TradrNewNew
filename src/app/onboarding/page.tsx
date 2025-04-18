@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 import Image from 'next/image';
 import { toast } from 'sonner';
+import ImageCropModal from '../components/ImageCropModal';
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB limit
 
@@ -77,6 +78,8 @@ export default function OnboardingPage() {
   const autoSaveTimeoutRef = useRef<NodeJS.Timeout>();
   const [session, setSession] = useState<any>(null);
   const [lastSaved, setLastSaved] = useState<string>('');
+  const [showCropModal, setShowCropModal] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   // Initialize and maintain session
   useEffect(() => {
@@ -228,79 +231,71 @@ export default function OnboardingPage() {
 
   const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     try {
-      setUploading(true);
-      const file = e.target.files?.[0];
-      if (!file) {
-        toast.error('No file selected');
+      if (!e.target.files || e.target.files.length === 0) {
         return;
       }
 
-      // Validate file type first
+      const file = e.target.files[0];
       if (!file.type.startsWith('image/')) {
-        toast.error('Only image files are allowed');
-        return;
-      }
-
-      const fileExt = file.name.split('.').pop()?.toLowerCase();
-      const validExtensions = ['jpg', 'jpeg', 'png', 'gif'];
-      if (!fileExt || !validExtensions.includes(fileExt)) {
-        toast.error('Invalid file type. Please use JPG, PNG, or GIF');
+        toast.error('Please upload an image file');
         return;
       }
 
       if (file.size > MAX_FILE_SIZE) {
-        toast.error(`File too large. Maximum size is ${MAX_FILE_SIZE / (1024 * 1024)}MB`);
+        toast.error('File size too large. Maximum size is 5MB');
         return;
       }
 
-      // Compress the image to a reasonable size while maintaining quality
-      const compressedImage = await compressImage(file);
-      console.log('Compressed image size:', compressedImage.size, 'bytes');
+      // Create a temporary URL for the selected image
+      const imageUrl = URL.createObjectURL(file);
+      setSelectedImage(imageUrl);
+      setShowCropModal(true);
+    } catch (error) {
+      console.error('Error handling file selection:', error);
+      toast.error('Error selecting file');
+    }
+  };
 
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) {
-        toast.error('Authentication required');
-        return;
+  const handleCropComplete = async (croppedImage: string) => {
+    try {
+      setUploading(true);
+      setShowCropModal(false);
+
+      if (!session?.user?.id) {
+        throw new Error('No user session found');
       }
 
-      // Create a unique filename
-      const timestamp = Date.now();
-      const filePath = `${user.id}/${timestamp}.jpg`;
+      // Convert base64 to blob
+      const response = await fetch(croppedImage);
+      const blob = await response.blob();
 
-      // Upload the compressed image
-      const { error: uploadError } = await supabase.storage
+      const fileName = `${session.user.id}-${Date.now()}.jpg`;
+      const { data: uploadData, error: uploadError } = await supabase.storage
         .from('avatars')
-        .upload(filePath, compressedImage, {
-          cacheControl: '3600',
-          contentType: 'image/jpeg',
-          upsert: true
+        .upload(fileName, blob, {
+          upsert: true,
+          contentType: 'image/jpeg'
         });
 
       if (uploadError) {
-        console.error('Upload error details:', uploadError);
-        toast.error(`Upload failed: ${uploadError.message}`);
-        return;
+        throw uploadError;
       }
 
-      // Get the public URL
       const { data: { publicUrl } } = supabase.storage
         .from('avatars')
-        .getPublicUrl(filePath);
+        .getPublicUrl(fileName);
 
-      if (!publicUrl) {
-        toast.error('Failed to get avatar URL');
-        return;
-      }
-
-      // Update the avatar URL in state
       setAvatarUrl(publicUrl);
       toast.success('Avatar updated successfully');
-
     } catch (error) {
       console.error('Error uploading avatar:', error);
-      toast.error('Failed to upload avatar. Please try again.');
+      toast.error('Error uploading avatar');
     } finally {
       setUploading(false);
+      if (selectedImage) {
+        URL.revokeObjectURL(selectedImage);
+        setSelectedImage(null);
+      }
     }
   };
 
@@ -522,6 +517,21 @@ export default function OnboardingPage() {
             </div>
           </div>
         </div>
+      )}
+
+      {/* Add the ImageCropModal */}
+      {showCropModal && selectedImage && (
+        <ImageCropModal
+          imageUrl={selectedImage}
+          onClose={() => {
+            setShowCropModal(false);
+            if (selectedImage) {
+              URL.revokeObjectURL(selectedImage);
+              setSelectedImage(null);
+            }
+          }}
+          onSave={handleCropComplete}
+        />
       )}
 
       <div className="flex-1 flex flex-col max-h-[100dvh] overflow-hidden">

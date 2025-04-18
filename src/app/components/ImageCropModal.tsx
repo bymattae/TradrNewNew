@@ -54,58 +54,64 @@ export default function ImageCropModal({ imageUrl, onClose, onSave }: ImageCropM
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="relative w-full max-w-lg rounded-lg bg-white p-6">
-        <div className="mb-4 flex items-center justify-between">
-          <h3 className="text-lg font-semibold">Crop Image</h3>
-          <button
-            onClick={onClose}
-            className="text-gray-500 hover:text-gray-700"
-          >
-            <svg
-              className="h-6 w-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
-          </button>
-        </div>
-        <div className="mb-4">
+    <div className="fixed inset-0 z-50 flex flex-col bg-black/95 backdrop-blur-xl">
+      {/* Header */}
+      <div className="flex items-center justify-between p-4 border-b border-zinc-800/50">
+        <button 
+          onClick={onClose}
+          className="text-gray-400 hover:text-white transition-colors"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+          </svg>
+        </button>
+        <h3 className="text-lg font-semibold text-white">Edit photo</h3>
+        <button
+          onClick={handleSave}
+          className="text-indigo-400 hover:text-indigo-300 transition-colors text-sm font-medium"
+        >
+          Save
+        </button>
+      </div>
+
+      {/* Crop Area */}
+      <div className="flex-1 flex items-center justify-center p-4">
+        <div className="relative max-w-2xl w-full">
           <ReactCrop
             crop={crop}
             onChange={(c: Crop) => setCrop(c)}
             onComplete={(c) => setCompletedCrop(c)}
             aspect={1}
             circularCrop
+            className="rounded-xl overflow-hidden border border-zinc-800/50 bg-zinc-900/50"
           >
             <img
               ref={imgRef}
               src={imageUrl}
               alt="Crop me"
-              className="max-h-[400px] w-full object-contain"
+              className="max-h-[70vh] w-full object-contain"
             />
           </ReactCrop>
         </div>
-        <div className="flex justify-end space-x-2">
-          <button
-            onClick={onClose}
-            className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
-          >
-            Cancel
-          </button>
-          <button
-            onClick={handleSave}
-            className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
-          >
-            Save
-          </button>
+      </div>
+
+      {/* Footer */}
+      <div className="p-4 border-t border-zinc-800/50">
+        <div className="max-w-2xl mx-auto">
+          <div className="flex items-center gap-2 mb-2">
+            <span className="text-lg">💡</span>
+            <span className="text-white font-medium">Tips</span>
+          </div>
+          <ul className="space-y-2 text-sm text-gray-400">
+            <li className="flex items-center gap-2">
+              <span className="w-1 h-1 rounded-full bg-indigo-500"></span>
+              Drag to reposition
+            </li>
+            <li className="flex items-center gap-2">
+              <span className="w-1 h-1 rounded-full bg-indigo-500"></span>
+              Pinch or use slider to zoom
+            </li>
+          </ul>
         </div>
       </div>
     </div>

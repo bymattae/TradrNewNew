@@ -586,12 +586,19 @@ export default function OnboardingPage() {
                 className="relative w-24 h-24 rounded-full bg-zinc-900/50 border-2 border-dashed border-zinc-800/50 overflow-hidden flex items-center justify-center hover:border-indigo-500/50 transition-all group backdrop-blur-xl mb-3"
               >
                 {avatarUrl ? (
-                  <Image
-                    src={avatarUrl}
-                    alt="Avatar"
-                    fill
-                    className="object-cover"
-                  />
+                  <>
+                    <Image
+                      src={avatarUrl}
+                      alt="Avatar"
+                      fill
+                      className="object-cover"
+                    />
+                    <div className="absolute bottom-0 left-0 w-7 h-7 bg-indigo-500 rounded-tr-xl flex items-center justify-center group-hover:bg-indigo-400 transition-colors">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4 text-white">
+                        <path fillRule="evenodd" d="M12 3.75a.75.75 0 01.75.75v6.75h6.75a.75.75 0 010 1.5h-6.75v6.75a.75.75 0 01-1.5 0v-6.75H4.5a.75.75 0 010-1.5h6.75V4.5a.75.75 0 01.75-.75z" clipRule="evenodd" />
+                      </svg>
+                    </div>
+                  </>
                 ) : (
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8 text-gray-400 group-hover:text-white transition-colors">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z" />

@@ -16,7 +16,7 @@ export async function middleware(req: NextRequest) {
   const publicRoutes = ['/auth/join', '/auth/callback', '/auth/magic-link-sent'];
   const isPublicRoute = publicRoutes.includes(pathname);
 
-  // If it's a public route, allow access
+  // If it's a public route, allow access but still refresh the session
   if (isPublicRoute) {
     return res;
   }

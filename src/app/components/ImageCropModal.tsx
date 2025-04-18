@@ -13,51 +13,51 @@ interface ImageCropModalProps {
 const ImageCropModal: React.FC<ImageCropModalProps> = ({ imageUrl, onClose, onSave }) => {
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
-  const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState<any>(null);
 
   const onCropComplete = useCallback((croppedArea: any, croppedAreaPixels: any) => {
     setCroppedAreaPixels(croppedAreaPixels);
   }, []);
 
-  const createImage = (url: string): Promise<HTMLImageElement> =>
-    new Promise((resolve, reject) => {
-      const image = new Image();
-      image.addEventListener('load', () => resolve(image));
-      image.addEventListener('error', error => reject(error));
-      image.src = url;
-    });
-
   const getCroppedImg = async (
     imageSrc: string,
     pixelCrop: any,
   ): Promise<string> => {
-    const image = await createImage(imageSrc);
+    const image = new Image();
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
 
-    if (!ctx) {
-      throw new Error('No 2d context');
-    }
+    return new Promise((resolve, reject) => {
+      image.onload = () => {
+        if (!ctx) {
+          reject(new Error('No 2d context'));
+          return;
+        }
 
-    // Set canvas size to match the desired crop size
-    canvas.width = pixelCrop.width;
-    canvas.height = pixelCrop.height;
+        canvas.width = pixelCrop.width;
+        canvas.height = pixelCrop.height;
 
-    // Draw the cropped image onto the canvas
-    ctx.drawImage(
-      image,
-      pixelCrop.x,
-      pixelCrop.y,
-      pixelCrop.width,
-      pixelCrop.height,
-      0,
-      0,
-      pixelCrop.width,
-      pixelCrop.height
-    );
+        ctx.drawImage(
+          image,
+          pixelCrop.x,
+          pixelCrop.y,
+          pixelCrop.width,
+          pixelCrop.height,
+          0,
+          0,
+          pixelCrop.width,
+          pixelCrop.height
+        );
 
-    // Convert canvas to base64 string
-    return canvas.toDataURL('image/jpeg', 0.9);
+        resolve(canvas.toDataURL('image/jpeg', 0.9));
+      };
+
+      image.onerror = () => {
+        reject(new Error('Failed to load image'));
+      };
+
+      image.src = imageSrc;
+    });
   };
 
   const handleSave = useCallback(async () => {
@@ -68,7 +68,7 @@ const ImageCropModal: React.FC<ImageCropModalProps> = ({ imageUrl, onClose, onSa
       const croppedImage = await getCroppedImg(imageUrl, croppedAreaPixels);
       onSave(croppedImage);
     } catch (e) {
-      console.error(e);
+      console.error('Error cropping image:', e);
     }
   }, [croppedAreaPixels, imageUrl, onSave]);
 

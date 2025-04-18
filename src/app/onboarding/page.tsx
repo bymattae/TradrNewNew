@@ -80,6 +80,7 @@ export default function OnboardingPage() {
   const [lastSaved, setLastSaved] = useState<string>('');
   const [showCropModal, setShowCropModal] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [isEditingTag, setIsEditingTag] = useState(false);
 
   // Initialize and maintain session
   useEffect(() => {
@@ -314,11 +315,26 @@ export default function OnboardingPage() {
     setTags(tags.filter(tag => tag !== tagToRemove));
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      handleAddTag();
-    }
+  const handleEditUsername = () => {
+    setTempUsername(username);
+    setIsEditingUsername(true);
+  };
+
+  const handleSaveUsername = async () => {
+    setUsername(tempUsername);
+    setIsEditingUsername(false);
+    await handleSave();
+  };
+
+  const handleEditBio = () => {
+    setTempBio(bio);
+    setIsEditingBio(true);
+  };
+
+  const handleSaveBio = async () => {
+    setBio(tempBio);
+    setIsEditingBio(false);
+    await handleSave();
   };
 
   const handleSave = async () => {
@@ -392,28 +408,6 @@ export default function OnboardingPage() {
   const handleFinish = async () => {
     await handleSave();
     router.push('/dashboard');
-  };
-
-  const handleEditUsername = () => {
-    setTempUsername(username);
-    setIsEditingUsername(true);
-  };
-
-  const handleSaveUsername = async () => {
-    setUsername(tempUsername);
-    setIsEditingUsername(false);
-    await handleSave();
-  };
-
-  const handleEditBio = () => {
-    setTempBio(bio);
-    setIsEditingBio(true);
-  };
-
-  const handleSaveBio = async () => {
-    setBio(tempBio);
-    setIsEditingBio(false);
-    await handleSave();
   };
 
   if (isLoading) {
@@ -621,96 +615,124 @@ export default function OnboardingPage() {
               <p className="text-sm text-gray-400">Add a profile photo</p>
             </div>
 
-            {/* Username input */}
-            <div className="space-y-4">
-              <div className="flex justify-between items-center">
-                <label className="text-sm font-medium">Username</label>
+            {/* Username input - updated design */}
+            <div className="mb-8">
+              <div className="relative flex items-center bg-zinc-900/50 border border-zinc-800/50 rounded-xl px-4 py-4 hover:border-zinc-700/50 transition-all group">
+                <span className="text-gray-400 text-lg">@</span>
+                <div className="flex-1 ml-1">
+                  <p onClick={handleEditUsername} className="text-lg text-white cursor-pointer">
+                    {username || <span className="text-gray-500">yourusername</span>}
+                  </p>
+                </div>
                 <button
                   onClick={handleEditUsername}
-                  className="text-sm text-indigo-400 hover:text-indigo-300 transition-colors"
+                  className="text-gray-400 hover:text-indigo-400 transition-colors"
                 >
-                  Edit
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
+                    <path d="M21.731 2.269a2.625 2.625 0 00-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 000-3.712zM19.513 8.199l-3.712-3.712-12.15 12.15a5.25 5.25 0 00-1.32 2.214l-.8 2.685a.75.75 0 00.933.933l2.685-.8a5.25 5.25 0 002.214-1.32L19.513 8.2z" />
+                  </svg>
                 </button>
-              </div>
-              <div className="bg-zinc-900/50 border border-zinc-800/50 rounded-xl px-4 py-3">
-                <div className="flex items-center text-gray-400">
-                  <span className="text-base">@</span>
-                  <span className="ml-1 text-white">{username || 'Choose your username'}</span>
-                </div>
               </div>
             </div>
 
-            {/* Bio input */}
-            <div className="space-y-4">
-              <div className="flex justify-between items-center">
-                <label className="text-sm font-medium">Bio</label>
+            {/* Bio input - updated design */}
+            <div className="mb-8">
+              <div className="relative bg-zinc-900/50 border border-zinc-800/50 rounded-xl px-4 py-4 hover:border-zinc-700/50 transition-all group">
+                <div className="flex-1 pr-8">
+                  <p onClick={handleEditBio} className="text-[15px] text-white cursor-pointer">
+                    {bio || <span className="text-gray-500">Tell us about your strategy…</span>}
+                  </p>
+                </div>
                 <button
                   onClick={handleEditBio}
-                  className="text-sm text-indigo-400 hover:text-indigo-300 transition-colors"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-indigo-400 transition-colors"
                 >
-                  Edit
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
+                    <path d="M21.731 2.269a2.625 2.625 0 00-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 000-3.712zM19.513 8.199l-3.712-3.712-12.15 12.15a5.25 5.25 0 00-1.32 2.214l-.8 2.685a.75.75 0 00.933.933l2.685-.8a5.25 5.25 0 002.214-1.32L19.513 8.2z" />
+                  </svg>
                 </button>
-              </div>
-              <div className="bg-zinc-900/50 border border-zinc-800/50 rounded-xl px-4 py-3">
-                <p className="text-gray-400">
-                  {bio || "What's your trading philosophy?"}
-                </p>
-              </div>
-              <div className="bg-zinc-900/30 rounded-xl p-4 backdrop-blur-xl">
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="text-lg">🎯</span>
-                  <span className="text-base text-white">Tips for a great bio</span>
-                </div>
-                <ul className="space-y-2 text-sm text-gray-400">
-                  <li className="flex items-center gap-2">
-                    <span className="w-1 h-1 rounded-full bg-indigo-500"></span>
-                    Mention your trading style
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <span className="w-1 h-1 rounded-full bg-indigo-500"></span>
-                    Add your experience level
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <span className="w-1 h-1 rounded-full bg-indigo-500"></span>
-                    Keep it punchy
-                  </li>
-                </ul>
               </div>
             </div>
 
-            {/* Tags */}
-            <div className="space-y-4">
-              <div className="flex justify-between items-center">
-                <label className="text-sm font-medium">Tags</label>
-                <span className="text-xs text-gray-500">{tags.length}/3</span>
-              </div>
-              <div className="flex flex-wrap gap-2">
-                {tags.map((tag, index) => (
-                  <div
-                    key={index}
-                    className="group relative bg-indigo-600/20 border border-indigo-500/30 text-white px-3 py-1.5 rounded-lg text-sm backdrop-blur-xl"
+            {/* Tags - updated design */}
+            <div className="flex flex-wrap gap-2 items-center">
+              {tags.map((tag, index) => (
+                <div
+                  key={index}
+                  className="group relative bg-indigo-600/20 border border-indigo-500/30 text-white px-3 py-1.5 rounded-full text-sm backdrop-blur-xl flex items-center gap-1.5"
+                >
+                  {tag}
+                  <button
+                    onClick={() => handleRemoveTag(tag)}
+                    className="text-indigo-300/70 hover:text-indigo-300 transition-colors"
                   >
-                    {tag}
-                    <button
-                      onClick={() => handleRemoveTag(tag)}
-                      className="absolute -top-1.5 -right-1.5 hidden group-hover:flex bg-red-500 rounded-full w-4 h-4 items-center justify-center text-xs shadow-lg"
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3.5 h-3.5">
+                      <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
+                    </svg>
+                  </button>
+                </div>
+              ))}
+              {tags.length < 3 && (
+                <button
+                  onClick={() => setIsEditingTag(true)}
+                  className="flex items-center gap-1 text-indigo-400 hover:text-indigo-300 transition-colors text-sm font-medium"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
+                    <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
+                  </svg>
+                  Add hashtag
+                </button>
+              )}
+            </div>
+
+            {/* Add tag modal */}
+            {isEditingTag && (
+              <div className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4">
+                <div className="relative w-full max-w-sm bg-zinc-900 rounded-2xl overflow-hidden">
+                  <div className="flex items-center justify-between p-4 border-b border-zinc-800/50">
+                    <button 
+                      onClick={() => setIsEditingTag(false)}
+                      className="text-gray-400 hover:text-white transition-colors"
                     >
-                      ×
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+                      </svg>
+                    </button>
+                    <button
+                      onClick={() => {
+                        handleAddTag();
+                        setIsEditingTag(false);
+                      }}
+                      disabled={!newTag}
+                      className="text-indigo-400 hover:text-indigo-300 transition-colors text-sm font-medium disabled:opacity-50"
+                    >
+                      Add
                     </button>
                   </div>
-                ))}
-                {tags.length < 3 && (
-                  <input
-                    type="text"
-                    value={newTag}
-                    onChange={(e) => setNewTag(e.target.value)}
-                    onKeyDown={handleKeyDown}
-                    placeholder="+ Add tag"
-                    className="bg-zinc-900/50 border border-zinc-800/50 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:border-indigo-500/50 w-24 backdrop-blur-xl"
-                  />
-                )}
+                  <div className="p-4">
+                    <div className="flex bg-zinc-900/50 rounded-xl overflow-hidden border border-zinc-800/50 backdrop-blur-xl">
+                      <div className="flex items-center pl-4 text-gray-400">
+                        <span className="text-lg">#</span>
+                      </div>
+                      <input
+                        type="text"
+                        value={newTag}
+                        onChange={(e) => setNewTag(e.target.value.replace(/[^a-zA-Z0-9]/g, ''))}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' && newTag) {
+                            handleAddTag();
+                            setIsEditingTag(false);
+                          }
+                        }}
+                        className="w-full bg-transparent py-3 px-2 text-base text-white focus:outline-none"
+                        placeholder="Add a hashtag"
+                        autoFocus
+                      />
+                    </div>
+                  </div>
+                </div>
               </div>
-            </div>
+            )}
           </div>
 
           {/* Optional Fields Section */}

@@ -4,31 +4,23 @@ import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 
+// Create a single instance of the Supabase client outside the component
+const supabase = createClientComponentClient();
+
 export default function JoinPage() {
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
   const router = useRouter();
-  const supabase = createClientComponentClient();
 
   useEffect(() => {
-    const checkSession = async () => {
-      try {
-        const { data: { session }, error } = await supabase.auth.getSession();
-        if (error) {
-          console.error('Error checking session:', error.message);
-          return;
-        }
-        if (session?.user && window.location.pathname !== '/onboarding') {
-          router.push('/onboarding');
-        }
-      } catch (error) {
-        console.error('Error in session check:', error);
+    // Simple session check without router.push
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session) {
+        window.location.href = '/onboarding';
       }
-    };
-
-    checkSession();
-  }, [router, supabase.auth]);
+    });
+  }, []);
 
   const handleEmailSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -36,7 +28,7 @@ export default function JoinPage() {
     setMessage('');
 
     try {
-      const { data, error } = await supabase.auth.signInWithOtp({
+      const { error } = await supabase.auth.signInWithOtp({
         email,
         options: {
           shouldCreateUser: true,
@@ -45,14 +37,11 @@ export default function JoinPage() {
       });
 
       if (error) {
-        console.error('Error sending magic link:', error.message);
         setMessage(error.message);
-      } else if (data) {
-        console.log('Magic link sent successfully');
+      } else {
         router.push('/auth/magic-link-sent');
       }
     } catch (error) {
-      console.error('Unexpected error:', error);
       setMessage('An unexpected error occurred. Please try again.');
     } finally {
       setLoading(false);
@@ -72,24 +61,22 @@ export default function JoinPage() {
         </div>
 
         <form className="mt-8 space-y-6" onSubmit={handleEmailSignUp}>
-          <div className="-space-y-px">
-            <div>
-              <label htmlFor="email-address" className="sr-only">
-                Email address
-              </label>
-              <input
-                id="email-address"
-                name="email"
-                type="email"
-                autoComplete="email"
-                required
-                className="relative block w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 sm:text-sm"
-                placeholder="Enter your email address"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                disabled={loading}
-              />
-            </div>
+          <div>
+            <label htmlFor="email-address" className="sr-only">
+              Email address
+            </label>
+            <input
+              id="email-address"
+              name="email"
+              type="email"
+              autoComplete="email"
+              required
+              className="relative block w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 sm:text-sm"
+              placeholder="Enter your email address"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              disabled={loading}
+            />
           </div>
 
           {message && (

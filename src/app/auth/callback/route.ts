@@ -5,26 +5,29 @@ import { NextResponse } from 'next/server'
 export const dynamic = 'force-dynamic'
 
 export async function GET(request: Request) {
-  const requestUrl = new URL(request.url)
-  const code = requestUrl.searchParams.get('code')
-  
-  // If no code present, redirect to join page
-  if (!code) {
-    return NextResponse.redirect(new URL('/auth/join', request.url))
-  }
-
-  const cookieStore = cookies()
-  const supabase = createRouteHandlerClient({ cookies: () => cookieStore })
-
   try {
-    // Exchange the code for a session
-    await supabase.auth.exchangeCodeForSession(code)
+    const requestUrl = new URL(request.url)
+    const code = requestUrl.searchParams.get('code')
+
+    if (code) {
+      const cookieStore = cookies()
+      const supabase = createRouteHandlerClient({ cookies: () => cookieStore })
+      
+      await supabase.auth.exchangeCodeForSession(code)
+      
+      // Get the session after exchange
+      const { data: { session } } = await supabase.auth.getSession()
+      
+      // If we have a session, redirect to onboarding
+      if (session) {
+        return NextResponse.redirect(new URL('/onboarding', request.url))
+      }
+    }
     
-    // After successful exchange, redirect to onboarding
-    return NextResponse.redirect(new URL('/onboarding', request.url))
+    // If no code or no session, redirect to join
+    return NextResponse.redirect(new URL('/auth/join', request.url))
   } catch (error) {
-    console.error('Auth error:', error)
-    // On error, redirect back to join page
+    // On any error, safely redirect to join
     return NextResponse.redirect(new URL('/auth/join', request.url))
   }
 } 

@@ -151,10 +151,10 @@ export default function OnboardingPage() {
         }
 
         if (profile) {
-          setUsername(profile.username || '');
-          setBio(profile.bio || '');
-          setTags(profile.tags || []);
-          setAvatarUrl(profile.avatar_url || '');
+          setUsername(profile.username as string || '');
+          setBio(profile.bio as string || '');
+          setTags((profile.tags as string[]) || []);
+          setAvatarUrl(profile.avatar_url as string || '');
         }
       } catch (error) {
         console.error('Error loading profile:', error);
@@ -254,10 +254,9 @@ export default function OnboardingPage() {
     setIsEditingUsername(true);
   };
 
-  const handleSaveUsername = async () => {
+  const handleSaveUsername = () => {
     setUsername(tempUsername);
     setIsEditingUsername(false);
-    await handleSave();
   };
 
   const handleEditBio = () => {
@@ -265,10 +264,9 @@ export default function OnboardingPage() {
     setIsEditingBio(true);
   };
 
-  const handleSaveBio = async () => {
+  const handleSaveBio = () => {
     setBio(tempBio);
     setIsEditingBio(false);
-    await handleSave();
   };
 
   const validateFields = () => {
@@ -283,7 +281,20 @@ export default function OnboardingPage() {
     return !Object.values(newErrors).some(error => error);
   };
 
-  const handleSave = async () => {
+  const handleFinish = async () => {
+    setShowValidation(true);
+    if (!validateFields()) {
+      toast.error('All required fields must be filled');
+      return;
+    }
+    
+    // Validate username format
+    const usernameRegex = /^[a-zA-Z0-9_]+$/;
+    if (!usernameRegex.test(username)) {
+      toast.error('Username can only contain letters, numbers, and underscores');
+      return;
+    }
+
     if (!session?.user?.id || !session?.user?.email) {
       toast.error('Please sign in to save your profile');
       return;
@@ -292,7 +303,21 @@ export default function OnboardingPage() {
     try {
       setIsSaving(true);
 
-      const { error } = await supabase
+      // Check if username is already taken
+      const { data: existingUser } = await supabase
+        .from('profiles')
+        .select('id')
+        .eq('username', username)
+        .neq('id', session.user.id)
+        .single();
+
+      if (existingUser) {
+        toast.error('Username is already taken');
+        return;
+      }
+
+      // Save all profile data
+      const { error: saveError } = await supabase
         .from('profiles')
         .upsert({
           id: session.user.id,
@@ -304,50 +329,20 @@ export default function OnboardingPage() {
           updated_at: new Date().toISOString(),
         });
 
-      if (error) {
-        console.error('Supabase error:', error);
+      if (saveError) {
+        console.error('Error saving profile:', saveError);
         toast.error('Failed to save profile');
         return;
       }
 
       toast.success('Profile saved successfully');
+      router.push('/dashboard');
     } catch (error) {
       console.error('Error saving profile:', error);
       toast.error('Failed to save profile');
     } finally {
       setIsSaving(false);
     }
-  };
-
-  const handleFinish = async () => {
-    setShowValidation(true);
-    if (!validateFields()) {
-      toast.error('All required fields must be filled');
-      return;
-    }
-    
-    // Validate username format and uniqueness on final submission
-    const usernameRegex = /^[a-zA-Z0-9_]+$/;
-    if (!usernameRegex.test(username)) {
-      toast.error('Username can only contain letters, numbers, and underscores');
-      return;
-    }
-
-    // Check if username is already taken
-    const { data: existingUser } = await supabase
-      .from('profiles')
-      .select('id')
-      .eq('username', username)
-      .neq('id', session.user.id)
-      .single();
-
-    if (existingUser) {
-      toast.error('Username is already taken');
-      return;
-    }
-
-    await handleSave();
-    router.push('/dashboard');
   };
 
   if (isLoading) {

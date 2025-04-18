@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { createClient } from '@/lib/supabase/client';
+import getSupabaseBrowserClient from '@/lib/supabase/client';
 import Image from 'next/image';
 import { toast } from 'sonner';
 import ImageCropModal from '../components/ImageCropModal';
@@ -76,7 +76,7 @@ export default function OnboardingPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [showPreview, setShowPreview] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const supabase = createClient();
+  const supabase = getSupabaseBrowserClient();
   const [session, setSession] = useState<any>(null);
   const [showCropModal, setShowCropModal] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);

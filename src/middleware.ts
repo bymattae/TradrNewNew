@@ -8,17 +8,25 @@ export async function middleware(req: NextRequest) {
   const { data: { session } } = await supabase.auth.getSession();
   const pathname = req.nextUrl.pathname;
 
-  // Allow public routes
-  if (pathname.startsWith('/auth/')) {
-    return res;
+  // Define public routes that don't require authentication
+  const publicRoutes = ['/auth/join', '/auth/magic-link-sent', '/auth/callback'];
+  const isPublicRoute = publicRoutes.some(route => pathname.startsWith(route));
+
+  // If on a public route and has session, redirect to onboarding
+  if (isPublicRoute && session) {
+    const response = NextResponse.redirect(new URL('/onboarding', req.url));
+    response.headers.set('Cache-Control', 'no-store, max-age=0');
+    return response;
   }
 
-  // Redirect to join if no session
-  if (!session) {
-    return NextResponse.redirect(new URL('/auth/join', req.url));
+  // If not on a public route and no session, redirect to join
+  if (!isPublicRoute && !session) {
+    const response = NextResponse.redirect(new URL('/auth/join', req.url));
+    response.headers.set('Cache-Control', 'no-store, max-age=0');
+    return response;
   }
 
-  // Allow access to all other routes if authenticated
+  // For all other cases, proceed normally
   return res;
 }
 

@@ -1,6 +1,6 @@
 'use server';
 
-import { createClient } from '@/lib/supabase/client';
+import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
 import { StrategyInsert } from '@/lib/types/supabase'
 import { cookies } from 'next/headers';
 import { nanoid } from 'nanoid';
@@ -40,19 +40,15 @@ if (!supabaseUrl || !supabaseKey) {
 /**
  * Creates a new strategy and returns the generated strategy_id
  */
-export async function createStrategy({
-  title,
-  description,
-  hashtags
-}: CreateStrategyParams) {
-  const supabase = createClient();
+export async function createStrategy(strategy: StrategyInsert) {
+  const supabase = createRouteHandlerClient({ cookies });
   
   const { data, error } = await supabase
     .from('strategies')
     .insert({
-      title,
-      description,
-      hashtags,
+      title: strategy.title,
+      description: strategy.description,
+      hashtags: strategy.hashtags,
       created_at: new Date().toISOString()
     })
     .select()
@@ -74,7 +70,7 @@ export async function connectAccount(params: ConnectAccountParams): Promise<{
   error?: string;
 }> {
   try {
-    const supabase = createClient();
+    const supabase = createRouteHandlerClient({ cookies });
     
     // Get the current user
     const { data: { user }, error: userError } = await supabase.auth.getUser();
@@ -157,7 +153,7 @@ export async function updateStrategyMetrics(strategyId: string, accountId: strin
   error?: string;
 }> {
   try {
-    const supabase = createClient();
+    const supabase = createRouteHandlerClient({ cookies });
     
     const response = await fetch(
       `https://metastats-api-v1.new-york.agiliumtrade.ai/accounts/${accountId}/metrics`,
@@ -208,7 +204,7 @@ export async function updateStrategyMetrics(strategyId: string, accountId: strin
 }
 
 export async function getStrategies() {
-  const supabase = createClient();
+  const supabase = createRouteHandlerClient({ cookies });
   
   const { data, error } = await supabase
     .from('strategies')
@@ -223,7 +219,7 @@ export async function getStrategies() {
 }
 
 export async function getStrategy(id: string) {
-  const supabase = createClient();
+  const supabase = createRouteHandlerClient({ cookies });
   
   const { data, error } = await supabase
     .from('strategies')

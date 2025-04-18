@@ -2,155 +2,112 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { colors, components, layout } from '@/app/lib/styles/designSystem';
 import { createStrategy } from '@/app/lib/actions/strategy';
-import { toast } from 'sonner';
-import { useAuth } from '@/app/lib/contexts/AuthContext';
-import { UserProfile } from '@/app/components/UserProfile';
-import Link from 'next/link';
+import { nanoid } from 'nanoid';
+import getSupabaseBrowserClient from '@/lib/supabase/client';
 
 export default function StrategyPage() {
-  const router = useRouter();
-  const { user } = useAuth();
   const [loading, setLoading] = useState(false);
-  const [strategyData, setStrategyData] = useState({
-    name: '',
-    bio: '',
-    tags: [] as string[]
-  });
+  const router = useRouter();
+  const supabase = getSupabaseBrowserClient();
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
-    if (!user) {
-      router.push('/auth/join');
+    const formData = new FormData(e.currentTarget);
+    const strategyData = {
+      name: formData.get('name') as string,
+      bio: formData.get('bio') as string,
+      tags: (formData.get('tags') as string).split(',').map(tag => tag.trim()),
+    };
+
+    if (!strategyData.name || !strategyData.bio || !strategyData.tags.length) {
+      alert('Please fill in all fields');
       return;
     }
 
     setLoading(true);
     try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error('No user found');
+
+      const strategy_id = nanoid();
       await createStrategy({
+        strategy_id,
+        user_id: user.id,
         title: strategyData.name.trim(),
         description: strategyData.bio.trim(),
-        hashtags: strategyData.tags
+        hashtags: strategyData.tags,
+        created_at: new Date().toISOString()
       });
-      
-      toast.success('Strategy created successfully');
-      // Reset form
-      setStrategyData({
-        name: '',
-        bio: '',
-        tags: []
-      });
-    } catch (error: any) {
-      toast.error(error.message || 'Failed to create strategy');
+
+      router.push('/dashboard');
+    } catch (error) {
+      console.error('Error creating strategy:', error);
+      alert('Failed to create strategy');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className={layout.container}>
-      {/* Header */}
-      <div className={components.nav.header}>
-        <button 
-          onClick={() => router.back()}
-          className={components.button.icon}
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
-          </svg>
-        </button>
-        <div className="text-center">
-          <h1 className="text-xl font-bold">What&apos;s this strategy about?</h1>
-          <p className="text-sm text-muted-foreground mt-1">1/3 steps</p>
-        </div>
-        <div className="w-5"></div>
-      </div>
-
-      {/* User Profile or Sign In Button */}
-      <div className="absolute top-4 right-4">
-        {user ? (
-          <UserProfile />
-        ) : (
-          <Link 
-            href="/auth/join"
-            className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700"
-          >
-            Sign in
-          </Link>
-        )}
-      </div>
-
-      {/* Content */}
-      <div className="flex-1 px-4 py-8 space-y-8 overflow-y-auto scrollbar-hide max-w-2xl mx-auto w-full">
-        <h1 className="text-2xl font-bold mb-6">Create Strategy</h1>
-        
-        <form onSubmit={handleSubmit} className="max-w-md space-y-6">
-          <div className="space-y-2">
-            <label htmlFor="name" className="block text-sm font-medium">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md mx-auto">
+        <h2 className="text-3xl font-bold text-white text-center mb-8">Create Your Strategy</h2>
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div>
+            <label htmlFor="name" className="block text-sm font-medium text-gray-300">
               Strategy Name
             </label>
             <input
-              id="name"
               type="text"
-              value={strategyData.name}
-              onChange={(e) => setStrategyData(prev => ({ ...prev, name: e.target.value }))}
-              className="w-full px-3 py-2 border rounded-lg"
+              name="name"
+              id="name"
               required
+              className="mt-1 block w-full rounded-md border border-gray-700 bg-gray-800 py-2 px-3 text-white placeholder-gray-400 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+              placeholder="Enter strategy name"
             />
           </div>
 
-          <div className="space-y-2">
-            <label htmlFor="bio" className="block text-sm font-medium">
+          <div>
+            <label htmlFor="bio" className="block text-sm font-medium text-gray-300">
               Description
             </label>
             <textarea
               id="bio"
-              value={strategyData.bio}
-              onChange={(e) => setStrategyData(prev => ({ ...prev, bio: e.target.value }))}
-              className="w-full px-3 py-2 border rounded-lg"
+              name="bio"
               rows={4}
+              required
+              className="mt-1 block w-full rounded-md border border-gray-700 bg-gray-800 py-2 px-3 text-white placeholder-gray-400 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+              placeholder="Describe your strategy"
             />
           </div>
 
-          <div className="space-y-2">
-            <label htmlFor="tags" className="block text-sm font-medium">
-              Tags (comma separated)
+          <div>
+            <label htmlFor="tags" className="block text-sm font-medium text-gray-300">
+              Tags (comma-separated)
             </label>
             <input
-              id="tags"
               type="text"
-              value={strategyData.tags.join(', ')}
-              onChange={(e) => setStrategyData(prev => ({ 
-                ...prev, 
-                tags: e.target.value.split(',').map(tag => tag.trim()).filter(Boolean)
-              }))}
-              className="w-full px-3 py-2 border rounded-lg"
-              placeholder="e.g. forex, scalping, momentum"
+              name="tags"
+              id="tags"
+              required
+              className="mt-1 block w-full rounded-md border border-gray-700 bg-gray-800 py-2 px-3 text-white placeholder-gray-400 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+              placeholder="forex, scalping, momentum"
             />
           </div>
-        </form>
-      </div>
 
-      {/* Footer */}
-      <div className={components.nav.footer}>
-        <button
-          onClick={handleSubmit}
-          disabled={loading}
-          className="w-full py-3.5 bg-indigo-600 text-white font-medium rounded-xl hover:bg-indigo-500 transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          {loading ? (
-            <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-          ) : (
-            <>
-              <span>{user ? 'Next step' : 'Sign in to continue'}</span>
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-              </svg>
-            </>
-          )}
-        </button>
+          <div>
+            <button
+              type="submit"
+              disabled={loading}
+              className={`w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ${
+                loading ? 'opacity-50 cursor-not-allowed' : ''
+              }`}
+            >
+              {loading ? 'Creating...' : 'Create Strategy'}
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );

@@ -1,29 +1,38 @@
 'use client';
 
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
-
-// Create a single instance of the Supabase client outside the component
-const supabase = createClientComponentClient();
+import getSupabaseBrowserClient from '@/lib/supabase/client';
 
 export default function JoinPage() {
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
+  const [isCheckingSession, setIsCheckingSession] = useState(true);
   const router = useRouter();
+  const supabase = getSupabaseBrowserClient();
 
   useEffect(() => {
-    // Simple session check without router.push
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session) {
-        window.location.href = '/onboarding';
+    const checkSession = async () => {
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session?.user) {
+          router.replace('/onboarding');
+        }
+      } catch (error) {
+        console.error('Session check error:', error);
+      } finally {
+        setIsCheckingSession(false);
       }
-    });
-  }, []);
+    };
+
+    checkSession();
+  }, [router, supabase.auth]);
 
   const handleEmailSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (loading) return;
+    
     setLoading(true);
     setMessage('');
 
@@ -47,6 +56,15 @@ export default function JoinPage() {
       setLoading(false);
     }
   };
+
+  // Show loading state while checking session
+  if (isCheckingSession) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-gray-900 to-black">
+        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-indigo-500"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-br from-gray-900 to-black px-4 py-12">

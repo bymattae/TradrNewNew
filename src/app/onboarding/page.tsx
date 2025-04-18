@@ -234,21 +234,17 @@ export default function OnboardingPage() {
         return;
       }
 
-      // Validate file size (max 1MB before compression)
-      if (file.size > MAX_FILE_SIZE) {
-        toast.error('File size must be less than 1MB');
-        return;
-      }
+      // Log file details for debugging
+      console.log('Original file details:', {
+        name: file.name,
+        type: file.type,
+        size: file.size,
+        sizeInKB: Math.round(file.size / 1024)
+      });
 
-      // Validate file type
+      // Validate file type first
       if (!file.type.startsWith('image/')) {
         toast.error('Only image files are allowed');
-        return;
-      }
-
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) {
-        toast.error('Authentication required');
         return;
       }
 
@@ -259,30 +255,35 @@ export default function OnboardingPage() {
         return;
       }
 
-      // Compress the image
-      let fileToUpload: Blob;
-      try {
-        fileToUpload = await compressImage(file);
-        if (fileToUpload.size > MAX_FILE_SIZE) {
-          toast.error('Image is too large even after compression');
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        toast.error('Authentication required');
+        return;
+      }
+
+      // Only compress if file is larger than 1MB
+      let fileToUpload: Blob = file;
+      if (file.size > MAX_FILE_SIZE) {
+        try {
+          fileToUpload = await compressImage(file);
+          console.log('Compressed file size:', Math.round(fileToUpload.size / 1024), 'KB');
+        } catch (compressionError) {
+          console.error('Compression error:', compressionError);
+          toast.error('Failed to process image. Please try a different file.');
           return;
         }
-      } catch (compressionError) {
-        console.error('Compression error:', compressionError);
-        toast.error('Failed to process image. Please try a different file.');
-        return;
       }
 
       // Create a unique filename
       const timestamp = Date.now();
-      const filePath = `${user.id}/${timestamp}.jpg`; // Always use jpg for compressed images
+      const filePath = `${user.id}/${timestamp}.${fileExt}`; // Preserve original extension
 
       // Upload the file
       const { error: uploadError } = await supabase.storage
         .from('avatars')
         .upload(filePath, fileToUpload, {
           cacheControl: '3600',
-          contentType: 'image/jpeg',
+          contentType: file.type, // Use original content type
           upsert: false
         });
 
@@ -305,7 +306,7 @@ export default function OnboardingPage() {
         }
 
         // Show the actual error message to help with debugging
-        toast.error(`Failed to upload avatar: ${uploadError.message}`);
+        toast.error(`Upload failed: ${uploadError.message}`);
         return;
       }
 

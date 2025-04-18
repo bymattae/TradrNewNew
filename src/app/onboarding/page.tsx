@@ -6,6 +6,8 @@ import { createClient } from '@/lib/supabase/client';
 import Image from 'next/image';
 import { toast } from 'sonner';
 import ImageCropModal from '../components/ImageCropModal';
+import ProfilePreview from '../components/ProfilePreview';
+import { Dialog } from '@headlessui/react';
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB limit
 
@@ -72,6 +74,7 @@ export default function OnboardingPage() {
   const [tempUsername, setTempUsername] = useState('');
   const [isSaving, setIsSaving] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [showPreview, setShowPreview] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const supabase = createClient();
   const [session, setSession] = useState<any>(null);
@@ -85,6 +88,7 @@ export default function OnboardingPage() {
     avatar?: boolean;
   }>({});
   const [showValidation, setShowValidation] = useState(false);
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
 
   // Initialize and maintain session
   useEffect(() => {
@@ -465,6 +469,18 @@ export default function OnboardingPage() {
         />
       )}
 
+      {/* Add the ProfilePreview */}
+      {showPreview && (
+        <ProfilePreview
+          username={username}
+          isVerified={false}
+          bio={bio}
+          hashtags={tags}
+          strategies={[]}
+          avatarUrl={avatarUrl}
+        />
+      )}
+
       <div className="flex-1 flex flex-col max-h-[100dvh] overflow-hidden">
         <div className="p-4 border-b border-zinc-800/50 flex items-center justify-between">
           <button 
@@ -477,7 +493,7 @@ export default function OnboardingPage() {
           </button>
           <h1 className="text-xl font-bold">Build your profile</h1>
           <button 
-            onClick={() => router.push('/dashboard')}
+            onClick={() => setIsPreviewOpen(true)}
             className="text-gray-400 hover:text-white transition-colors flex items-center gap-1.5"
           >
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
@@ -711,6 +727,51 @@ export default function OnboardingPage() {
           </button>
         </div>
       </div>
+
+      {/* Preview Dialog */}
+      <Dialog
+        open={isPreviewOpen}
+        onClose={() => setIsPreviewOpen(false)}
+        className="relative z-50"
+      >
+        <div className="fixed inset-0 bg-black/80" aria-hidden="true" />
+        
+        <div className="fixed inset-0 flex items-center justify-center p-4">
+          <Dialog.Panel className="w-full max-w-xl rounded-2xl bg-zinc-900 p-6 shadow-xl">
+            <Dialog.Title className="text-xl font-semibold mb-4 flex items-center justify-between">
+              Profile Preview
+              <button
+                onClick={() => setIsPreviewOpen(false)}
+                className="text-zinc-400 hover:text-white transition-colors"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </Dialog.Title>
+            
+            <div className="relative aspect-[3/4] w-full bg-zinc-800 rounded-xl overflow-hidden">
+              <ProfilePreview
+                username={username}
+                isVerified={false}
+                bio={bio}
+                hashtags={tags}
+                strategies={[]}
+                avatarUrl={avatarUrl}
+              />
+            </div>
+            
+            <div className="mt-4 flex justify-end space-x-3">
+              <button
+                onClick={() => setIsPreviewOpen(false)}
+                className="px-4 py-2 text-sm font-medium text-zinc-400 hover:text-white transition-colors"
+              >
+                Close
+              </button>
+            </div>
+          </Dialog.Panel>
+        </div>
+      </Dialog>
 
       <style jsx global>{`
         @keyframes checkmark {

@@ -21,13 +21,20 @@ export default function JoinPage() {
         email,
         options: {
           emailRedirectTo: `${window.location.origin}/auth/callback`,
+          shouldCreateUser: true,
         },
       });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error sending magic link:', error);
+        throw error;
+      }
+
+      console.log('Magic link sent successfully');
       router.push('/auth/magic-link-sent');
     } catch (error: any) {
-      setMessage(error.message);
+      console.error('Error in handleEmailSignUp:', error);
+      setMessage(error.message || 'Failed to send magic link. Please try again.');
     } finally {
       setLoading(false);
     }

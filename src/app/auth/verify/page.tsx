@@ -9,8 +9,6 @@ export default function VerifyPage() {
   const supabase = createClientComponentClient();
 
   useEffect(() => {
-    let redirectTimer: NodeJS.Timeout;
-
     const handleAuth = async () => {
       try {
         console.log('Checking session...');
@@ -18,9 +16,9 @@ export default function VerifyPage() {
         
         if (error) {
           console.error('Session error:', error);
-      router.push('/auth/join');
-      return;
-    }
+          router.push('/auth/join');
+          return;
+        }
     
         if (!session) {
           console.error('No session found');
@@ -28,13 +26,8 @@ export default function VerifyPage() {
           return;
         }
 
-        console.log('Session found, setting up redirect timer...');
-        
-        // Force redirect to onboarding after 2 seconds
-        redirectTimer = setTimeout(() => {
-          console.log('Redirecting to onboarding...');
-          window.location.href = '/onboarding';
-        }, 2000);
+        console.log('Session found, redirecting to onboarding...');
+        router.push('/onboarding');
         
       } catch (error) {
         console.error('Error:', error);
@@ -43,13 +36,6 @@ export default function VerifyPage() {
     };
 
     handleAuth();
-
-    // Cleanup timer on unmount
-    return () => {
-      if (redirectTimer) {
-        clearTimeout(redirectTimer);
-      }
-    };
   }, [router, supabase]);
 
   return (

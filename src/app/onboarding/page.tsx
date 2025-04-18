@@ -575,17 +575,17 @@ export default function OnboardingPage() {
 
             {/* Avatar upload - updated design */}
             <div className="flex flex-col items-center text-center">
-              <div className="relative">
+              <div className="relative w-24 h-24">
                 <button 
                   onClick={() => fileInputRef.current?.click()}
-                  className="relative w-24 h-24 rounded-full bg-zinc-900/50 border-2 border-dashed border-zinc-800/50 overflow-hidden flex items-center justify-center hover:border-indigo-500/50 transition-all group backdrop-blur-xl"
+                  className="absolute inset-0 rounded-full bg-zinc-900/50 border-2 border-dashed border-zinc-800/50 overflow-hidden flex items-center justify-center hover:border-indigo-500/50 transition-all group backdrop-blur-xl"
                 >
                   {avatarUrl ? (
                     <Image
                       src={avatarUrl}
                       alt="Avatar"
                       fill
-                      className="object-cover"
+                      className="object-cover rounded-full"
                     />
                   ) : (
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8 text-gray-400 group-hover:text-white transition-colors">
@@ -599,7 +599,10 @@ export default function OnboardingPage() {
                     </div>
                   )}
                 </button>
-                <div className="absolute right-0 bottom-0 w-8 h-8 bg-indigo-500 rounded-tl-xl flex items-center justify-center group-hover:bg-indigo-400 transition-colors cursor-pointer">
+                <div 
+                  onClick={() => fileInputRef.current?.click()}
+                  className="absolute right-0 bottom-0 w-8 h-8 bg-indigo-500 rounded-tl-xl flex items-center justify-center hover:bg-indigo-400 transition-colors cursor-pointer"
+                >
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4 text-white">
                     <path d="M21.731 2.269a2.625 2.625 0 00-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 000-3.712zM19.513 8.199l-3.712-3.712-12.15 12.15a5.25 5.25 0 00-1.32 2.214l-.8 2.685a.75.75 0 00.933.933l2.685-.8a5.25 5.25 0 002.214-1.32L19.513 8.2z" />
                   </svg>

@@ -71,13 +71,10 @@ export default function OnboardingPage() {
   const [isEditingUsername, setIsEditingUsername] = useState(false);
   const [tempUsername, setTempUsername] = useState('');
   const [isSaving, setIsSaving] = useState(false);
-  const [autoSaveStatus, setAutoSaveStatus] = useState<'saved' | 'saving' | 'error'>('saved');
   const [isLoading, setIsLoading] = useState(true);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const supabase = createClient();
-  const autoSaveTimeoutRef = useRef<NodeJS.Timeout>();
   const [session, setSession] = useState<any>(null);
-  const [lastSaved, setLastSaved] = useState<string>('');
   const [showCropModal, setShowCropModal] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [isEditingTag, setIsEditingTag] = useState(false);
@@ -160,82 +157,6 @@ export default function OnboardingPage() {
 
     loadProfile();
   }, [session, supabase]);
-
-  // Auto-save functionality
-  useEffect(() => {
-    if (!session?.user?.id || !session?.user?.email) return;
-
-    if (autoSaveTimeoutRef.current) {
-      clearTimeout(autoSaveTimeoutRef.current);
-    }
-
-    if (username || bio || tags.length > 0 || avatarUrl) {
-      setAutoSaveStatus('saving');
-      autoSaveTimeoutRef.current = setTimeout(async () => {
-        try {
-          // Validate username if it exists
-          if (username) {
-            const usernameRegex = /^[a-zA-Z0-9_]+$/;
-            if (!usernameRegex.test(username)) {
-              setAutoSaveStatus('error');
-              return;
-            }
-
-            // Check if username is already taken
-            const { data: existingUser } = await supabase
-              .from('profiles')
-              .select('id')
-              .eq('username', username)
-              .neq('id', session.user.id)
-              .single();
-
-            if (existingUser) {
-              setAutoSaveStatus('error');
-              return;
-            }
-          }
-
-          const { error } = await supabase
-            .from('profiles')
-            .upsert({
-              id: session.user.id,
-              email: session.user.email,
-              username,
-              bio,
-              tags,
-              avatar_url: avatarUrl,
-              updated_at: new Date().toISOString(),
-            });
-
-          if (error) {
-            console.error('Auto-save error:', error);
-            setAutoSaveStatus('error');
-            toast.error('Failed to save profile', {
-              position: 'top-right',
-              duration: 2000,
-            });
-            return;
-          }
-
-          setAutoSaveStatus('saved');
-          setLastSaved(new Date().toLocaleTimeString());
-        } catch (error) {
-          console.error('Auto-save error:', error);
-          setAutoSaveStatus('error');
-          toast.error('Failed to save profile', {
-            position: 'top-right',
-            duration: 2000,
-          });
-        }
-      }, 2000);
-    }
-
-    return () => {
-      if (autoSaveTimeoutRef.current) {
-        clearTimeout(autoSaveTimeoutRef.current);
-      }
-    };
-  }, [username, bio, tags, avatarUrl, session, supabase]);
 
   const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     try {
@@ -365,26 +286,6 @@ export default function OnboardingPage() {
     try {
       setIsSaving(true);
 
-      // Validate username format
-      const usernameRegex = /^[a-zA-Z0-9_]+$/;
-      if (!usernameRegex.test(username)) {
-        toast.error('Username can only contain letters, numbers, and underscores');
-        return;
-      }
-
-      // Check if username is already taken
-      const { data: existingUser } = await supabase
-        .from('profiles')
-        .select('id')
-        .eq('username', username)
-        .neq('id', session.user.id)
-        .single();
-
-      if (existingUser) {
-        toast.error('Username is already taken');
-        return;
-      }
-
       const { error } = await supabase
         .from('profiles')
         .upsert({
@@ -403,7 +304,6 @@ export default function OnboardingPage() {
         return;
       }
 
-      setLastSaved(new Date().toISOString());
       toast.success('Profile saved successfully');
     } catch (error) {
       console.error('Error saving profile:', error);
@@ -420,7 +320,7 @@ export default function OnboardingPage() {
       return;
     }
     
-    // Only validate username format and uniqueness on final submission
+    // Validate username format and uniqueness on final submission
     const usernameRegex = /^[a-zA-Z0-9_]+$/;
     if (!usernameRegex.test(username)) {
       toast.error('Username can only contain letters, numbers, and underscores');
@@ -585,26 +485,6 @@ export default function OnboardingPage() {
               <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
             </svg>
           </button>
-        </div>
-
-        {/* Save status bar */}
-        <div className="px-4 py-2 border-b border-zinc-800/50 bg-zinc-900/50">
-          <div className="flex items-center justify-center gap-2">
-            {autoSaveStatus === 'saving' && (
-              <div className="flex items-center gap-1.5">
-                <div className="animate-spin rounded-full h-3 w-3 border border-zinc-500 border-t-white"></div>
-                <span className="text-xs text-zinc-500">Saving changes...</span>
-              </div>
-            )}
-            {autoSaveStatus === 'saved' && (
-              <div className="flex items-center gap-1.5 text-zinc-500">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3 h-3">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" />
-                </svg>
-                <span className="text-xs">Latest changes saved</span>
-              </div>
-            )}
-          </div>
         </div>
 
         <div className="flex-1 px-4 py-6 space-y-6 overflow-y-auto scrollbar-hide max-w-2xl mx-auto w-full">

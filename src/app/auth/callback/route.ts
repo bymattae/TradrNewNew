@@ -12,13 +12,23 @@ export async function GET(request: Request) {
     const cookieStore = cookies()
     const supabase = createRouteHandlerClient({ cookies: () => cookieStore })
 
-    // Exchange the code for a session
-    await supabase.auth.exchangeCodeForSession(code)
-    
-    // Always redirect to onboarding after successful auth
-    return NextResponse.redirect(new URL('/onboarding', request.url))
+    try {
+      // Exchange the code for a session
+      const { data: { session }, error } = await supabase.auth.exchangeCodeForSession(code)
+      
+      if (error) {
+        throw error
+      }
+
+      if (session) {
+        // Always redirect to onboarding after successful auth
+        return NextResponse.redirect(new URL('/onboarding', request.url))
+      }
+    } catch (error) {
+      console.error('Error exchanging code for session:', error)
+    }
   }
 
-  // If no code, redirect to join page
+  // If no code or error, redirect to join page
   return NextResponse.redirect(new URL('/auth/join', request.url))
 } 

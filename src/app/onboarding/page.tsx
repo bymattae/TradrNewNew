@@ -213,22 +213,21 @@ export default function OnboardingPage() {
       const timestamp = Date.now();
       const filePath = `${user.id}/${timestamp}.${fileExt}`;
 
-      // Try to create the bucket if it doesn't exist
-      try {
-        const { data: bucketData, error: createBucketError } = await supabase.storage
-          .createBucket('avatars', {
-            public: true,
-            allowedMimeTypes: ['image/png', 'image/jpeg', 'image/gif'],
-            fileSizeLimit: 5242880 // 5MB in bytes
-          });
+      // First check if we can list buckets (this verifies our permissions)
+      const { data: buckets, error: listError } = await supabase.storage.listBuckets();
+      
+      if (listError) {
+        console.error('Error listing buckets:', listError);
+        toast.error('Unable to access storage. Please check your permissions.');
+        return;
+      }
 
-        if (createBucketError && !createBucketError.message.includes('already exists')) {
-          console.error('Error creating bucket:', createBucketError);
-          toast.error('Failed to configure storage. Please contact support.');
-          return;
-        }
-      } catch (bucketError) {
-        console.error('Bucket creation error:', bucketError);
+      // Check if avatars bucket exists
+      const avatarsBucket = buckets.find(b => b.name === 'avatars');
+      
+      if (!avatarsBucket) {
+        toast.error('Storage not configured. Please contact support to set up the avatars storage.');
+        return;
       }
 
       // Upload the file
@@ -236,25 +235,18 @@ export default function OnboardingPage() {
         .from('avatars')
         .upload(filePath, file, {
           cacheControl: '3600',
-          upsert: false // Don't overwrite existing files
+          upsert: false
         });
 
       if (uploadError) {
-        console.error('Upload error details:', uploadError);
+        console.error('Upload error:', uploadError);
         
-        // Check if it's a bucket not found error
-        if (uploadError.message?.includes('bucket not found')) {
-          toast.error('Storage not properly configured. Please contact support.');
-          return;
-        }
-        
-        // Check if it's a permissions error
         if (uploadError.message?.includes('permission denied')) {
-          toast.error('Permission denied. Please try again or contact support.');
+          toast.error('Permission denied. Please check your access rights.');
           return;
         }
 
-        toast.error(uploadError.message || 'Failed to upload avatar');
+        toast.error('Failed to upload avatar. Please try again.');
         return;
       }
 
@@ -274,7 +266,7 @@ export default function OnboardingPage() {
       // Clean up old avatar if exists
       if (avatarUrl) {
         try {
-          const oldPath = avatarUrl.split('/').pop(); // Get the old filename
+          const oldPath = avatarUrl.split('/').pop();
           if (oldPath) {
             await supabase.storage
               .from('avatars')
@@ -282,7 +274,6 @@ export default function OnboardingPage() {
           }
         } catch (cleanupError) {
           console.error('Error cleaning up old avatar:', cleanupError);
-          // Don't return here, as the upload was successful
         }
       }
 

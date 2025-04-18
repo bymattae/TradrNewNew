@@ -13,42 +13,64 @@ interface ImageCropModalProps {
 const ImageCropModal: React.FC<ImageCropModalProps> = ({ imageUrl, onClose, onSave }) => {
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
 
-  const onCropComplete = useCallback(async (croppedArea: any, croppedAreaPixels: any) => {
-    try {
+  const onCropComplete = useCallback((croppedArea: any, croppedAreaPixels: any) => {
+    setCroppedAreaPixels(croppedAreaPixels);
+  }, []);
+
+  const createImage = (url: string): Promise<HTMLImageElement> =>
+    new Promise((resolve, reject) => {
       const image = new Image();
-      image.src = imageUrl;
-      
-      await new Promise((resolve) => {
-        image.onload = resolve;
-      });
+      image.addEventListener('load', () => resolve(image));
+      image.addEventListener('error', error => reject(error));
+      image.src = url;
+    });
 
-      const canvas = document.createElement('canvas');
-      const ctx = canvas.getContext('2d');
-      
-      if (!ctx) return;
+  const getCroppedImg = async (
+    imageSrc: string,
+    pixelCrop: any,
+  ): Promise<string> => {
+    const image = await createImage(imageSrc);
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
 
-      canvas.width = croppedAreaPixels.width;
-      canvas.height = croppedAreaPixels.height;
+    if (!ctx) {
+      throw new Error('No 2d context');
+    }
 
-      ctx.drawImage(
-        image,
-        croppedAreaPixels.x,
-        croppedAreaPixels.y,
-        croppedAreaPixels.width,
-        croppedAreaPixels.height,
-        0,
-        0,
-        croppedAreaPixels.width,
-        croppedAreaPixels.height
-      );
+    // Set canvas size to match the desired crop size
+    canvas.width = pixelCrop.width;
+    canvas.height = pixelCrop.height;
 
-      const base64Image = canvas.toDataURL('image/jpeg');
-      onSave(base64Image);
+    // Draw the cropped image onto the canvas
+    ctx.drawImage(
+      image,
+      pixelCrop.x,
+      pixelCrop.y,
+      pixelCrop.width,
+      pixelCrop.height,
+      0,
+      0,
+      pixelCrop.width,
+      pixelCrop.height
+    );
+
+    // Convert canvas to base64 string
+    return canvas.toDataURL('image/jpeg', 0.9);
+  };
+
+  const handleSave = useCallback(async () => {
+    try {
+      if (!croppedAreaPixels) {
+        throw new Error('No crop area selected');
+      }
+      const croppedImage = await getCroppedImg(imageUrl, croppedAreaPixels);
+      onSave(croppedImage);
     } catch (e) {
       console.error(e);
     }
-  }, [imageUrl, onSave]);
+  }, [croppedAreaPixels, imageUrl, onSave]);
 
   return (
     <Dialog open={true} onClose={onClose} className="relative z-50">
@@ -80,19 +102,34 @@ const ImageCropModal: React.FC<ImageCropModalProps> = ({ imageUrl, onClose, onSa
             />
           </div>
           
-          <div className="mt-4 flex justify-end space-x-3">
-            <button
-              onClick={onClose}
-              className="px-4 py-2 text-sm font-medium text-zinc-400 hover:text-white transition-colors"
-            >
-              Cancel
-            </button>
-            <button
-              onClick={() => onCropComplete(crop, { x: 0, y: 0, width: 400, height: 400 })}
-              className="px-4 py-2 text-sm font-medium bg-indigo-600 text-white rounded-lg hover:bg-indigo-500 transition-colors"
-            >
-              Save
-            </button>
+          <div className="mt-4 flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <label htmlFor="zoom" className="text-sm text-zinc-400">Zoom:</label>
+              <input
+                type="range"
+                id="zoom"
+                min={1}
+                max={3}
+                step={0.1}
+                value={zoom}
+                onChange={(e) => setZoom(Number(e.target.value))}
+                className="w-32"
+              />
+            </div>
+            <div className="flex space-x-3">
+              <button
+                onClick={onClose}
+                className="px-4 py-2 text-sm font-medium text-zinc-400 hover:text-white transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleSave}
+                className="px-4 py-2 text-sm font-medium bg-indigo-600 text-white rounded-lg hover:bg-indigo-500 transition-colors"
+              >
+                Save
+              </button>
+            </div>
           </div>
         </Dialog.Panel>
       </div>

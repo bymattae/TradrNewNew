@@ -17,22 +17,42 @@ export async function GET(request: Request) {
     const supabase = createRouteHandlerClient({ cookies })
 
     try {
-      await supabase.auth.exchangeCodeForSession(code)
-      const { data: { session }, error } = await supabase.auth.getSession()
-
-      if (error || !session) {
-        console.error('Session error:', error)
+      // Exchange the code for a session
+      const { data: { session }, error: sessionError } = await supabase.auth.exchangeCodeForSession(code)
+      
+      if (sessionError || !session) {
+        console.error('Session error:', sessionError)
         return NextResponse.redirect(new URL('/auth/join', request.url))
       }
 
-      const response = NextResponse.redirect(new URL('/onboarding', request.url))
-      
-      // Set strict cache control headers
+      // Check if user has a profile
+      const { data: profile, error: profileError } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', session.user.id)
+        .single()
+
+      if (profileError) {
+        console.error('Profile check error:', profileError)
+        return NextResponse.redirect(new URL('/auth/join', request.url))
+      }
+
+      // If no profile exists, redirect to onboarding
+      if (!profile) {
+        const response = NextResponse.redirect(new URL('/onboarding', request.url))
+        response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate')
+        response.headers.set('Pragma', 'no-cache')
+        response.headers.set('Expires', '0')
+        return response
+      }
+
+      // If profile exists, redirect to dashboard
+      const response = NextResponse.redirect(new URL('/dashboard', request.url))
       response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate')
       response.headers.set('Pragma', 'no-cache')
       response.headers.set('Expires', '0')
-
       return response
+
     } catch (error) {
       console.error('Error exchanging code for session:', error)
       return NextResponse.redirect(new URL('/auth/join', request.url))

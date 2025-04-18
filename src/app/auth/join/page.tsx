@@ -20,7 +20,6 @@ export default function JoinPage() {
           return;
         }
         if (session?.user && window.location.pathname !== '/onboarding') {
-          console.log('Session found, redirecting to onboarding');
           router.push('/onboarding');
         }
       } catch (error) {

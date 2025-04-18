@@ -179,28 +179,100 @@ export default function OnboardingPage() {
     try {
       setUploading(true);
       const file = e.target.files?.[0];
-      if (!file) return;
+      if (!file) {
+        toast.error('No file selected');
+        return;
+      }
+
+      // Validate file size (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        toast.error('File size must be less than 5MB');
+        return;
+      }
+
+      // Validate file type
+      if (!file.type.startsWith('image/')) {
+        toast.error('Only image files are allowed');
+        return;
+      }
 
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error('No user found');
+      if (!user) {
+        toast.error('Authentication required');
+        return;
+      }
 
-      const fileExt = file.name.split('.').pop();
-      const filePath = `${user.id}/avatar.${fileExt}`;
+      const fileExt = file.name.split('.').pop()?.toLowerCase();
+      const validExtensions = ['jpg', 'jpeg', 'png', 'gif'];
+      if (!fileExt || !validExtensions.includes(fileExt)) {
+        toast.error('Invalid file type. Please use JPG, PNG, or GIF');
+        return;
+      }
 
-      const { error: uploadError, data } = await supabase.storage
+      // Create a unique filename
+      const timestamp = Date.now();
+      const filePath = `${user.id}/${timestamp}.${fileExt}`;
+
+      // Upload the file
+      const { error: uploadError } = await supabase.storage
         .from('avatars')
-        .upload(filePath, file, { upsert: true });
+        .upload(filePath, file, {
+          cacheControl: '3600',
+          upsert: false // Don't overwrite existing files
+        });
 
-      if (uploadError) throw uploadError;
+      if (uploadError) {
+        console.error('Upload error details:', uploadError);
+        
+        // Check if it's a bucket not found error
+        if (uploadError.message?.includes('bucket not found')) {
+          toast.error('Storage bucket not configured. Please contact support.');
+          return;
+        }
+        
+        // Check if it's a permissions error
+        if (uploadError.message?.includes('permission denied')) {
+          toast.error('Permission denied. Please try again or contact support.');
+          return;
+        }
 
+        toast.error(uploadError.message || 'Failed to upload avatar');
+        return;
+      }
+
+      // Get the public URL
       const { data: { publicUrl } } = supabase.storage
         .from('avatars')
         .getPublicUrl(filePath);
 
+      if (!publicUrl) {
+        toast.error('Failed to get avatar URL');
+        return;
+      }
+
+      // Update the avatar URL in state
       setAvatarUrl(publicUrl);
+
+      // Clean up old avatar if exists
+      if (avatarUrl) {
+        try {
+          const oldPath = avatarUrl.split('/').pop(); // Get the old filename
+          if (oldPath) {
+            await supabase.storage
+              .from('avatars')
+              .remove([`${user.id}/${oldPath}`]);
+          }
+        } catch (cleanupError) {
+          console.error('Error cleaning up old avatar:', cleanupError);
+          // Don't return here, as the upload was successful
+        }
+      }
+
+      toast.success('Avatar updated successfully');
+
     } catch (error) {
       console.error('Error uploading avatar:', error);
-      toast.error('Failed to upload avatar');
+      toast.error('Failed to upload avatar. Please try again.');
     } finally {
       setUploading(false);
     }
@@ -436,27 +508,28 @@ export default function OnboardingPage() {
               <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
             </svg>
           </button>
-          <div className="text-center">
-            <h1 className="text-xl font-bold">Build your profile</h1>
-            <div className="flex items-center justify-center gap-2 mt-1">
-              <p className="text-sm text-gray-400">1/4 steps • Basic info</p>
-              {autoSaveStatus === 'saving' && (
-                <div className="flex items-center gap-1.5">
-                  <div className="animate-spin rounded-full h-2 w-2 border border-zinc-500 border-t-white"></div>
-                  <span className="text-xs text-zinc-500">Saving...</span>
-                </div>
-              )}
-              {autoSaveStatus === 'saved' && lastSaved && (
-                <span className="text-xs text-zinc-500">• Saved {lastSaved}</span>
-              )}
-            </div>
-          </div>
+          <h1 className="text-xl font-bold">Build your profile</h1>
           <button 
             onClick={() => router.push('/dashboard')}
             className="text-gray-400 hover:text-white transition-colors flex items-center gap-1.5"
           >
             Done
           </button>
+        </div>
+
+        {/* Save status bar */}
+        <div className="px-4 py-2 border-b border-zinc-800/50 bg-zinc-900/50">
+          <div className="flex items-center justify-center gap-2">
+            {autoSaveStatus === 'saving' && (
+              <div className="flex items-center gap-1.5">
+                <div className="animate-spin rounded-full h-2 w-2 border border-zinc-500 border-t-white"></div>
+                <span className="text-xs text-zinc-500">Saving...</span>
+              </div>
+            )}
+            {autoSaveStatus === 'saved' && lastSaved && (
+              <span className="text-xs text-zinc-500">Last saved {lastSaved}</span>
+            )}
+          </div>
         </div>
 
         <div className="flex-1 px-4 py-6 space-y-6 overflow-y-auto scrollbar-hide max-w-2xl mx-auto w-full">

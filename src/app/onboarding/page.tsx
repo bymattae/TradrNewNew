@@ -81,6 +81,12 @@ export default function OnboardingPage() {
   const [showCropModal, setShowCropModal] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [isEditingTag, setIsEditingTag] = useState(false);
+  const [errors, setErrors] = useState<{
+    username?: boolean;
+    bio?: boolean;
+    tags?: boolean;
+    avatar?: boolean;
+  }>({});
 
   // Initialize and maintain session
   useEffect(() => {
@@ -337,20 +343,31 @@ export default function OnboardingPage() {
     await handleSave();
   };
 
+  const validateFields = () => {
+    const newErrors = {
+      username: !username,
+      bio: !bio,
+      tags: !tags.length,
+      avatar: !avatarUrl
+    };
+    
+    setErrors(newErrors);
+    return !Object.values(newErrors).some(error => error);
+  };
+
   const handleSave = async () => {
     if (!session?.user?.id || !session?.user?.email) {
       toast.error('Please sign in to save your profile');
       return;
     }
 
+    if (!validateFields()) {
+      toast.error('All required fields must be filled');
+      return;
+    }
+
     try {
       setIsSaving(true);
-
-      // Validate required fields
-      if (!username) {
-        toast.error('Username is required');
-        return;
-      }
 
       // Validate username format
       const usernameRegex = /^[a-zA-Z0-9_]+$/;
@@ -386,20 +403,15 @@ export default function OnboardingPage() {
 
       if (error) {
         console.error('Supabase error:', error);
-        toast.error('Failed to save profile', {
-          position: 'top-right',
-          duration: 2000,
-        });
+        toast.error('Failed to save profile');
         return;
       }
 
-      setLastSaved(new Date().toLocaleTimeString());
+      setLastSaved(new Date().toISOString());
+      toast.success('Profile saved successfully');
     } catch (error) {
       console.error('Error saving profile:', error);
-      toast.error('Failed to save profile', {
-        position: 'top-right',
-        duration: 2000,
-      });
+      toast.error('Failed to save profile');
     } finally {
       setIsSaving(false);
     }
@@ -559,12 +571,12 @@ export default function OnboardingPage() {
                 <span className="text-xs text-zinc-500">Saving changes...</span>
               </div>
             )}
-            {autoSaveStatus === 'saved' && lastSaved && (
+            {autoSaveStatus === 'saved' && (
               <div className="flex items-center gap-1.5 text-zinc-500">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3 h-3">
                   <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" />
                 </svg>
-                <span className="text-xs">Updated {new Date(lastSaved).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                <span className="text-xs">Latest changes saved</span>
               </div>
             )}
           </div>
@@ -578,7 +590,7 @@ export default function OnboardingPage() {
               <div className="relative w-24 h-24">
                 <button 
                   onClick={() => fileInputRef.current?.click()}
-                  className="absolute inset-0 rounded-full bg-zinc-900/50 border-2 border-dashed border-zinc-800/50 overflow-hidden flex items-center justify-center hover:border-indigo-500/50 transition-all group backdrop-blur-xl"
+                  className={`absolute inset-0 rounded-full bg-zinc-900/50 border-2 border-dashed ${errors.avatar ? 'border-red-500/50' : 'border-zinc-800/50'} overflow-hidden flex items-center justify-center hover:border-indigo-500/50 transition-all group backdrop-blur-xl`}
                 >
                   {avatarUrl ? (
                     <Image
@@ -608,6 +620,9 @@ export default function OnboardingPage() {
                   </svg>
                 </div>
               </div>
+              {errors.avatar && (
+                <p className="mt-2 text-xs text-red-500">Profile picture is required</p>
+              )}
               <input
                 ref={fileInputRef}
                 type="file"
@@ -619,7 +634,7 @@ export default function OnboardingPage() {
 
             {/* Username input */}
             <div className="space-y-3">
-              <div className="relative flex items-center bg-zinc-900/50 border border-zinc-800/50 rounded-xl px-4 py-4 hover:border-zinc-700/50 transition-all group">
+              <div className={`relative flex items-center bg-zinc-900/50 border ${errors.username ? 'border-red-500/50' : 'border-zinc-800/50'} rounded-xl px-4 py-4 hover:border-zinc-700/50 transition-all group`}>
                 <span className="text-gray-400 text-lg">@</span>
                 <div className="flex-1 ml-1">
                   <p onClick={handleEditUsername} className="text-lg text-white cursor-pointer">
@@ -635,6 +650,9 @@ export default function OnboardingPage() {
                   </svg>
                 </button>
               </div>
+              {errors.username && (
+                <p className="text-xs text-red-500">Username is required</p>
+              )}
 
               {/* Personalized link box */}
               <div className="bg-zinc-900/30 border border-zinc-800/30 rounded-xl px-4 py-3 group cursor-pointer backdrop-blur-xl">
@@ -658,7 +676,7 @@ export default function OnboardingPage() {
 
             {/* Bio input */}
             <div className="mb-8">
-              <div className="relative bg-zinc-900/50 border border-zinc-800/50 rounded-xl px-4 py-4 hover:border-zinc-700/50 transition-all group">
+              <div className={`relative bg-zinc-900/50 border ${errors.bio ? 'border-red-500/50' : 'border-zinc-800/50'} rounded-xl px-4 py-4 hover:border-zinc-700/50 transition-all group`}>
                 <div className="flex-1 pr-8">
                   <p onClick={handleEditBio} className="text-[15px] text-white cursor-pointer min-h-[4rem]">
                     {bio || <span className="text-gray-500">Tell us about your strategy…</span>}
@@ -673,113 +691,62 @@ export default function OnboardingPage() {
                   </svg>
                 </button>
               </div>
-            </div>
-
-            {/* Tags */}
-            <div className="flex flex-wrap gap-2 items-center">
-              {tags.map((tag, index) => (
-                <div
-                  key={index}
-                  className="group relative bg-indigo-600/20 border border-indigo-500/30 text-white px-3 py-1.5 rounded-full text-sm backdrop-blur-xl flex items-center gap-1.5"
-                >
-                  {tag}
-                  <button
-                    onClick={() => handleRemoveTag(tag)}
-                    className="text-indigo-300/70 hover:text-indigo-300 transition-colors"
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3.5 h-3.5">
-                      <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
-                    </svg>
-                  </button>
-                </div>
-              ))}
-              {tags.length < 3 && (
-                <button
-                  onClick={() => setIsEditingTag(true)}
-                  className="flex items-center gap-1 text-indigo-400 hover:text-indigo-300 transition-colors text-sm font-medium"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
-                    <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
-                  </svg>
-                  Add hashtag
-                </button>
+              {errors.bio && (
+                <p className="mt-2 text-xs text-red-500">Bio is required</p>
               )}
             </div>
 
-            {/* Add tag modal */}
-            {isEditingTag && (
-              <div className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4">
-                <div className="relative w-full max-w-sm bg-zinc-900 rounded-2xl overflow-hidden">
-                  <div className="flex items-center justify-between p-4 border-b border-zinc-800/50">
-                    <button 
-                      onClick={() => setIsEditingTag(false)}
-                      className="text-gray-400 hover:text-white transition-colors"
+            {/* Tags */}
+            <div className="space-y-3">
+              <div className={`flex flex-wrap gap-2 items-center ${errors.tags ? 'p-4 border border-red-500/50 rounded-xl' : ''}`}>
+                {tags.map((tag, index) => (
+                  <div
+                    key={index}
+                    className="group relative bg-indigo-600/20 border border-indigo-500/30 text-white px-3 py-1.5 rounded-full text-sm backdrop-blur-xl flex items-center gap-1.5"
+                  >
+                    {tag}
+                    <button
+                      onClick={() => handleRemoveTag(tag)}
+                      className="text-indigo-300/70 hover:text-indigo-300 transition-colors"
                     >
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3.5 h-3.5">
+                        <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
                       </svg>
                     </button>
-                    <button
-                      onClick={() => {
-                        handleAddTag();
-                        setIsEditingTag(false);
-                      }}
-                      disabled={!newTag}
-                      className="text-indigo-400 hover:text-indigo-300 transition-colors text-sm font-medium disabled:opacity-50"
-                    >
-                      Add
-                    </button>
                   </div>
-                  <div className="p-4">
-                    <div className="flex bg-zinc-900/50 rounded-xl overflow-hidden border border-zinc-800/50 backdrop-blur-xl">
-                      <div className="flex items-center pl-4 text-gray-400">
-                        <span className="text-lg">#</span>
-                      </div>
-                      <input
-                        type="text"
-                        value={newTag}
-                        onChange={(e) => setNewTag(e.target.value.replace(/[^a-zA-Z0-9]/g, ''))}
-                        onKeyDown={(e) => {
-                          if (e.key === 'Enter' && newTag) {
-                            handleAddTag();
-                            setIsEditingTag(false);
-                          }
-                        }}
-                        className="w-full bg-transparent py-3 px-2 text-base text-white focus:outline-none"
-                        placeholder="Add a hashtag"
-                        autoFocus
-                      />
-                    </div>
-                  </div>
+                ))}
+                {errors.tags && (
+                  <p className="text-xs text-red-500">At least one hashtag is required</p>
+                )}
+              </div>
+            </div>
+
+            {/* Additional Fields Section */}
+            <div className="space-y-6 mt-8 opacity-80">
+              <p className="text-sm text-gray-500 mb-4">Optional</p>
+              {/* Strategy */}
+              <button 
+                onClick={() => router.push('/strategy')}
+                className="w-full border-2 border-dashed border-zinc-800/50 rounded-xl px-4 py-3 text-center hover:border-indigo-500/50 transition-all group backdrop-blur-xl"
+              >
+                <div className="flex items-center justify-center gap-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-gray-400 group-hover:text-indigo-400">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                  </svg>
+                  <span className="text-gray-400 group-hover:text-indigo-400 transition-colors text-base">Add strategy</span>
                 </div>
-              </div>
-            )}
-          </div>
+              </button>
 
-          {/* Additional Fields Section */}
-          <div className="space-y-6 mt-8">
-            {/* Strategy */}
-            <button 
-              onClick={() => router.push('/strategy')}
-              className="w-full border-2 border-dashed border-zinc-800/50 rounded-xl px-4 py-3 text-center hover:border-indigo-500/50 transition-all group backdrop-blur-xl"
-            >
-              <div className="flex items-center justify-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-gray-400 group-hover:text-indigo-400">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                </svg>
-                <span className="text-gray-400 group-hover:text-indigo-400 transition-colors text-base">Add strategy</span>
-              </div>
-            </button>
-
-            {/* Links */}
-            <button className="w-full border-2 border-dashed border-zinc-800/50 rounded-xl px-4 py-3 text-center hover:border-indigo-500/50 transition-all group backdrop-blur-xl">
-              <div className="flex items-center justify-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-gray-400 group-hover:text-indigo-400">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                </svg>
-                <span className="text-gray-400 group-hover:text-indigo-400 transition-colors text-base">Add links</span>
-              </div>
-            </button>
+              {/* Links */}
+              <button className="w-full border-2 border-dashed border-zinc-800/50 rounded-xl px-4 py-3 text-center hover:border-indigo-500/50 transition-all group backdrop-blur-xl">
+                <div className="flex items-center justify-center gap-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-gray-400 group-hover:text-indigo-400">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                  </svg>
+                  <span className="text-gray-400 group-hover:text-indigo-400 transition-colors text-base">Add links</span>
+                </div>
+              </button>
+            </div>
           </div>
         </div>
 

@@ -5,42 +5,40 @@ import { NextResponse } from 'next/server'
 export const dynamic = 'force-dynamic'
 
 export async function GET(request: Request) {
-  const requestUrl = new URL(request.url)
-  const code = requestUrl.searchParams.get('code')
-
-  // If no code present, redirect to join page
-  if (!code) {
-    return NextResponse.redirect(new URL('/auth/join', request.url))
-  }
-
   try {
-    const cookieStore = cookies()
-    const supabase = createRouteHandlerClient({ cookies: () => cookieStore })
-
-    // Exchange the code for a session
-    const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code)
-    if (exchangeError) throw exchangeError
-
-    // Get the session after exchange
-    const { data: { session }, error: sessionError } = await supabase.auth.getSession()
-    if (sessionError) throw sessionError
-
-    // If we have a session, redirect to onboarding
-    if (session) {
-      const response = NextResponse.redirect(new URL('/onboarding', request.url))
-      
-      // Set cache headers to prevent caching
-      response.headers.set('Cache-Control', 'no-store, max-age=0')
-      response.headers.set('Pragma', 'no-cache')
-      
-      return response
+    const requestUrl = new URL(request.url)
+    const code = requestUrl.searchParams.get('code')
+    
+    if (!code) {
+      console.error('No code provided in callback')
+      return NextResponse.redirect(new URL('/auth/join', request.url))
     }
 
-    // If no session, redirect to join
-    return NextResponse.redirect(new URL('/auth/join', request.url))
+    const supabase = createRouteHandlerClient({ cookies })
+
+    try {
+      await supabase.auth.exchangeCodeForSession(code)
+      const { data: { session }, error } = await supabase.auth.getSession()
+
+      if (error || !session) {
+        console.error('Session error:', error)
+        return NextResponse.redirect(new URL('/auth/join', request.url))
+      }
+
+      const response = NextResponse.redirect(new URL('/onboarding', request.url))
+      
+      // Set strict cache control headers
+      response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate')
+      response.headers.set('Pragma', 'no-cache')
+      response.headers.set('Expires', '0')
+
+      return response
+    } catch (error) {
+      console.error('Error exchanging code for session:', error)
+      return NextResponse.redirect(new URL('/auth/join', request.url))
+    }
   } catch (error) {
-    console.error('Auth callback error:', error)
-    // On any error, safely redirect to join
+    console.error('Callback error:', error)
     return NextResponse.redirect(new URL('/auth/join', request.url))
   }
 } 

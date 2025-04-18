@@ -575,43 +575,36 @@ export default function OnboardingPage() {
 
             {/* Avatar upload - updated design */}
             <div className="flex flex-col items-center text-center">
-              <button 
-                onClick={() => fileInputRef.current?.click()}
-                className="relative w-24 h-24 rounded-full bg-zinc-900/50 border-2 border-dashed border-zinc-800/50 overflow-hidden flex items-center justify-center hover:border-indigo-500/50 transition-all group backdrop-blur-xl"
-              >
-                {avatarUrl ? (
-                  <>
+              <div className="relative">
+                <button 
+                  onClick={() => fileInputRef.current?.click()}
+                  className="relative w-24 h-24 rounded-full bg-zinc-900/50 border-2 border-dashed border-zinc-800/50 overflow-hidden flex items-center justify-center hover:border-indigo-500/50 transition-all group backdrop-blur-xl"
+                >
+                  {avatarUrl ? (
                     <Image
                       src={avatarUrl}
                       alt="Avatar"
                       fill
                       className="object-cover"
                     />
-                    <div className="absolute right-0 bottom-0 w-8 h-8 bg-indigo-500 rounded-tl-xl flex items-center justify-center group-hover:bg-indigo-400 transition-colors">
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4 text-white">
-                        <path d="M21.731 2.269a2.625 2.625 0 00-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 000-3.712zM19.513 8.199l-3.712-3.712-12.15 12.15a5.25 5.25 0 00-1.32 2.214l-.8 2.685a.75.75 0 00.933.933l2.685-.8a5.25 5.25 0 002.214-1.32L19.513 8.2z" />
-                      </svg>
-                    </div>
-                  </>
-                ) : (
-                  <>
+                  ) : (
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8 text-gray-400 group-hover:text-white transition-colors">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z" />
                       <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zM18.75 10.5h.008v.008h-.008V10.5z" />
                     </svg>
-                    <div className="absolute right-0 bottom-0 w-8 h-8 bg-indigo-500 rounded-tl-xl flex items-center justify-center group-hover:bg-indigo-400 transition-colors">
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4 text-white">
-                        <path d="M21.731 2.269a2.625 2.625 0 00-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 000-3.712zM19.513 8.199l-3.712-3.712-12.15 12.15a5.25 5.25 0 00-1.32 2.214l-.8 2.685a.75.75 0 00.933.933l2.685-.8a5.25 5.25 0 002.214-1.32L19.513 8.2z" />
-                      </svg>
+                  )}
+                  {uploading && (
+                    <div className="absolute inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center">
+                      <div className="animate-spin rounded-full h-6 w-6 border-2 border-indigo-500 border-t-transparent"></div>
                     </div>
-                  </>
-                )}
-                {uploading && (
-                  <div className="absolute inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center">
-                    <div className="animate-spin rounded-full h-6 w-6 border-2 border-indigo-500 border-t-transparent"></div>
-                  </div>
-                )}
-              </button>
+                  )}
+                </button>
+                <div className="absolute right-0 bottom-0 w-8 h-8 bg-indigo-500 rounded-tl-xl flex items-center justify-center group-hover:bg-indigo-400 transition-colors cursor-pointer">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4 text-white">
+                    <path d="M21.731 2.269a2.625 2.625 0 00-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 000-3.712zM19.513 8.199l-3.712-3.712-12.15 12.15a5.25 5.25 0 00-1.32 2.214l-.8 2.685a.75.75 0 00.933.933l2.685-.8a5.25 5.25 0 002.214-1.32L19.513 8.2z" />
+                  </svg>
+                </div>
+              </div>
               <input
                 ref={fileInputRef}
                 type="file"

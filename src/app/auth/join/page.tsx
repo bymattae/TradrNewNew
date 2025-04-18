@@ -123,8 +123,8 @@ export default function JoinPage() {
               className="w-16 h-16"
             />
           </div>
-          <h2 className="text-center text-2xl font-semibold text-white mb-8">
-            Sign in to Tradr
+          <h2 className="text-center text-[32px] font-bold tracking-tight text-white mb-8">
+            Get into Tradr
           </h2>
         </div>
 

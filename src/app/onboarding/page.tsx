@@ -457,7 +457,7 @@ export default function OnboardingPage() {
                 onChange={(e) => setTempBio(e.target.value)}
                 placeholder="Example: London scalper based in Germany.."
                 maxLength={120}
-                className="w-full h-32 bg-zinc-900/50 border border-zinc-800/50 rounded-xl px-4 py-3 text-base text-white focus:outline-none focus:border-indigo-500/50 backdrop-blur-xl resize-none"
+                className="w-full h-48 bg-zinc-900/50 border border-zinc-800/50 rounded-xl px-4 py-3 text-base text-white focus:outline-none focus:border-indigo-500/50 backdrop-blur-xl resize-none"
               />
               <div className="mt-2 flex justify-between items-center text-sm">
                 <p className="text-gray-500">Keep it under 120 characters</p>
@@ -555,25 +555,25 @@ export default function OnboardingPage() {
           <div className="flex items-center justify-center gap-2">
             {autoSaveStatus === 'saving' && (
               <div className="flex items-center gap-1.5">
-                <div className="animate-spin rounded-full h-2 w-2 border border-zinc-500 border-t-white"></div>
-                <span className="text-xs text-zinc-500">Saving...</span>
+                <div className="animate-spin rounded-full h-3 w-3 border border-zinc-500 border-t-white"></div>
+                <span className="text-xs text-zinc-500">Saving changes...</span>
               </div>
             )}
             {autoSaveStatus === 'saved' && lastSaved && (
-              <span className="text-xs text-zinc-500">Last saved {lastSaved}</span>
+              <div className="flex items-center gap-1.5 text-zinc-500">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3 h-3">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" />
+                </svg>
+                <span className="text-xs">Updated {new Date(lastSaved).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+              </div>
             )}
           </div>
         </div>
 
         <div className="flex-1 px-4 py-6 space-y-6 overflow-y-auto scrollbar-hide max-w-2xl mx-auto w-full">
-          {/* Required Fields Section */}
+          {/* Profile Fields Section */}
           <div className="space-y-6">
-            <div className="flex items-center gap-2 mb-4">
-              <span className="text-sm font-medium text-indigo-400">Required</span>
-              <div className="h-px flex-1 bg-zinc-800/50"></div>
-            </div>
-
-            {/* Avatar upload - updated design */}
+            {/* Avatar upload */}
             <div className="flex flex-col items-center text-center">
               <div className="relative w-24 h-24">
                 <button 
@@ -617,13 +617,16 @@ export default function OnboardingPage() {
               />
             </div>
 
-            {/* Username input - updated design */}
+            {/* Username input */}
             <div className="mb-8">
               <div className="relative flex items-center bg-zinc-900/50 border border-zinc-800/50 rounded-xl px-4 py-4 hover:border-zinc-700/50 transition-all group">
                 <span className="text-gray-400 text-lg">@</span>
                 <div className="flex-1 ml-1">
                   <p onClick={handleEditUsername} className="text-lg text-white cursor-pointer">
                     {username || <span className="text-gray-500">yourusername</span>}
+                  </p>
+                  <p className="text-sm text-gray-500 mt-1 group-hover:text-gray-400 transition-colors">
+                    tradr.co/{username || 'yourusername'}
                   </p>
                 </div>
                 <button
@@ -637,17 +640,17 @@ export default function OnboardingPage() {
               </div>
             </div>
 
-            {/* Bio input - updated design */}
+            {/* Bio input */}
             <div className="mb-8">
               <div className="relative bg-zinc-900/50 border border-zinc-800/50 rounded-xl px-4 py-4 hover:border-zinc-700/50 transition-all group">
                 <div className="flex-1 pr-8">
-                  <p onClick={handleEditBio} className="text-[15px] text-white cursor-pointer">
+                  <p onClick={handleEditBio} className="text-[15px] text-white cursor-pointer min-h-[4rem]">
                     {bio || <span className="text-gray-500">Tell us about your strategy…</span>}
                   </p>
                 </div>
                 <button
                   onClick={handleEditBio}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-indigo-400 transition-colors"
+                  className="absolute right-4 top-6 text-gray-400 hover:text-indigo-400 transition-colors"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
                     <path d="M21.731 2.269a2.625 2.625 0 00-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 000-3.712zM19.513 8.199l-3.712-3.712-12.15 12.15a5.25 5.25 0 00-1.32 2.214l-.8 2.685a.75.75 0 00.933.933l2.685-.8a5.25 5.25 0 002.214-1.32L19.513 8.2z" />
@@ -656,7 +659,7 @@ export default function OnboardingPage() {
               </div>
             </div>
 
-            {/* Tags - updated design */}
+            {/* Tags */}
             <div className="flex flex-wrap gap-2 items-center">
               {tags.map((tag, index) => (
                 <div
@@ -737,13 +740,8 @@ export default function OnboardingPage() {
             )}
           </div>
 
-          {/* Optional Fields Section */}
+          {/* Additional Fields Section */}
           <div className="space-y-6 mt-8">
-            <div className="flex items-center gap-2 mb-4">
-              <span className="text-sm font-medium text-gray-400">Optional</span>
-              <div className="h-px flex-1 bg-zinc-800/50"></div>
-            </div>
-
             {/* Strategy */}
             <button 
               onClick={() => router.push('/strategy')}

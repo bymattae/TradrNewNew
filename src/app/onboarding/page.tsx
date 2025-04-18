@@ -99,7 +99,8 @@ export default function OnboardingPage() {
         const { data: { session: initialSession } } = await supabase.auth.getSession();
         if (mounted) {
           setSession(initialSession);
-          if (!initialSession) {
+          // Only redirect if there's no session and we're not already on the join page
+          if (!initialSession && !window.location.pathname.includes('/auth/join')) {
             router.push('/auth/join');
           }
         }
@@ -119,7 +120,8 @@ export default function OnboardingPage() {
     } = supabase.auth.onAuthStateChange((_event, session) => {
       if (mounted) {
         setSession(session);
-        if (!session) {
+        // Only redirect if there's no session and we're not already on the join page
+        if (!session && !window.location.pathname.includes('/auth/join')) {
           router.push('/auth/join');
         }
       }

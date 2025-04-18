@@ -1,7 +1,12 @@
 import { createBrowserClient } from '@supabase/ssr'
+import type { Database } from '@/lib/types/supabase'
+
+let supabase: ReturnType<typeof createBrowserClient<Database>> | undefined
 
 const createClient = () => {
-  return createBrowserClient(
+  if (supabase) return supabase
+
+  supabase = createBrowserClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
@@ -18,8 +23,9 @@ const createClient = () => {
       }
     }
   )
+
+  return supabase
 }
 
-// Create a singleton instance
-const supabase = createClient()
-export { supabase, createClient } 
+export { createClient }
+export default createClient() 

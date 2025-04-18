@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { createClient } from '@/lib/supabase/client';
+import supabase from '@/lib/supabase/client';
 
 export default function JoinPage() {
   const router = useRouter();
@@ -10,31 +10,38 @@ export default function JoinPage() {
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
-  const supabase = createClient();
 
   useEffect(() => {
-    const accessToken = searchParams.get('access_token');
-    if (accessToken) {
-      handleAccessToken(accessToken);
-    }
-  }, [searchParams]);
+    const checkSession = async () => {
+      try {
+        const { data: { session }, error } = await supabase.auth.getSession();
+        
+        if (error) {
+          throw error;
+        }
 
-  const handleAccessToken = async (token: string) => {
-    try {
-      const { data: { session }, error } = await supabase.auth.getSession();
-      
-      if (error) {
-        throw error;
-      }
+        if (session) {
+          router.replace('/onboarding');
+          return;
+        }
 
-      if (session) {
-        router.push('/onboarding');
+        // If no session, check for access token
+        const accessToken = searchParams.get('access_token');
+        if (accessToken) {
+          const { error: signInError } = await supabase.auth.getUser(accessToken);
+          if (signInError) {
+            throw signInError;
+          }
+          router.replace('/onboarding');
+        }
+      } catch (error: any) {
+        console.error('Auth error:', error);
+        setMessage(error.message || 'Authentication failed. Please try again.');
       }
-    } catch (error: any) {
-      console.error('Error handling access token:', error);
-      setMessage(error.message || 'Failed to authenticate. Please try again.');
-    }
-  };
+    };
+
+    checkSession();
+  }, [router, searchParams]);
 
   const handleEmailSignUp = async (e: React.FormEvent) => {
     e.preventDefault();

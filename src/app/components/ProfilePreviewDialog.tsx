@@ -11,7 +11,13 @@ interface ProfilePreviewDialogProps {
   avatarUrl: string;
   bio: string;
   hashtags: string[];
-  strategies: string[];
+  strategies: Array<{
+    name: string;
+    gain: number;
+    winRate: number;
+    riskRatio: number;
+  }>;
+  currentStrategyIndex?: number;
 }
 
 export default function ProfilePreviewDialog({
@@ -23,6 +29,7 @@ export default function ProfilePreviewDialog({
   bio,
   hashtags,
   strategies,
+  currentStrategyIndex,
 }: ProfilePreviewDialogProps) {
   return (
     <Dialog
@@ -52,6 +59,7 @@ export default function ProfilePreviewDialog({
             bio={bio}
             hashtags={hashtags}
             strategies={strategies}
+            currentStrategyIndex={currentStrategyIndex}
           />
         </div>
       </Dialog.Panel>

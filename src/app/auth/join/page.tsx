@@ -128,9 +128,9 @@ export default function JoinPage() {
           </div>
           <div className="space-y-1">
             <h2 className="text-center text-2xl tracking-tight">
-              <span className="text-gray-400">Make your </span>
-              <span className="font-semibold text-white">first trade</span>
-              <span className="text-gray-400"> today.</span>
+              <span className="text-gray-400">Where </span>
+              <span className="font-semibold text-white">real traders</span>
+              <span className="text-gray-400"> get noticed</span>
             </h2>
             <p className="text-center text-sm text-gray-400">
               Register or sign in to get started
@@ -197,7 +197,7 @@ export default function JoinPage() {
           <button className="flex h-11 w-full items-center justify-center rounded-2xl border border-white/10 bg-black hover:bg-zinc-900 transition-colors">
             <Image src="/apple.svg" alt="Continue with Apple" width={16} height={16} className="w-[18px]" />
           </button>
-          <button className="flex h-11 w-full items-center justify-center rounded-2xl border border-white/10 bg-white hover:bg-gray-50 transition-colors">
+          <button className="flex h-11 w-full items-center justify-center rounded-2xl border border-white/10 bg-black hover:bg-zinc-900 transition-colors">
             <Image src="/google.svg" alt="Continue with Google" width={18} height={18} className="w-5" />
           </button>
         </div>

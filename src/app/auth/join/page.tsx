@@ -11,6 +11,7 @@ export default function JoinPage() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
   const [isCheckingSession, setIsCheckingSession] = useState(true);
+  const [imageError, setImageError] = useState(false);
   const router = useRouter();
   const searchParams = useSearchParams();
   const supabase = getSupabaseBrowserClient();
@@ -115,17 +116,19 @@ export default function JoinPage() {
         <div className="flex flex-col items-center space-y-8">
           <div className="relative w-20 h-20 rounded-2xl overflow-hidden bg-violet-500/10 border border-violet-500/20 flex items-center justify-center">
             <Image
-              src="https://wphqgmcoqneazpbviprp.supabase.co/storage/v1/object/public/assets/TradrIcon.png"
-              alt="Tradr Logo"
+              src="https://wphqgmcoqneazpbviprp.supabase.co/storage/v1/object/public/assets//Untitled%20design%20(40).png"
+              alt="Logo"
               width={56}
               height={56}
               priority
-              className="w-14 h-14"
+              className="w-14 h-14 object-contain"
+              onError={() => setImageError(true)}
+              style={{ opacity: imageError ? 0.5 : 1 }}
             />
           </div>
           <div className="space-y-3">
-            <h2 className="text-center text-[28px] font-bold tracking-tight text-white">
-              Get started with the future of trading
+            <h2 className="text-center text-[28px] font-bold tracking-tight text-white whitespace-nowrap">
+              The future of trading is here
             </h2>
             <p className="text-center text-sm text-gray-400">
               Register or sign in and we&apos;ll get started.

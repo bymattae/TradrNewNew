@@ -130,7 +130,7 @@ export default function JoinPage() {
             <h2 className="text-center text-2xl tracking-tight">
               <span className="text-gray-400">Where </span>
               <span className="font-semibold text-white">real traders</span>
-              <span className="text-gray-400"> get noticed</span>
+              <span className="text-gray-400"> get noticed.</span>
             </h2>
             <p className="text-center text-sm text-gray-400">
               Register or sign in to get started

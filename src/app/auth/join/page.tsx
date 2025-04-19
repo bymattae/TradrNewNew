@@ -112,31 +112,33 @@ export default function JoinPage() {
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-[#0A0A0C] px-6 py-12">
-      <div className="w-full max-w-sm space-y-8">
-        <div className="flex flex-col items-center space-y-8">
-          <div className="relative w-20 h-20 rounded-2xl overflow-hidden bg-violet-500/10 border border-violet-500/20 flex items-center justify-center">
+      <div className="w-full max-w-sm space-y-6">
+        <div className="flex flex-col items-center space-y-4">
+          <div className="relative w-16 h-16 rounded-2xl overflow-hidden bg-violet-500/10 border border-violet-500/20 flex items-center justify-center">
             <Image
               src="https://wphqgmcoqneazpbviprp.supabase.co/storage/v1/object/public/assets/TradrIcon%20(1).png"
               alt="Tradr Logo"
-              width={56}
-              height={56}
+              width={48}
+              height={48}
               priority
-              className="w-14 h-14 object-contain"
+              className="w-12 h-12 object-contain"
               onError={() => setImageError(true)}
               style={{ opacity: imageError ? 0.5 : 1 }}
             />
           </div>
-          <div className="space-y-3">
-            <h2 className="text-center text-[28px] font-bold tracking-tight text-white whitespace-nowrap">
-              The future of trading is here
+          <div className="space-y-1">
+            <h2 className="text-center text-2xl tracking-tight">
+              <span className="text-gray-400">Make your </span>
+              <span className="font-semibold text-white">first trade</span>
+              <span className="text-gray-400"> today.</span>
             </h2>
             <p className="text-center text-sm text-gray-400">
-              Register or sign in and we&apos;ll get started.
+              Register or sign in to get started
             </p>
           </div>
         </div>
 
-        <div className="space-y-4">
+        <div className="space-y-3">
           <div className="relative">
             <input
               id="email-address"
@@ -161,7 +163,7 @@ export default function JoinPage() {
           <button
             onClick={handleEmailSignUp}
             disabled={loading}
-            className={`relative flex w-full items-center justify-center rounded-2xl bg-violet-600 px-4 py-4 text-sm font-medium text-white transition-all hover:bg-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-offset-2 ${
+            className={`relative flex w-full items-center justify-center rounded-2xl bg-violet-600 px-4 py-3.5 text-sm font-medium text-white transition-all hover:bg-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-offset-2 ${
               loading ? 'opacity-50 cursor-not-allowed' : ''
             }`}
           >
@@ -179,28 +181,28 @@ export default function JoinPage() {
           </button>
         </div>
 
-        <div className="relative">
+        <div className="relative py-2">
           <div className="absolute inset-0 flex items-center">
             <div className="w-full border-t border-white/10"></div>
           </div>
           <div className="relative flex justify-center text-sm">
-            <span className="bg-[#0A0A0C] px-4 text-gray-500">or continue with</span>
+            <span className="bg-[#0A0A0C] px-3 text-gray-500 text-xs">or continue with</span>
           </div>
         </div>
 
-        <div className="grid grid-cols-3 gap-3">
-          <button className="flex h-12 w-full items-center justify-center rounded-2xl border border-white/10 bg-white/5 hover:bg-white/10 transition-colors">
-            <Image src="/apple.svg" alt="Apple" width={20} height={20} className="opacity-60" />
+        <div className="grid grid-cols-3 gap-2">
+          <button className="flex h-11 w-full items-center justify-center rounded-2xl border border-white/10 bg-white/5 hover:bg-white/10 transition-colors">
+            <Image src="/apple.svg" alt="Apple" width={18} height={18} className="opacity-60" />
           </button>
-          <button className="flex h-12 w-full items-center justify-center rounded-2xl border border-white/10 bg-white/5 hover:bg-white/10 transition-colors">
-            <Image src="/google.svg" alt="Google" width={20} height={20} className="opacity-60" />
+          <button className="flex h-11 w-full items-center justify-center rounded-2xl border border-white/10 bg-white/5 hover:bg-white/10 transition-colors">
+            <Image src="/google.svg" alt="Google" width={18} height={18} className="opacity-60" />
           </button>
-          <button className="flex h-12 w-full items-center justify-center rounded-2xl border border-white/10 bg-white/5 hover:bg-white/10 transition-colors">
-            <Image src="/twitter.svg" alt="Twitter" width={20} height={20} className="opacity-60" />
+          <button className="flex h-11 w-full items-center justify-center rounded-2xl border border-white/10 bg-white/5 hover:bg-white/10 transition-colors">
+            <Image src="/twitter.svg" alt="Twitter" width={18} height={18} className="opacity-60" />
           </button>
         </div>
 
-        <p className="text-center text-xs text-gray-500">
+        <p className="text-center text-[11px] text-gray-500">
           By continuing, you agree to our{' '}
           <a href="/terms" className="text-violet-400 hover:text-violet-300">
             Terms of Service

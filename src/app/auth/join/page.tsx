@@ -103,27 +103,27 @@ export default function JoinPage() {
   // Show loading state while checking session
   if (isCheckingSession) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-gray-900 to-black">
-        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-indigo-500"></div>
+      <div className="flex min-h-screen items-center justify-center bg-[#0A0A0C]">
+        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-violet-500"></div>
       </div>
     );
   }
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-br from-gray-900 to-black px-4 py-12">
-      <div className="w-full max-w-md space-y-6">
-        <div className="flex flex-col items-center">
-          <div className="mb-6">
+    <div className="flex min-h-screen flex-col items-center justify-center bg-[#0A0A0C] px-4 py-12">
+      <div className="w-full max-w-sm space-y-8">
+        <div className="flex flex-col items-center space-y-6">
+          <div className="relative w-16 h-16 rounded-2xl overflow-hidden bg-violet-500/10 border border-violet-500/20 flex items-center justify-center">
             <Image
               src="https://wphqgmcoqneazpbviprp.supabase.co/storage/v1/object/public/assets/TradrIcon.png"
               alt="Tradr Logo"
-              width={64}
-              height={64}
+              width={48}
+              height={48}
               priority
-              className="w-16 h-16 rounded-2xl"
+              className="w-12 h-12"
             />
           </div>
-          <h2 className="text-center text-[32px] font-bold tracking-tight text-white mb-8">
+          <h2 className="text-center text-[32px] font-bold tracking-tight text-white">
             Get into Tradr
           </h2>
         </div>
@@ -136,7 +136,7 @@ export default function JoinPage() {
               type="email"
               autoComplete="email"
               required
-              className="relative block w-full rounded-lg border border-white/10 bg-white/5 px-4 py-3.5 text-white placeholder:text-gray-400 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 sm:text-sm"
+              className="relative block w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-4 text-white placeholder:text-gray-500 focus:border-violet-500 focus:ring-1 focus:ring-violet-500 text-sm"
               placeholder="Your email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -145,7 +145,7 @@ export default function JoinPage() {
           </div>
 
           {message && (
-            <div className="rounded-lg bg-red-900/50 border border-red-500/50 p-4">
+            <div className="rounded-2xl bg-red-900/50 border border-red-500/50 p-4">
               <div className="text-sm text-red-200">{message}</div>
             </div>
           )}
@@ -153,7 +153,7 @@ export default function JoinPage() {
           <button
             type="submit"
             disabled={loading}
-            className={`group relative flex w-full justify-center rounded-lg bg-indigo-600 px-4 py-3.5 text-sm font-medium text-white transition-all hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 ${
+            className={`relative flex w-full justify-center rounded-2xl bg-violet-600 px-4 py-4 text-sm font-medium text-white transition-all hover:bg-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-offset-2 ${
               loading ? 'opacity-50 cursor-not-allowed' : ''
             }`}
           >
@@ -171,49 +171,47 @@ export default function JoinPage() {
           </button>
         </form>
 
-        <div className="mt-6 text-center">
-          <div className="relative">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-white/10"></div>
-            </div>
-            <div className="relative flex justify-center text-sm">
-              <span className="bg-gradient-to-br from-gray-900 to-black px-4 text-gray-400">or</span>
-            </div>
+        <div className="relative">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-white/10"></div>
+          </div>
+          <div className="relative flex justify-center text-sm">
+            <span className="bg-[#0A0A0C] px-4 text-gray-500">or</span>
           </div>
         </div>
 
-        <div className="mt-6 grid grid-cols-5 gap-3">
-          <button className="flex justify-center items-center h-12 w-full rounded-lg border border-white/10 bg-white/5 hover:bg-white/10 transition-colors">
-            <Image src="/discord.svg" alt="Discord" width={24} height={24} />
+        <div className="grid grid-cols-5 gap-2">
+          <button className="flex justify-center items-center h-12 w-full rounded-2xl border border-white/10 bg-white/5 hover:bg-white/10 transition-colors">
+            <Image src="/discord.svg" alt="Discord" width={20} height={20} className="opacity-60" />
           </button>
-          <button className="flex justify-center items-center h-12 w-full rounded-lg border border-white/10 bg-white/5 hover:bg-white/10 transition-colors">
-            <Image src="/google.svg" alt="Google" width={24} height={24} />
+          <button className="flex justify-center items-center h-12 w-full rounded-2xl border border-white/10 bg-white/5 hover:bg-white/10 transition-colors">
+            <Image src="/google.svg" alt="Google" width={20} height={20} className="opacity-60" />
           </button>
-          <button className="flex justify-center items-center h-12 w-full rounded-lg border border-white/10 bg-white/5 hover:bg-white/10 transition-colors">
-            <Image src="/ethereum.svg" alt="Ethereum" width={24} height={24} />
+          <button className="flex justify-center items-center h-12 w-full rounded-2xl border border-white/10 bg-white/5 hover:bg-white/10 transition-colors">
+            <Image src="/ethereum.svg" alt="Ethereum" width={20} height={20} className="opacity-60" />
           </button>
-          <button className="flex justify-center items-center h-12 w-full rounded-lg border border-white/10 bg-white/5 hover:bg-white/10 transition-colors">
-            <Image src="/twitter.svg" alt="Twitter" width={24} height={24} />
+          <button className="flex justify-center items-center h-12 w-full rounded-2xl border border-white/10 bg-white/5 hover:bg-white/10 transition-colors">
+            <Image src="/twitter.svg" alt="Twitter" width={20} height={20} className="opacity-60" />
           </button>
-          <button className="flex justify-center items-center h-12 w-full rounded-lg border border-white/10 bg-white/5 hover:bg-white/10 transition-colors">
-            <Image src="/apple.svg" alt="Apple" width={24} height={24} />
+          <button className="flex justify-center items-center h-12 w-full rounded-2xl border border-white/10 bg-white/5 hover:bg-white/10 transition-colors">
+            <Image src="/apple.svg" alt="Apple" width={20} height={20} className="opacity-60" />
           </button>
         </div>
 
-        <p className="mt-6 text-center text-sm text-gray-400">
+        <p className="text-center text-sm text-gray-500">
           By signing up, you agree to our{' '}
-          <a href="/terms" className="text-indigo-400 hover:text-indigo-300">
+          <a href="/terms" className="text-violet-400 hover:text-violet-300">
             Terms
           </a>{' '}
           &{' '}
-          <a href="/privacy" className="text-indigo-400 hover:text-indigo-300">
+          <a href="/privacy" className="text-violet-400 hover:text-violet-300">
             Privacy
           </a>
         </p>
 
-        <p className="text-center text-sm text-gray-400">
+        <p className="text-center text-sm text-gray-500">
           New to Tradr?{' '}
-          <a href="/auth/signup" className="text-indigo-400 hover:text-indigo-300">
+          <a href="/auth/signup" className="text-violet-400 hover:text-violet-300">
             Create an account
           </a>
         </p>

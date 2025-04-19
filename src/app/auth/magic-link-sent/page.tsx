@@ -1,7 +1,6 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import Image from 'next/image';
 
 export default function MagicLinkSent() {
   const router = useRouter();
@@ -11,14 +10,44 @@ export default function MagicLinkSent() {
       <div className="w-full max-w-sm space-y-6">
         <div className="flex flex-col items-center space-y-4">
           <div className="relative w-16 h-16 rounded-2xl overflow-hidden bg-violet-500/10 border border-violet-500/20 flex items-center justify-center">
-            <Image
-              src="https://wphqgmcoqneazpbviprp.supabase.co/storage/v1/object/public/assets/TradrIcon%20(1).png"
-              alt="Tradr Logo"
-              width={48}
-              height={48}
-              priority
-              className="w-12 h-12 object-contain"
-            />
+            <svg
+              className="w-8 h-8 text-violet-500"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M8 5L10 3M10 3L12 5M10 3L8 1M10 3L12 1"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+              />
+              <path
+                d="M19 14L21 12M21 12L23 14M21 12L19 10M21 12L23 10"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+              />
+              <path
+                d="M3 14L4 13M4 13L5 14M4 13L3 12M4 13L5 12"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+              />
+              <path
+                d="M17.5 6.5L4.5 19.5"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+              />
+              <path
+                className="animate-pulse"
+                d="M17.5 6.5L19 5L19.5 4.5"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+              />
+            </svg>
           </div>
           <div className="space-y-1">
             <h2 className="text-center text-2xl font-semibold text-white">

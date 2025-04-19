@@ -116,8 +116,8 @@ export default function JoinPage() {
         <div className="flex flex-col items-center space-y-8">
           <div className="relative w-20 h-20 rounded-2xl overflow-hidden bg-violet-500/10 border border-violet-500/20 flex items-center justify-center">
             <Image
-              src="https://wphqgmcoqneazpbviprp.supabase.co/storage/v1/object/public/assets//Untitled%20design%20(40).png"
-              alt="Logo"
+              src="https://wphqgmcoqneazpbviprp.supabase.co/storage/v1/object/public/assets/TradrIcon%20(1).png"
+              alt="Tradr Logo"
               width={56}
               height={56}
               priority

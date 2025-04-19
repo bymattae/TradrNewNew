@@ -191,14 +191,14 @@ export default function JoinPage() {
         </div>
 
         <div className="grid grid-cols-3 gap-2">
-          <button className="flex h-11 w-full items-center justify-center rounded-2xl border border-white/10 bg-white/5 hover:bg-white/10 transition-colors">
-            <Image src="/google.svg" alt="Continue with Google" width={20} height={20} className="opacity-60" />
+          <button className="flex h-11 w-full items-center justify-center rounded-2xl border border-white/10 bg-zinc-900 hover:bg-zinc-800 transition-colors">
+            <Image src="/twitter.svg" alt="Continue with X" width={20} height={20} className="opacity-90" />
           </button>
-          <button className="flex h-11 w-full items-center justify-center rounded-2xl border border-white/10 bg-white/5 hover:bg-white/10 transition-colors">
-            <Image src="/apple.svg" alt="Continue with Apple" width={20} height={20} className="opacity-60" />
+          <button className="flex h-11 w-full items-center justify-center rounded-2xl border border-white/10 bg-zinc-900 hover:bg-zinc-800 transition-colors">
+            <Image src="/apple.svg" alt="Continue with Apple" width={20} height={20} className="opacity-90" />
           </button>
-          <button className="flex h-11 w-full items-center justify-center rounded-2xl border border-white/10 bg-white/5 hover:bg-white/10 transition-colors">
-            <Image src="/twitter.svg" alt="Continue with X" width={18} height={18} className="opacity-60" />
+          <button className="flex h-11 w-full items-center justify-center rounded-2xl border border-white/10 bg-zinc-900 hover:bg-zinc-800 transition-colors">
+            <Image src="/google.svg" alt="Continue with Google" width={20} height={20} className="opacity-90" />
           </button>
         </div>
 

@@ -520,7 +520,7 @@ export default function OnboardingPage() {
               <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
             </svg>
           </button>
-            <h1 className="text-xl font-bold">Build your profile</h1>You
+          <h1 className="text-xl font-bold">Build your profile</h1>
           <button 
             onClick={() => setIsPreviewOpen(true)}
             className="text-gray-400 hover:text-white transition-colors flex items-center gap-1.5"

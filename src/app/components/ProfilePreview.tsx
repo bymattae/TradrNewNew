@@ -70,32 +70,41 @@ export default function ProfilePreview({
   links
 }: ProfilePreviewProps) {
   return (
-    <div className="w-full max-w-lg mx-auto bg-[#0A0A0C] rounded-3xl overflow-hidden">
+    <div className="w-full max-w-lg mx-auto bg-surface-default rounded-3xl overflow-hidden font-body">
       {/* Content */}
       <div className="px-6 pt-8 pb-4">
-        {/* Avatar */}
+        {/* Avatar and Username Section */}
         <div className="flex flex-col items-center">
           <div className="relative w-24 h-24 mb-4">
+            <div className="absolute inset-0 bg-gradient-to-tr from-profit via-neutral to-profit/50 rounded-full animate-gradient-xy opacity-50" />
             {avatarUrl ? (
               <Image
                 src={avatarUrl}
                 alt={username}
                 fill
-                className="object-cover rounded-full"
+                className="object-cover rounded-full border-2 border-surface-card relative"
                 sizes="96px"
                 priority
               />
             ) : (
-              <div className="w-full h-full rounded-full bg-zinc-800 flex items-center justify-center">
-                <span className="text-4xl text-zinc-600">{username.charAt(0).toUpperCase()}</span>
+              <div className="w-full h-full rounded-full bg-surface-card border-2 border-surface-hover relative flex items-center justify-center">
+                <span className="text-4xl font-display text-gray-400">{username.charAt(0).toUpperCase()}</span>
               </div>
             )}
+            {/* Trading Level Badge */}
+            <div className="absolute -bottom-1 -right-1 bg-surface-card rounded-full p-1.5 border-2 border-surface-default">
+              <div className="bg-gradient-to-r from-neutral to-profit rounded-full p-1">
+                <svg className="w-4 h-4 text-surface-default" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M2 20h20M6.5 17l2.5-10h2l2.5 10M14.5 17l2.5-10h2l2.5 10" />
+                </svg>
+              </div>
+            </div>
           </div>
 
           {/* Username and Bio */}
           <div className="text-center space-y-2">
-            <h1 className="text-xl font-medium text-white">@{username}</h1>
-            {bio && <p className="text-gray-400 text-sm max-w-sm">{bio}</p>}
+            <h1 className="text-xl font-display font-medium text-white">@{username}</h1>
+            {bio && <p className="text-gray-400 text-sm max-w-sm font-body">{bio}</p>}
           </div>
 
           {/* Tags */}
@@ -104,7 +113,7 @@ export default function ProfilePreview({
               {tags.map((tag, index) => (
                 <span
                   key={index}
-                  className="bg-zinc-900 text-gray-300 px-3 py-1 rounded-lg text-sm"
+                  className="bg-surface-card text-gray-300 px-3 py-1 rounded-lg text-sm font-body hover:bg-surface-hover transition-colors"
                 >
                   #{tag}
                 </span>
@@ -116,22 +125,30 @@ export default function ProfilePreview({
         {/* Strategies Section */}
         {strategies && strategies.length > 0 && (
           <div className="mt-6">
-            <div className="bg-zinc-900 rounded-xl p-4">
+            <div className="bg-surface-card rounded-xl p-4">
               {strategies.map((strategy, index) => (
                 <div key={index}>
-                  <h3 className="text-white text-sm mb-4">{strategy.title}</h3>
+                  <h3 className="text-white text-sm font-display mb-4 flex items-center gap-2">
+                    <svg className="w-4 h-4 text-neutral" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M3 3v18h18" />
+                      <path d="M7 17l4-8 4 4 4-10" />
+                    </svg>
+                    {strategy.title}
+                  </h3>
                   <div className="grid grid-cols-3 gap-8">
-                    <div className="text-center">
-                      <p className="text-[#00FF85] text-xl font-medium">+{strategy.stats.gain}%</p>
-                      <p className="text-xs text-gray-500 mt-1">Gain</p>
+                    <div className="text-center group">
+                      <p className={`text-xl font-display font-medium ${strategy.stats.gain >= 0 ? 'text-profit animate-number-up' : 'text-loss animate-number-down'}`}>
+                        {strategy.stats.gain >= 0 ? '+' : ''}{strategy.stats.gain}%
+                      </p>
+                      <p className="text-xs text-gray-500 mt-1 font-body group-hover:text-gray-400 transition-colors">Gain</p>
                     </div>
-                    <div className="text-center">
-                      <p className="text-white text-xl font-medium">{strategy.stats.winRate}%</p>
-                      <p className="text-xs text-gray-500 mt-1">Win Rate</p>
+                    <div className="text-center group">
+                      <p className="text-xl font-display font-medium text-white">{strategy.stats.winRate}%</p>
+                      <p className="text-xs text-gray-500 mt-1 font-body group-hover:text-gray-400 transition-colors">Win Rate</p>
                     </div>
-                    <div className="text-center">
-                      <p className="text-white text-xl font-medium">{strategy.stats.riskRatio}</p>
-                      <p className="text-xs text-gray-500 mt-1">Risk Ratio</p>
+                    <div className="text-center group">
+                      <p className="text-xl font-display font-medium text-white">{strategy.stats.riskRatio}</p>
+                      <p className="text-xs text-gray-500 mt-1 font-body group-hover:text-gray-400 transition-colors">Risk Ratio</p>
                     </div>
                   </div>
                 </div>
@@ -139,11 +156,11 @@ export default function ProfilePreview({
             </div>
             {/* Strategy Carousel Dots */}
             {strategies.length > 1 && (
-              <div className="flex justify-center gap-1 mt-3">
+              <div className="flex justify-center gap-1.5 mt-3">
                 {strategies.map((_, index) => (
                   <div
                     key={index}
-                    className={`w-1.5 h-1.5 rounded-full ${index === 0 ? 'bg-violet-500' : 'bg-zinc-700'}`}
+                    className={`w-1.5 h-1.5 rounded-full transition-colors ${index === 0 ? 'bg-profit' : 'bg-surface-card'}`}
                   />
                 ))}
               </div>
@@ -155,12 +172,12 @@ export default function ProfilePreview({
         {links && links.length > 0 && (
           <div className="mt-6 space-y-4">
             {links.map((link, index) => (
-              <div key={index} className="bg-zinc-900 rounded-xl p-4">
-                <h3 className="text-white text-lg font-medium">{link.title}</h3>
-                <p className="text-gray-400 text-sm mt-1">{link.description}</p>
+              <div key={index} className="bg-surface-card rounded-xl p-4 group hover:bg-surface-hover transition-colors">
+                <h3 className="text-white text-lg font-display">{link.title}</h3>
+                <p className="text-gray-400 text-sm mt-1 font-body">{link.description}</p>
                 <Link
                   href={link.cta.url}
-                  className="mt-4 block w-full bg-violet-600 hover:bg-violet-700 text-white text-center py-3 rounded-xl font-medium transition-colors"
+                  className="mt-4 block w-full bg-gradient-to-r from-profit to-profit-dark text-surface-default text-center py-3 rounded-xl font-display font-medium transition-all hover:from-profit-dark hover:to-profit active:scale-[0.99]"
                 >
                   {link.cta.text}
                 </Link>
@@ -170,7 +187,7 @@ export default function ProfilePreview({
         )}
 
         {/* Powered by Tradr */}
-        <div className="flex items-center justify-center gap-2 mt-8 text-sm text-gray-500">
+        <div className="flex items-center justify-center gap-2 mt-8 text-sm text-gray-500 font-body">
           <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
             <path d="M13.976 9.15c-2.172-.806-3.356-1.426-3.356-2.409 0-.831.683-1.305 1.901-1.305 2.227 0 4.515.858 6.09 1.631l.89-5.494C18.252.975 15.697 0 12.165 0 9.667 0 7.589.654 6.104 1.872 4.56 3.147 3.757 4.992 3.757 7.218c0 4.039 2.467 5.76 6.476 7.219 2.585.92 3.445 1.574 3.445 2.583 0 .98-.84 1.545-2.354 1.545-1.875 0-4.965-.921-6.99-2.109l-.9 5.555C5.175 22.99 8.385 24 11.714 24c2.641 0 4.843-.624 6.328-1.813 1.664-1.305 2.525-3.236 2.525-5.732 0-4.128-2.524-5.851-6.591-7.305z" />
           </svg>

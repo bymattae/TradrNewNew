@@ -8,13 +8,39 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        display: ['var(--font-space-grotesk)', 'system-ui', 'sans-serif'],
+        body: ['var(--font-outfit)', 'system-ui', 'sans-serif'],
+      },
+      colors: {
+        profit: {
+          DEFAULT: '#00DC82',
+          dark: '#00B468',
+        },
+        loss: {
+          DEFAULT: '#FF4A6C',
+          dark: '#D93D59',
+        },
+        neutral: {
+          DEFAULT: '#FFB547',
+          dark: '#D99A3C',
+        },
+        surface: {
+          DEFAULT: '#141416',
+          card: '#1C1C1F',
+          hover: '#232326',
+        },
+      },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic": "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+        'candlestick-pattern': "url('/patterns/candlestick.svg')",
       },
       animation: {
         border: 'border 4s ease infinite',
         'gradient-xy': 'gradient-xy 15s ease infinite',
+        'number-up': 'number-up 0.5s ease-out forwards',
+        'number-down': 'number-down 0.5s ease-out forwards',
       },
       keyframes: {
         border: {
@@ -30,6 +56,14 @@ const config: Config = {
             'background-size': '200% 200%',
             'background-position': 'right center'
           }
+        },
+        'number-up': {
+          '0%': { transform: 'translateY(20px)', opacity: '0' },
+          '100%': { transform: 'translateY(0)', opacity: '1' }
+        },
+        'number-down': {
+          '0%': { transform: 'translateY(-20px)', opacity: '0' },
+          '100%': { transform: 'translateY(0)', opacity: '1' }
         }
       },
     },

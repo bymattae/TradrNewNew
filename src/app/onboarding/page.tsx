@@ -505,12 +505,16 @@ export default function OnboardingPage() {
           username={username}
           bio={bio}
           tags={tags}
-          stats={{
-            gain: 0,
-            winRate: 0,
-            riskRatio: "0:0"
-          }}
-          strategies={[]}
+          strategies={[
+            {
+              title: "Example Strategy",
+              stats: {
+                gain: 0,
+                winRate: 0,
+                riskRatio: "0:0"
+              }
+            }
+          ]}
           avatarUrl={avatarUrl}
         />
       )}
@@ -779,7 +783,16 @@ export default function OnboardingPage() {
         username={username}
         bio={bio}
         hashtags={tags}
-        strategies={[]}
+        strategies={[
+          {
+            title: "Example Strategy",
+            stats: {
+              gain: 0,
+              winRate: 0,
+              riskRatio: "0:0"
+            }
+          }
+        ]}
       />
 
       <style jsx global>{`

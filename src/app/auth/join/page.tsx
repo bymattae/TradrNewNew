@@ -2,7 +2,7 @@
 
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useState, useEffect } from 'react';
-import { createClient } from '@/lib/supabase/client';
+import getSupabaseBrowserClient from '@/lib/supabase/client';
 import { toast } from 'sonner';
 import Image from 'next/image';
 
@@ -14,7 +14,7 @@ export default function JoinPage() {
   const [imageError, setImageError] = useState(false);
   const router = useRouter();
   const searchParams = useSearchParams();
-  const supabase = createClient();
+  const supabase = getSupabaseBrowserClient();
 
   useEffect(() => {
     const checkSession = async () => {

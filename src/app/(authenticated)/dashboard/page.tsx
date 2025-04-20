@@ -4,13 +4,14 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import getSupabaseBrowserClient from '@/lib/supabase/client';
 import { toast } from 'sonner';
-import StrategyPreview from '@/app/components/StrategyPreview';
+import ProfilePreview from '@/app/components/ProfilePreview';
 import { User } from '@supabase/supabase-js';
 
 export default function DashboardPage() {
   const router = useRouter();
   const supabase = getSupabaseBrowserClient();
   const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [profile, setProfile] = useState<any>(null);
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -42,7 +43,10 @@ export default function DashboardPage() {
         if (isProfileEmpty) {
           toast.error('Please complete your profile first');
           router.push('/onboarding');
+          return;
         }
+
+        setProfile(profile);
       } catch (error) {
         console.error('Error checking auth:', error);
         router.push('/auth/join');
@@ -80,20 +84,16 @@ export default function DashboardPage() {
     }
   ];
 
-  const mockStrategy = {
-    title: "Volume-based breakout strategy",
-    description: "Volume-based breakout strategy on the 15m chart with multiple confirmation levels",
-    tags: ["Crypto", "Manual", "Scalping"],
-    stats: {
-      gain: 31.2,
-      winRate: 72,
-      riskRatio: "1:3"
-    },
-    cta: {
-      text: "Get Access Now",
-      url: "#"
+  const mockStrategies = [
+    {
+      title: "Volume-based breakout strategy",
+      description: "Volume-based breakout strategy on the 15m chart with multiple confirmation levels",
+      cta: {
+        text: "Get Access Now",
+        url: "#"
+      }
     }
-  };
+  ];
 
   return (
     <div className="min-h-screen bg-black p-4">
@@ -101,12 +101,21 @@ export default function DashboardPage() {
         {/* Header */}
         <h1 className="text-2xl font-bold text-white">My Tradr</h1>
 
-        {/* Strategy Preview */}
-        <StrategyPreview
-          username={currentUser?.email?.split('@')[0] || 'trader'}
-          avatarUrl={currentUser?.user_metadata?.avatar_url}
-          strategy={mockStrategy}
-        />
+        {/* Profile Preview */}
+        {profile && (
+          <ProfilePreview
+            username={profile.username || currentUser?.email?.split('@')[0] || 'trader'}
+            avatarUrl={profile.avatar_url}
+            bio={profile.bio}
+            tags={profile.tags || []}
+            stats={{
+              gain: 31.2,
+              winRate: 72,
+              riskRatio: "1:3"
+            }}
+            strategies={mockStrategies}
+          />
+        )}
 
         {/* Action Buttons */}
         <div className="grid grid-cols-3 gap-4">

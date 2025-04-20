@@ -133,7 +133,7 @@ export default function JoinPage() {
               <span className="text-gray-400"> get noticed.</span>
             </h2>
             <p className="text-center text-sm text-gray-400">
-              We&apos;ll send you a magic link
+              New or returning? Just enter your email
             </p>
           </div>
         </div>

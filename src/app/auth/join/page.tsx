@@ -127,13 +127,13 @@ export default function JoinPage() {
             />
           </div>
           <div className="space-y-1">
-            <h2 className="text-center text-2xl tracking-tight">
+            <h2 className="text-center text-2xl font-semibold text-white">
               <span className="text-gray-400">Where </span>
               <span className="font-semibold text-white">real traders</span>
               <span className="text-gray-400"> get noticed.</span>
             </h2>
             <p className="text-center text-sm text-gray-400">
-              Register or sign in to get started
+              We&apos;ll send you a magic link
             </p>
           </div>
         </div>

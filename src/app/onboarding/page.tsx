@@ -8,6 +8,7 @@ import { toast } from 'sonner';
 import ImageCropModal from '../components/ImageCropModal';
 import ProfilePreview from '../components/ProfilePreview';
 import { Dialog } from '@headlessui/react';
+import ProfilePreviewDialog from '../components/ProfilePreviewDialog';
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB limit
 
@@ -502,9 +503,13 @@ export default function OnboardingPage() {
       {showPreview && (
         <ProfilePreview
           username={username}
-          isVerified={false}
           bio={bio}
-          hashtags={tags}
+          tags={tags}
+          stats={{
+            gain: 0,
+            winRate: 0,
+            riskRatio: "0:0"
+          }}
           strategies={[]}
           avatarUrl={avatarUrl}
         />
@@ -768,49 +773,14 @@ export default function OnboardingPage() {
       </div>
 
       {/* Preview Dialog */}
-      <Dialog
-        open={isPreviewOpen}
+      <ProfilePreviewDialog
+        isOpen={isPreviewOpen}
         onClose={() => setIsPreviewOpen(false)}
-        className="relative z-50"
-      >
-        <div className="fixed inset-0 bg-black/80" aria-hidden="true" />
-        
-        <div className="fixed inset-0 flex items-center justify-center p-4">
-          <Dialog.Panel className="w-full max-w-xl rounded-2xl bg-zinc-900 p-6 shadow-xl">
-            <Dialog.Title className="text-xl font-semibold mb-4 flex items-center justify-between">
-              Profile Preview
-              <button
-                onClick={() => setIsPreviewOpen(false)}
-                className="text-zinc-400 hover:text-white transition-colors"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            </Dialog.Title>
-            
-            <div className="relative aspect-[3/4] w-full bg-zinc-800 rounded-xl overflow-hidden">
-              <ProfilePreview
-                username={username}
-                isVerified={false}
-                bio={bio}
-                hashtags={tags}
-                strategies={[]}
-                avatarUrl={avatarUrl}
-              />
-            </div>
-            
-            <div className="mt-4 flex justify-end space-x-3">
-              <button
-                onClick={() => setIsPreviewOpen(false)}
-                className="px-4 py-2 text-sm font-medium text-zinc-400 hover:text-white transition-colors"
-              >
-                Close
-              </button>
-            </div>
-          </Dialog.Panel>
-        </div>
-      </Dialog>
+        username={username}
+        bio={bio}
+        hashtags={tags}
+        strategies={[]}
+      />
 
       <style jsx global>{`
         @keyframes checkmark {

@@ -70,153 +70,110 @@ export default function ProfilePreview({
   links
 }: ProfilePreviewProps) {
   return (
-    <div className="w-full max-w-lg mx-auto bg-zinc-900/50 border border-zinc-800/50 rounded-3xl overflow-hidden backdrop-blur-xl relative">
-      {/* Grid Pattern Background */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#18181b_1px,transparent_1px),linear-gradient(to_bottom,#18181b_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_110%)]" />
-      
-      {/* Gradient Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/20 to-black/40" />
-
+    <div className="w-full max-w-lg mx-auto bg-[#0A0A0C] rounded-3xl overflow-hidden">
       {/* Content */}
-      <div className="relative">
-        {/* Header Section */}
-        <div className="relative px-6 pt-8 pb-6">
-          {/* Avatar */}
-          <div className="flex flex-col items-center">
-            <div className="relative w-32 h-32 mb-6 group">
-              {/* Animated gradient border */}
-              <div className="absolute -inset-1 bg-gradient-to-r from-violet-600 via-indigo-600 to-violet-600 rounded-full blur opacity-70 group-hover:opacity-100 transition duration-1000 group-hover:duration-200 animate-gradient-xy" />
-              
-              {avatarUrl ? (
-                <Image
-                  src={avatarUrl}
-                  alt={username}
-                  fill
-                  className="object-cover rounded-full border-[3px] border-black relative"
-                  sizes="128px"
-                  priority
-                />
-              ) : (
-                <div className="w-full h-full rounded-full bg-zinc-800 border-[3px] border-black relative flex items-center justify-center">
-                  <span className="text-5xl text-zinc-600">{username.charAt(0).toUpperCase()}</span>
-                </div>
-              )}
-              
-              {/* Verified Badge */}
-              <div className="absolute bottom-0 right-0 bg-black rounded-full p-1 border-2 border-black">
-                <div className="bg-gradient-to-r from-violet-600 to-indigo-600 rounded-full p-1 animate-pulse">
-                  <svg className="w-4 h-4 text-white" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M16.403 12.652a3 3 0 000-5.304 3 3 0 00-3.75-3.751 3 3 0 00-5.305 0 3 3 0 00-3.751 3.75 3 3 0 000 5.305 3 3 0 003.75 3.751 3 3 0 005.305 0 3 3 0 003.751-3.75zm-2.546-4.46a.75.75 0 00-1.214-.883l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" />
-                  </svg>
-                </div>
-              </div>
-            </div>
-
-            {/* Username and Bio */}
-            <div className="text-center space-y-3 mb-6">
-              <h1 className="text-2xl font-bold text-white bg-clip-text text-transparent bg-gradient-to-r from-white to-white/80">{username}</h1>
-              {bio && <p className="text-gray-400 text-base max-w-sm leading-relaxed">{bio}</p>}
-            </div>
-
-            {/* Tags */}
-            {tags.length > 0 && (
-              <div className="flex flex-wrap gap-2 justify-center mb-6">
-                {tags.map((tag, index) => (
-                  <span
-                    key={index}
-                    className="bg-indigo-500/10 text-indigo-400 px-4 py-1.5 rounded-full text-sm border border-indigo-500/20 hover:bg-indigo-500/20 hover:border-indigo-500/30 transition-colors cursor-default"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            )}
-
-            {/* Social Links */}
-            {socialLinks && socialLinks.length > 0 && (
-              <div className="flex gap-3">
-                {socialLinks.map((link, index) => (
-                  <Link
-                    key={index}
-                    href={link.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-11 h-11 rounded-full bg-zinc-800/50 border border-zinc-700/50 flex items-center justify-center text-gray-400 hover:text-white hover:bg-indigo-500/20 hover:border-indigo-500/30 hover:scale-110 transition-all duration-200"
-                  >
-                    {SocialIcons[link.platform]}
-                  </Link>
-                ))}
+      <div className="px-6 pt-8 pb-4">
+        {/* Avatar */}
+        <div className="flex flex-col items-center">
+          <div className="relative w-24 h-24 mb-4">
+            {avatarUrl ? (
+              <Image
+                src={avatarUrl}
+                alt={username}
+                fill
+                className="object-cover rounded-full"
+                sizes="96px"
+                priority
+              />
+            ) : (
+              <div className="w-full h-full rounded-full bg-zinc-800 flex items-center justify-center">
+                <span className="text-4xl text-zinc-600">{username.charAt(0).toUpperCase()}</span>
               </div>
             )}
           </div>
+
+          {/* Username and Bio */}
+          <div className="text-center space-y-2">
+            <h1 className="text-xl font-medium text-white">@{username}</h1>
+            {bio && <p className="text-gray-400 text-sm max-w-sm">{bio}</p>}
+          </div>
+
+          {/* Tags */}
+          {tags.length > 0 && (
+            <div className="flex flex-wrap gap-2 justify-center mt-4">
+              {tags.map((tag, index) => (
+                <span
+                  key={index}
+                  className="bg-zinc-900 text-gray-300 px-3 py-1 rounded-lg text-sm"
+                >
+                  #{tag}
+                </span>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Strategies Section */}
         {strategies && strategies.length > 0 && (
-          <div className="border-t border-zinc-800/50 px-6 py-6 bg-black/20">
-            <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5 text-indigo-400">
-                <path fillRule="evenodd" d="M1 2.75A.75.75 0 011.75 2h16.5a.75.75 0 010 1.5H18v8.75A2.75 2.75 0 0115.25 15h-1.072l.798 3.06a.75.75 0 01-1.452.38L13.41 18H6.59l-.114.44a.75.75 0 01-1.452-.38L5.823 15H4.75A2.75 2.75 0 012 12.25V3.5h-.25A.75.75 0 011 2.75zM7.373 15l-.391 1.5h6.037l-.392-1.5H7.373zM13.25 5a.75.75 0 01.75.75v5.5a.75.75 0 01-1.5 0v-5.5a.75.75 0 01.75-.75zm-6.5 4a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 016.75 9zm4-1.25a.75.75 0 00-1.5 0v3.5a.75.75 0 001.5 0v-3.5z" clipRule="evenodd" />
-              </svg>
-              Strategies
-            </h2>
-            <div className="space-y-4">
+          <div className="mt-6">
+            <div className="bg-zinc-900 rounded-xl p-4">
               {strategies.map((strategy, index) => (
-                <div key={index} className="bg-zinc-800/30 rounded-xl p-4 hover:bg-zinc-800/50 transition-colors">
-                  <h3 className="text-white font-medium mb-3">{strategy.title}</h3>
-                  <div className="grid grid-cols-3 gap-4">
+                <div key={index}>
+                  <h3 className="text-white text-sm mb-4">{strategy.title}</h3>
+                  <div className="grid grid-cols-3 gap-8">
                     <div className="text-center">
-                      <p className="text-sm text-gray-400">Gain</p>
-                      <p className="text-lg font-semibold text-white">{strategy.stats.gain}%</p>
+                      <p className="text-[#00FF85] text-xl font-medium">+{strategy.stats.gain}%</p>
+                      <p className="text-xs text-gray-500 mt-1">Gain</p>
                     </div>
                     <div className="text-center">
-                      <p className="text-sm text-gray-400">Win Rate</p>
-                      <p className="text-lg font-semibold text-white">{strategy.stats.winRate}%</p>
+                      <p className="text-white text-xl font-medium">{strategy.stats.winRate}%</p>
+                      <p className="text-xs text-gray-500 mt-1">Win Rate</p>
                     </div>
                     <div className="text-center">
-                      <p className="text-sm text-gray-400">Risk Ratio</p>
-                      <p className="text-lg font-semibold text-white">{strategy.stats.riskRatio}</p>
+                      <p className="text-white text-xl font-medium">{strategy.stats.riskRatio}</p>
+                      <p className="text-xs text-gray-500 mt-1">Risk Ratio</p>
                     </div>
                   </div>
                 </div>
               ))}
             </div>
+            {/* Strategy Carousel Dots */}
+            {strategies.length > 1 && (
+              <div className="flex justify-center gap-1 mt-3">
+                {strategies.map((_, index) => (
+                  <div
+                    key={index}
+                    className={`w-1.5 h-1.5 rounded-full ${index === 0 ? 'bg-violet-500' : 'bg-zinc-700'}`}
+                  />
+                ))}
+              </div>
+            )}
           </div>
         )}
 
         {/* Links Section */}
         {links && links.length > 0 && (
-          <div className="border-t border-zinc-800/50 px-6 py-6 bg-black/20">
-            <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5 text-indigo-400">
-                <path d="M12.232 4.232a2.5 2.5 0 013.536 3.536l-1.225 1.224a.75.75 0 001.061 1.06l1.224-1.224a4 4 0 00-5.656-5.656l-3 3a4 4 0 00.225 5.865.75.75 0 00.977-1.138 2.5 2.5 0 01-.142-3.667l3-3z" />
-                <path d="M11.603 7.963a.75.75 0 00-.977 1.138 2.5 2.5 0 01.142 3.667l-3 3a2.5 2.5 0 01-3.536-3.536l1.225-1.224a.75.75 0 00-1.061-1.06l-1.224 1.224a4 4 0 105.656 5.656l3-3a4 4 0 00-.225-5.865z" />
-              </svg>
-              Links
-            </h2>
-            <div className="space-y-4">
-              {links.map((link, index) => (
+          <div className="mt-6 space-y-4">
+            {links.map((link, index) => (
+              <div key={index} className="bg-zinc-900 rounded-xl p-4">
+                <h3 className="text-white text-lg font-medium">{link.title}</h3>
+                <p className="text-gray-400 text-sm mt-1">{link.description}</p>
                 <Link
-                  key={index}
                   href={link.cta.url}
-                  className="block bg-zinc-800/30 rounded-xl p-4 hover:bg-zinc-800/50 transition-all hover:scale-[1.02] duration-200"
+                  className="mt-4 block w-full bg-violet-600 hover:bg-violet-700 text-white text-center py-3 rounded-xl font-medium transition-colors"
                 >
-                  <h3 className="text-white font-medium">{link.title}</h3>
-                  <p className="text-gray-400 text-sm mt-1">{link.description}</p>
-                  <div className="flex items-center gap-2 text-indigo-400 text-sm mt-3 group">
-                    <span className="group-hover:underline">{link.cta.text}</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform">
-                      <path fillRule="evenodd" d="M5.22 14.78a.75.75 0 001.06 0l7.22-7.22v5.69a.75.75 0 001.5 0v-7.5a.75.75 0 00-.75-.75h-7.5a.75.75 0 000 1.5h5.69l-7.22 7.22a.75.75 0 000 1.06z" clipRule="evenodd" />
-                    </svg>
-                  </div>
+                  {link.cta.text}
                 </Link>
-              ))}
-            </div>
+              </div>
+            ))}
           </div>
         )}
 
         {/* Powered by Tradr */}
-        <div className="text-center py-4 text-sm text-gray-500">
+        <div className="flex items-center justify-center gap-2 mt-8 text-sm text-gray-500">
+          <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M13.976 9.15c-2.172-.806-3.356-1.426-3.356-2.409 0-.831.683-1.305 1.901-1.305 2.227 0 4.515.858 6.09 1.631l.89-5.494C18.252.975 15.697 0 12.165 0 9.667 0 7.589.654 6.104 1.872 4.56 3.147 3.757 4.992 3.757 7.218c0 4.039 2.467 5.76 6.476 7.219 2.585.92 3.445 1.574 3.445 2.583 0 .98-.84 1.545-2.354 1.545-1.875 0-4.965-.921-6.99-2.109l-.9 5.555C5.175 22.99 8.385 24 11.714 24c2.641 0 4.843-.624 6.328-1.813 1.664-1.305 2.525-3.236 2.525-5.732 0-4.128-2.524-5.851-6.591-7.305z" />
+          </svg>
           Powered by Tradr
         </div>
       </div>

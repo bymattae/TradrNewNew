@@ -14,12 +14,23 @@ const config: Config = {
       },
       animation: {
         border: 'border 4s ease infinite',
+        'gradient-xy': 'gradient-xy 15s ease infinite',
       },
       keyframes: {
         border: {
           '0%, 100%': { transform: 'rotate(0deg)', opacity: '0.75' },
           '50%': { transform: 'rotate(180deg)', opacity: '0.5' },
         },
+        'gradient-xy': {
+          '0%, 100%': {
+            'background-size': '400% 400%',
+            'background-position': 'left center'
+          },
+          '50%': {
+            'background-size': '200% 200%',
+            'background-position': 'right center'
+          }
+        }
       },
     },
   },

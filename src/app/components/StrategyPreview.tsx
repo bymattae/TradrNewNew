@@ -1,3 +1,5 @@
+'use client';
+
 import Image from 'next/image';
 
 interface Strategy {
@@ -41,7 +43,13 @@ export default function StrategyPreview({ username, avatarUrl, strategy }: Strat
       <div className="flex items-center space-x-3">
         <div className="h-10 w-10 rounded-full bg-zinc-800 flex items-center justify-center">
           {avatarUrl ? (
-            <img src={avatarUrl} alt={username} className="h-10 w-10 rounded-full object-cover" />
+            <Image
+              src={avatarUrl}
+              alt={username}
+              width={40}
+              height={40}
+              className="rounded-full object-cover"
+            />
           ) : (
             <span className="text-white text-lg">{username[0].toUpperCase()}</span>
           )}

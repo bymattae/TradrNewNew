@@ -9,17 +9,18 @@ export async function GET(request: Request) {
   const code = requestUrl.searchParams.get('code')
   
   if (!code) {
-    return NextResponse.redirect(new URL('/auth/join', request.url))
+    return NextResponse.redirect(new URL('/auth/join', requestUrl.origin))
   }
 
   const cookieStore = cookies()
   const supabase = createRouteHandlerClient({ cookies: () => cookieStore })
 
   try {
-    await supabase.auth.exchangeCodeForSession(code)
-    return NextResponse.redirect(new URL('/onboarding', request.url))
+    const { error } = await supabase.auth.exchangeCodeForSession(code)
+    if (error) throw error
+    return NextResponse.redirect(new URL('/onboarding', requestUrl.origin))
   } catch (error) {
     console.error('Auth error:', error)
-    return NextResponse.redirect(new URL('/auth/join', request.url))
+    return NextResponse.redirect(new URL('/auth/join', requestUrl.origin))
   }
 } 

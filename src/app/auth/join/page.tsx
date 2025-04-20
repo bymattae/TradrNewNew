@@ -5,6 +5,15 @@ import { useState, useEffect } from 'react';
 import getSupabaseBrowserClient from '@/lib/supabase/client';
 import { toast } from 'sonner';
 import Image from 'next/image';
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+
+const errorMessages = {
+  missing_code: 'Authentication link is invalid or expired.',
+  auth_error: 'There was a problem with authentication. Please try again.',
+  session_error: 'Unable to create your session. Please try again.',
+  profile_error: 'Error accessing your profile. Please try again.',
+  unexpected: 'An unexpected error occurred. Please try again.',
+}
 
 export default function JoinPage() {
   const [email, setEmail] = useState('');
@@ -12,9 +21,12 @@ export default function JoinPage() {
   const [message, setMessage] = useState('');
   const [isCheckingSession, setIsCheckingSession] = useState(true);
   const [imageError, setImageError] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [emailSent, setEmailSent] = useState(false);
   const router = useRouter();
   const searchParams = useSearchParams();
   const supabase = getSupabaseBrowserClient();
+  const errorType = searchParams.get('error');
 
   useEffect(() => {
     const checkSession = async () => {
@@ -53,49 +65,36 @@ export default function JoinPage() {
     checkSession();
 
     // Check for error in URL params
-    const error = searchParams.get('error');
-    if (error) {
-      switch (error) {
-        case 'invalid_code':
-          toast.error('Invalid magic link. Please try again.');
-          break;
-        case 'no_user':
-          toast.error('User not found. Please try again.');
-          break;
-        case 'server_error':
-          toast.error('Server error. Please try again.');
-          break;
-        default:
-          toast.error('An error occurred. Please try again.');
-      }
+    if (errorType && errorMessages[errorType as keyof typeof errorMessages]) {
+      setError(errorMessages[errorType as keyof typeof errorMessages]);
     }
   }, [router, supabase, searchParams]);
 
   const handleEmailSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (loading) return;
-    
     setLoading(true);
-    setMessage('');
+    setError(null);
 
     try {
+      const supabase = createClientComponentClient();
       const { error } = await supabase.auth.signInWithOtp({
         email,
         options: {
+          emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL || window.location.origin}/auth/callback`,
           shouldCreateUser: true,
-          emailRedirectTo: `${window.location.origin}/auth/callback`,
         },
       });
 
       if (error) {
-        setMessage(error.message);
-        toast.error(error.message);
-      } else {
-        router.push('/auth/magic-link-sent');
+        console.error('Sign up error:', error);
+        setError(error.message);
+        return;
       }
-    } catch (error) {
-      setMessage('An unexpected error occurred. Please try again.');
-      toast.error('An unexpected error occurred. Please try again.');
+
+      setEmailSent(true);
+    } catch (err) {
+      console.error('Unexpected error:', err);
+      setError('An unexpected error occurred. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -154,9 +153,18 @@ export default function JoinPage() {
             />
           </div>
 
-          {message && (
-            <div className="rounded-2xl bg-red-900/50 border border-red-500/50 p-4">
-              <div className="text-sm text-red-200">{message}</div>
+          {error && (
+            <div className="rounded-md bg-red-900/50 p-4 mb-4">
+              <div className="flex">
+                <div className="flex-shrink-0">
+                  <svg className="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                  </svg>
+                </div>
+                <div className="ml-3">
+                  <p className="text-sm text-red-400">{error}</p>
+                </div>
+              </div>
             </div>
           )}
 

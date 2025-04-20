@@ -87,7 +87,18 @@ export default function DashboardPage() {
   const mockStrategies = [
     {
       title: "Volume-based breakout strategy",
-      description: "Volume-based breakout strategy on the 15m chart with multiple confirmation levels",
+      stats: {
+        gain: 31.2,
+        winRate: 72,
+        riskRatio: "1:3"
+      }
+    }
+  ];
+
+  const mockLinks = [
+    {
+      title: "Premium Strategy Course",
+      description: "Learn the complete strategy with detailed explanations and live examples",
       cta: {
         text: "Get Access Now",
         url: "#"
@@ -108,12 +119,8 @@ export default function DashboardPage() {
             avatarUrl={profile.avatar_url}
             bio={profile.bio}
             tags={profile.tags || []}
-            stats={{
-              gain: 31.2,
-              winRate: 72,
-              riskRatio: "1:3"
-            }}
             strategies={mockStrategies}
+            links={mockLinks}
           />
         )}
 

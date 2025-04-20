@@ -587,7 +587,10 @@ export default function OnboardingPage() {
               <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
             </svg>
           </button>
-          <h1 className="text-xl font-bold">Build your profile</h1>
+          <div className="flex flex-col items-center">
+            <h1 className="text-xl font-bold bg-gradient-to-r from-indigo-400 via-violet-400 to-indigo-400 text-transparent bg-clip-text">Build your profile</h1>
+            <p className="text-zinc-500 text-sm">Make it yours. Make it awesome.</p>
+          </div>
           <button 
             onClick={() => setIsPreviewOpen(true)}
             className="text-gray-400 hover:text-white transition-colors flex items-center gap-1.5"
@@ -602,12 +605,20 @@ export default function OnboardingPage() {
         <div className="flex-1 px-4 py-6 space-y-6 overflow-y-auto scrollbar-hide max-w-2xl mx-auto w-full">
           {/* Profile Fields Section */}
           <div className="space-y-6">
-            {/* Avatar upload */}
+            {/* Avatar upload with Tradr Score */}
             <div className="flex flex-col items-center text-center">
               <div className="relative w-24 h-24">
+                {/* Tradr Score Badge */}
+                <div className="absolute -right-2 -top-2 w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500 via-violet-500 to-indigo-600 p-[2px] shadow-lg z-10 animate-pulse">
+                  <div className="w-full h-full rounded-full bg-black flex items-center justify-center">
+                    <span className="text-xs font-semibold text-white">Lv.5</span>
+                  </div>
+                </div>
+                {/* Animated gradient border */}
+                <div className="absolute -inset-1 bg-gradient-to-r from-indigo-500 via-violet-500 to-indigo-500 rounded-full blur opacity-75 animate-border"></div>
                 <button 
                   onClick={() => fileInputRef.current?.click()}
-                  className={`absolute inset-0 rounded-full bg-zinc-900/50 border-2 border-dashed ${showValidation && errors.avatar ? 'border-red-500/50' : 'border-zinc-800/50'} overflow-hidden flex items-center justify-center hover:border-indigo-500/50 transition-all group backdrop-blur-xl`}
+                  className={`relative w-full h-full rounded-full bg-zinc-900/50 border-2 border-dashed ${showValidation && errors.avatar ? 'border-red-500/50' : 'border-zinc-800/50'} overflow-hidden flex items-center justify-center hover:border-indigo-500/50 transition-all group backdrop-blur-xl`}
                 >
                   {avatarUrl ? (
                     <div className="absolute inset-0">
@@ -989,6 +1000,17 @@ export default function OnboardingPage() {
           100% {
             transform: scale(1);
             opacity: 1;
+          }
+        }
+
+        @keyframes border {
+          0%, 100% {
+            transform: rotate(0deg);
+            opacity: 0.75;
+          }
+          50% {
+            transform: rotate(180deg);
+            opacity: 0.5;
           }
         }
       `}</style>

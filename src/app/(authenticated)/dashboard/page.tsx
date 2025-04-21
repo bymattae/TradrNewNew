@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import getSupabaseBrowserClient from '@/lib/supabase/client';
 import { toast } from 'sonner';
 import ProfilePreview from '@/app/components/ProfilePreview';
+import CopyableUrl from '@/app/components/CopyableUrl';
 import { User } from '@supabase/supabase-js';
 
 export default function DashboardPage() {
@@ -97,9 +98,7 @@ export default function DashboardPage() {
 
         {/* URL Display */}
         {profile && (
-          <div className="text-white/60 text-sm font-mono mb-4">
-            Your Tradr is live: <a href={`https://tradr.co/@${profile.username}`} target="_blank" rel="noopener noreferrer" className="text-violet-400 hover:text-violet-300 transition-colors">tradr.co/@{profile.username}</a>
-          </div>
+          <CopyableUrl username={profile.username} />
         )}
 
         {/* Profile Preview */}

@@ -1,7 +1,9 @@
 'use client';
 
+import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
+import { TradrIcon } from './Icons';
 
 interface SocialLink {
   platform: 'twitter' | 'instagram' | 'youtube' | 'tiktok' | 'telegram';
@@ -30,6 +32,9 @@ interface ProfilePreviewProps {
       url: string;
     };
   }[];
+  onEditClick: () => void;
+  onShareClick: () => void;
+  onThemeClick: () => void;
 }
 
 const SocialIcons = {
@@ -68,169 +73,187 @@ export default function ProfilePreview({
   socialLinks,
   strategies,
   links,
-  onThemeClick,
   onEditClick,
-  onShareClick
-}: ProfilePreviewProps & {
-  onThemeClick?: () => void;
-  onEditClick?: () => void;
-  onShareClick?: () => void;
-}) {
+  onShareClick,
+  onThemeClick
+}: ProfilePreviewProps) {
   return (
-    <div className="flex flex-col items-center">
-      <div className="relative w-full max-w-lg p-4">
-        {/* Card Outline & Glow Effects */}
-        <div className="absolute inset-2 bg-gradient-to-b from-violet-500/30 to-violet-400/20 rounded-[2.5rem] blur-2xl" />
-        <div className="absolute inset-0 bg-gradient-to-br from-violet-600/20 via-violet-400/5 to-transparent rounded-[2.5rem]" />
-        
-        {/* Main Card */}
-        <div className="relative bg-gradient-to-b from-black/95 via-black/90 to-black/95 backdrop-blur-xl rounded-[2.5rem] overflow-hidden border border-white/10 shadow-2xl">
-          {/* Top Action Row */}
-          <div className="absolute top-4 right-4 flex items-center gap-2">
-            <button 
-              onClick={onEditClick}
-              className="p-2 rounded-lg hover:bg-white/5 transition-colors"
-              aria-label="Edit profile"
-            >
-              <svg className="w-4 h-4 text-white/70" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-              </svg>
-            </button>
-            <button 
-              onClick={onShareClick}
-              className="p-2 rounded-lg hover:bg-white/5 transition-colors"
-              aria-label="Share profile"
-            >
-              <svg className="w-4 h-4 text-white/70" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" />
-              </svg>
-            </button>
-            <button 
-              onClick={onThemeClick}
-              className="p-2 rounded-lg hover:bg-white/5 transition-colors"
-              aria-label="Change theme"
-            >
-              <svg className="w-4 h-4 text-white/70" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-              </svg>
-            </button>
-          </div>
+    <div className="relative">
+      {/* LED Outline Animation */}
+      <motion.div
+        className="absolute inset-0 rounded-2xl"
+        style={{
+          background: `conic-gradient(
+            from 0deg at 50% 50%,
+            rgba(167, 139, 250, 0.5),
+            rgba(139, 92, 246, 0.5),
+            rgba(124, 58, 237, 0.5),
+            rgba(139, 92, 246, 0.5),
+            rgba(167, 139, 250, 0.5)
+          )`,
+          filter: 'blur(20px)',
+          opacity: 0.5
+        }}
+        animate={{
+          rotate: [0, 360]
+        }}
+        transition={{
+          duration: 8,
+          repeat: Infinity,
+          ease: "linear"
+        }}
+      />
 
-          {/* Content */}
-          <div className="px-8 py-6">
-            {/* Avatar and Username Section */}
-            <div className="flex flex-col items-center">
-              <div className="relative w-20 h-20 mb-3">
-                <div className="absolute inset-0 bg-gradient-to-tr from-violet-500 via-violet-400 to-violet-500/50 rounded-full animate-gradient-xy" />
+      {/* Main Card */}
+      <div className="relative bg-black/80 backdrop-blur-xl rounded-2xl border border-white/10 overflow-hidden">
+        <div className="p-6 space-y-6">
+          {/* Profile Header */}
+          <div className="flex items-center gap-4">
+            <div className="relative">
+              <div className="w-20 h-20 rounded-full overflow-hidden bg-violet-500/20">
                 {avatarUrl ? (
                   <Image
                     src={avatarUrl}
                     alt={username}
-                    fill
-                    className="object-cover rounded-full border-2 border-black/50 relative"
-                    sizes="80px"
-                    priority
+                    width={80}
+                    height={80}
+                    className="object-cover"
                   />
                 ) : (
-                  <div className="w-full h-full rounded-full bg-black/50 border-2 border-white/10 relative flex items-center justify-center">
-                    <span className="text-3xl font-display text-gray-400">{username.charAt(0).toUpperCase()}</span>
+                  <div className="w-full h-full flex items-center justify-center text-2xl font-bold text-violet-500">
+                    {username[0].toUpperCase()}
                   </div>
                 )}
-                {/* Online Status Badge */}
-                <div className="absolute -bottom-1 -right-1 bg-profit rounded-full w-3 h-3 border-2 border-black shadow-lg" />
               </div>
-
-              {/* Username and Bio */}
-              <div className="text-center space-y-2">
-                <h1 className="text-xl font-display font-medium text-white">@{username}</h1>
-                {bio && <p className="font-mono text-sm text-gray-400 max-w-sm tracking-tight leading-relaxed">{bio}</p>}
-              </div>
-
-              {/* Tags */}
-              {tags.length > 0 && (
-                <div className="flex flex-wrap gap-1.5 justify-center mt-3">
-                  {tags.map((tag, index) => {
-                    const gradients = [
-                      'from-violet-500/90 to-violet-700/90',
-                      'from-blue-900/90 to-blue-950/90',
-                      'from-emerald-600/90 to-emerald-800/90'
-                    ];
-                    return (
-                      <span
-                        key={index}
-                        className={`bg-gradient-to-br ${gradients[index]} px-3 py-1 rounded-lg text-xs font-medium shadow-lg transition-all hover:scale-105 border border-white/10`}
-                      >
-                        #{tag}
-                      </span>
-                    );
-                  })}
-                </div>
+            </div>
+            <div>
+              <h2 className="text-2xl font-display font-bold text-white tracking-tight">
+                @{username}
+              </h2>
+              {bio && (
+                <p className="text-white/60 font-sans mt-1 text-sm leading-relaxed">
+                  {bio}
+                </p>
               )}
             </div>
+          </div>
 
-            {/* Stats Section */}
-            {strategies && strategies.length > 0 && (
-              <div className="mt-6">
-                <div className="bg-black/50 backdrop-blur rounded-xl p-3 border border-white/10 shadow-lg">
-                  <div className="grid grid-cols-3 gap-6">
-                    <div className="text-center">
-                      <p className={`font-mono text-lg font-medium tabular-nums ${strategies[0].stats.gain >= 0 ? 'text-profit' : 'text-loss'}`}>
-                        {strategies[0].stats.gain >= 0 ? '+' : ''}{strategies[0].stats.gain}%
+          {/* Tags */}
+          {tags.length > 0 && (
+            <div className="flex flex-wrap gap-2">
+              {tags.map((tag, index) => (
+                <span
+                  key={index}
+                  className="px-3 py-1 bg-white/5 rounded-full text-sm text-white/80 font-medium hover:bg-white/10 transition-colors"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+          )}
+
+          {/* Strategies */}
+          {strategies && strategies.length > 0 && (
+            <div className="space-y-4">
+              {strategies.map((strategy, index) => (
+                <div
+                  key={index}
+                  className="bg-white/5 rounded-xl p-4 hover:bg-white/10 transition-colors"
+                >
+                  <h3 className="font-display text-lg font-semibold text-white mb-3">
+                    {strategy.title}
+                  </h3>
+                  <div className="grid grid-cols-3 gap-4">
+                    <div>
+                      <p className="text-white/60 text-xs mb-1">Gain</p>
+                      <p className="font-mono text-green-400 font-medium">
+                        +{strategy.stats.gain}%
                       </p>
-                      <p className="text-xs text-gray-500">Gain</p>
                     </div>
-                    <div className="text-center">
-                      <p className="font-mono text-lg font-medium text-white tabular-nums">{strategies[0].stats.winRate}%</p>
-                      <p className="text-xs text-gray-500">Win Rate</p>
+                    <div>
+                      <p className="text-white/60 text-xs mb-1">Win Rate</p>
+                      <p className="font-mono text-white font-medium">
+                        {strategy.stats.winRate}%
+                      </p>
                     </div>
-                    <div className="text-center">
-                      <p className="font-mono text-lg font-medium text-violet-400 tabular-nums">{strategies[0].stats.riskRatio}</p>
-                      <p className="text-xs text-gray-500">Avg RR</p>
+                    <div>
+                      <p className="text-white/60 text-xs mb-1">Risk Ratio</p>
+                      <p className="font-mono text-white font-medium">
+                        {strategy.stats.riskRatio}
+                      </p>
                     </div>
                   </div>
                 </div>
-              </div>
-            )}
-
-            {/* Links Section */}
-            {links && links.length > 0 && (
-              <div className="mt-4">
-                {links.map((link, index) => (
-                  <div key={index} className="bg-black/50 backdrop-blur rounded-xl p-4 border border-white/10 shadow-lg">
-                    <div className="flex flex-col space-y-1 mb-3">
-                      <h3 className="text-base font-display text-white/90">{link.title}</h3>
-                      <p className="text-xs text-gray-400 font-medium">{link.description}</p>
-                    </div>
-                    <Link
-                      href={link.cta.url}
-                      className="group flex items-center justify-between bg-violet-600/20 hover:bg-violet-600/30 text-violet-300 px-3 py-2 rounded-lg font-display text-sm transition-all active:scale-[0.99] border border-violet-500/20"
-                    >
-                      <span className="font-medium">{link.cta.text}</span>
-                      <svg 
-                        className="w-4 h-4 text-violet-400 transition-transform group-hover:translate-x-0.5" 
-                        fill="none" 
-                        stroke="currentColor" 
-                        viewBox="0 0 24 24"
-                      >
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                      </svg>
-                    </Link>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {/* Powered by Tradr */}
-            <div className="flex items-center justify-center gap-2 mt-6">
-              <div className="bg-[#0F0F12] rounded-lg px-3 py-1.5 flex items-center gap-2 text-xs text-white/90 font-medium border border-white/10 shadow-lg">
-                <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M19.4 6.1L14.5 11l4.9 4.9c.3.3.3.7 0 1-.1.1-.3.2-.5.2s-.4-.1-.5-.2l-4.9-4.9-4.9 4.9c-.1.1-.3.2-.5.2s-.4-.1-.5-.2c-.3-.3-.3-.7 0-1l4.9-4.9-4.9-4.9c-.3-.3-.3-.7 0-1 .3-.3.7-.3 1 0l4.9 4.9 4.9-4.9c.3-.3.7-.3 1 0 .3.3.3.7 0 1z"/>
-                </svg>
-                Powered by Tradr
-              </div>
+              ))}
             </div>
+          )}
+
+          {/* Links */}
+          {links && links.length > 0 && (
+            <div className="space-y-3">
+              {links.map((link, index) => (
+                <a
+                  key={index}
+                  href={link.cta.url}
+                  className="block bg-white/5 rounded-xl p-4 hover:bg-white/10 transition-colors"
+                >
+                  <h3 className="font-display text-lg font-semibold text-white">
+                    {link.title}
+                  </h3>
+                  <p className="text-white/60 text-sm mt-1">
+                    {link.description}
+                  </p>
+                  <span className="inline-block mt-3 text-violet-400 text-sm font-medium">
+                    {link.cta.text} →
+                  </span>
+                </a>
+              ))}
+            </div>
+          )}
+
+          {/* Powered by Tradr */}
+          <div className="flex items-center justify-center gap-2 pt-4 border-t border-white/10">
+            <p className="text-white/40 text-sm">Powered by</p>
+            <TradrIcon className="w-4 h-4 text-white/40" />
           </div>
         </div>
+      </div>
+
+      {/* Action Buttons */}
+      <div className="flex items-center justify-center gap-6 mt-6">
+        <button
+          onClick={onEditClick}
+          className="flex flex-col items-center gap-2 text-white/60 hover:text-white transition-colors group"
+        >
+          <div className="p-3 rounded-xl bg-white/5 group-hover:bg-white/10 transition-colors">
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+            </svg>
+          </div>
+          <span className="text-sm font-medium">Edit</span>
+        </button>
+        <button
+          onClick={onShareClick}
+          className="flex flex-col items-center gap-2 text-white/60 hover:text-white transition-colors group"
+        >
+          <div className="p-3 rounded-xl bg-white/5 group-hover:bg-white/10 transition-colors">
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+            </svg>
+          </div>
+          <span className="text-sm font-medium">Share</span>
+        </button>
+        <button
+          onClick={onThemeClick}
+          className="flex flex-col items-center gap-2 text-white/60 hover:text-white transition-colors group"
+        >
+          <div className="p-3 rounded-xl bg-white/5 group-hover:bg-white/10 transition-colors">
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
+            </svg>
+          </div>
+          <span className="text-sm font-medium">Theme</span>
+        </button>
       </div>
     </div>
   );

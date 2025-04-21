@@ -155,15 +155,26 @@ export default function ProfilePreview({
 
           {/* Links Section */}
           {links && links.length > 0 && (
-            <div className="mt-6 space-y-4">
+            <div className="mt-6">
               {links.map((link, index) => (
-                <div key={index} className="bg-black/50 backdrop-blur rounded-2xl p-4 border border-white/10 shadow-lg">
-                  <h3 className="text-xl font-display text-white">{link.title}</h3>
+                <div key={index} className="bg-black/50 backdrop-blur rounded-2xl p-5 border border-white/10 shadow-lg">
+                  <div className="flex flex-col space-y-1 mb-4">
+                    <h3 className="text-lg font-display text-white/90">{link.title}</h3>
+                    <p className="text-sm text-gray-400 font-medium">{link.description}</p>
+                  </div>
                   <Link
                     href={link.cta.url}
-                    className="mt-4 block w-full bg-gradient-to-r from-violet-600 to-violet-400 text-white text-center py-3 rounded-xl font-display text-lg font-medium shadow-lg transition-all hover:from-violet-500 hover:to-violet-300 active:scale-[0.99]"
+                    className="group flex items-center justify-between bg-violet-600/20 hover:bg-violet-600/30 text-violet-300 px-4 py-3 rounded-xl font-display text-base transition-all active:scale-[0.99] border border-violet-500/20"
                   >
-                    {link.cta.text}
+                    <span className="font-medium">{link.cta.text}</span>
+                    <svg 
+                      className="w-5 h-5 text-violet-400 transition-transform group-hover:translate-x-0.5" 
+                      fill="none" 
+                      stroke="currentColor" 
+                      viewBox="0 0 24 24"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
                   </Link>
                 </div>
               ))}

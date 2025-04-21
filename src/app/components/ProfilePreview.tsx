@@ -77,39 +77,8 @@ export default function ProfilePreview({
   onShareClick?: () => void;
 }) {
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center space-y-4">
       <div className="relative w-full max-w-lg p-4">
-        {/* Top Action Row - Elevated */}
-        <div className="absolute top-0 right-4 z-10 flex items-center gap-2 -translate-y-1/2 bg-black/90 backdrop-blur-sm px-3 py-1.5 rounded-full border border-white/10">
-          <button 
-            onClick={onEditClick}
-            className="p-1.5 rounded-lg hover:bg-white/5 transition-colors"
-            aria-label="Edit profile"
-          >
-            <svg className="w-4 h-4 text-white/70" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-            </svg>
-          </button>
-          <button 
-            onClick={onShareClick}
-            className="p-1.5 rounded-lg hover:bg-white/5 transition-colors"
-            aria-label="Share profile"
-          >
-            <svg className="w-4 h-4 text-white/70" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" />
-            </svg>
-          </button>
-          <button 
-            onClick={onThemeClick}
-            className="p-1.5 rounded-lg hover:bg-white/5 transition-colors"
-            aria-label="Change theme"
-          >
-            <svg className="w-4 h-4 text-white/70" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-            </svg>
-          </button>
-        </div>
-
         {/* Card Outline & Glow Effects */}
         <div className="absolute inset-2 bg-gradient-to-b from-violet-500/30 to-violet-400/20 rounded-[2.5rem] blur-2xl" />
         <div className="absolute inset-0 bg-gradient-to-br from-violet-600/20 via-violet-400/5 to-transparent rounded-[2.5rem]" />
@@ -231,6 +200,39 @@ export default function ProfilePreview({
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Action Row */}
+      <div className="flex items-center justify-center gap-3">
+        <button 
+          onClick={onEditClick}
+          className="group flex items-center gap-2 px-4 py-2 rounded-xl bg-surface-card/50 hover:bg-surface-card border border-white/5 transition-all"
+        >
+          <svg className="w-4 h-4 text-white/50 group-hover:text-white/70" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+          </svg>
+          <span className="text-sm font-medium text-white/70 group-hover:text-white/90">Edit</span>
+        </button>
+
+        <button 
+          onClick={onShareClick}
+          className="group flex items-center gap-2 px-4 py-2 rounded-xl bg-surface-card/50 hover:bg-surface-card border border-white/5 transition-all"
+        >
+          <svg className="w-4 h-4 text-white/50 group-hover:text-white/70" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" />
+          </svg>
+          <span className="text-sm font-medium text-white/70 group-hover:text-white/90">Share</span>
+        </button>
+
+        <button 
+          onClick={onThemeClick}
+          className="group flex items-center gap-2 px-4 py-2 rounded-xl bg-surface-card/50 hover:bg-surface-card border border-white/5 transition-all"
+        >
+          <svg className="w-4 h-4 text-white/50 group-hover:text-white/70" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+          </svg>
+          <span className="text-sm font-medium text-white/70 group-hover:text-white/90">Theme</span>
+        </button>
       </div>
     </div>
   );

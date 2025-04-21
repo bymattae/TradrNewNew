@@ -70,13 +70,13 @@ export default function ProfilePreview({
   links
 }: ProfilePreviewProps) {
   return (
-    <div className="relative w-full max-w-lg mx-auto">
-      {/* Card Outline */}
-      <div className="absolute inset-0 bg-gradient-to-b from-violet-500/20 to-violet-400/10 rounded-[2rem] blur-xl" />
-      <div className="absolute inset-0 bg-gradient-to-b from-violet-500/20 via-transparent to-transparent rounded-[2rem]" />
+    <div className="relative w-full max-w-lg mx-auto p-4">
+      {/* Card Outline & Glow Effects */}
+      <div className="absolute inset-2 bg-gradient-to-b from-violet-500/30 to-violet-400/20 rounded-[2.5rem] blur-2xl" />
+      <div className="absolute inset-0 bg-gradient-to-br from-violet-600/20 via-violet-400/5 to-transparent rounded-[2.5rem]" />
       
       {/* Main Card */}
-      <div className="relative w-full bg-black/40 backdrop-blur-xl rounded-[2rem] overflow-hidden border border-white/10">
+      <div className="relative bg-gradient-to-b from-black/95 via-black/90 to-black/95 backdrop-blur-xl rounded-[2.5rem] overflow-hidden border border-white/10 shadow-2xl">
         {/* Content */}
         <div className="px-8 pt-8 pb-6">
           {/* Avatar and Username Section */}
@@ -88,23 +88,23 @@ export default function ProfilePreview({
                   src={avatarUrl}
                   alt={username}
                   fill
-                  className="object-cover rounded-full border-2 border-surface-card relative"
+                  className="object-cover rounded-full border-2 border-black/50 relative"
                   sizes="96px"
                   priority
                 />
               ) : (
-                <div className="w-full h-full rounded-full bg-surface-card border-2 border-surface-hover relative flex items-center justify-center">
+                <div className="w-full h-full rounded-full bg-black/50 border-2 border-white/10 relative flex items-center justify-center">
                   <span className="text-4xl font-display text-gray-400">{username.charAt(0).toUpperCase()}</span>
                 </div>
               )}
               {/* Online Status Badge */}
-              <div className="absolute -bottom-1 -right-1 bg-profit rounded-full w-4 h-4 border-2 border-black" />
+              <div className="absolute -bottom-1 -right-1 bg-profit rounded-full w-4 h-4 border-2 border-black shadow-lg" />
             </div>
 
             {/* Username and Bio */}
             <div className="text-center space-y-3">
               <h1 className="text-2xl font-display font-medium text-white">@{username}</h1>
-              {bio && <p className="font-mono text-sm text-gray-400 max-w-sm tracking-tight">{bio}</p>}
+              {bio && <p className="font-mono text-sm text-gray-400 max-w-sm tracking-tight leading-relaxed">{bio}</p>}
             </div>
 
             {/* Tags */}
@@ -112,14 +112,14 @@ export default function ProfilePreview({
               <div className="flex flex-wrap gap-2 justify-center mt-4">
                 {tags.map((tag, index) => {
                   const gradients = [
-                    'from-violet-500 to-violet-700',
-                    'from-blue-900 to-blue-950',
-                    'from-emerald-600 to-emerald-800'
+                    'from-violet-500/90 to-violet-700/90',
+                    'from-blue-900/90 to-blue-950/90',
+                    'from-emerald-600/90 to-emerald-800/90'
                   ];
                   return (
                     <span
                       key={index}
-                      className={`bg-gradient-to-br ${gradients[index]} px-4 py-1.5 rounded-lg text-sm font-medium transition-all hover:scale-105`}
+                      className={`bg-gradient-to-br ${gradients[index]} px-4 py-1.5 rounded-lg text-sm font-medium shadow-lg transition-all hover:scale-105 border border-white/10`}
                     >
                       #{tag}
                     </span>
@@ -132,7 +132,7 @@ export default function ProfilePreview({
           {/* Stats Section */}
           {strategies && strategies.length > 0 && (
             <div className="mt-8">
-              <div className="bg-surface-card/30 backdrop-blur rounded-2xl p-4 border border-white/5">
+              <div className="bg-black/50 backdrop-blur rounded-2xl p-4 border border-white/10 shadow-lg">
                 <div className="grid grid-cols-3 gap-8">
                   <div className="text-center">
                     <p className={`font-mono text-xl font-medium tabular-nums ${strategies[0].stats.gain >= 0 ? 'text-profit' : 'text-loss'}`}>
@@ -157,11 +157,11 @@ export default function ProfilePreview({
           {links && links.length > 0 && (
             <div className="mt-6 space-y-4">
               {links.map((link, index) => (
-                <div key={index} className="bg-surface-card/30 backdrop-blur rounded-2xl p-4 border border-white/5">
+                <div key={index} className="bg-black/50 backdrop-blur rounded-2xl p-4 border border-white/10 shadow-lg">
                   <h3 className="text-xl font-display text-white">{link.title}</h3>
                   <Link
                     href={link.cta.url}
-                    className="mt-4 block w-full bg-gradient-to-r from-violet-600 to-violet-400 text-white text-center py-3 rounded-xl font-display text-lg font-medium transition-all hover:from-violet-500 hover:to-violet-300 active:scale-[0.99]"
+                    className="mt-4 block w-full bg-gradient-to-r from-violet-600 to-violet-400 text-white text-center py-3 rounded-xl font-display text-lg font-medium shadow-lg transition-all hover:from-violet-500 hover:to-violet-300 active:scale-[0.99]"
                   >
                     {link.cta.text}
                   </Link>
@@ -172,9 +172,9 @@ export default function ProfilePreview({
 
           {/* Powered by Tradr */}
           <div className="flex items-center justify-center gap-2 mt-8">
-            <div className="bg-blue-600 rounded-lg px-3 py-1.5 flex items-center gap-2 text-sm text-white font-medium">
+            <div className="bg-[#0F0F12] rounded-lg px-3 py-1.5 flex items-center gap-2 text-sm text-white/90 font-medium border border-white/10 shadow-lg">
               <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M13.976 9.15c-2.172-.806-3.356-1.426-3.356-2.409 0-.831.683-1.305 1.901-1.305 2.227 0 4.515.858 6.09 1.631l.89-5.494C18.252.975 15.697 0 12.165 0 9.667 0 7.589.654 6.104 1.872 4.56 3.147 3.757 4.992 3.757 7.218c0 4.039 2.467 5.76 6.476 7.219 2.585.92 3.445 1.574 3.445 2.583 0 .98-.84 1.545-2.354 1.545-1.875 0-4.965-.921-6.99-2.109l-.9 5.555C5.175 22.99 8.385 24 11.714 24c2.641 0 4.843-.624 6.328-1.813 1.664-1.305 2.525-3.236 2.525-5.732 0-4.128-2.524-5.851-6.591-7.305z" />
+                <path d="M19.4 6.1L14.5 11l4.9 4.9c.3.3.3.7 0 1-.1.1-.3.2-.5.2s-.4-.1-.5-.2l-4.9-4.9-4.9 4.9c-.1.1-.3.2-.5.2s-.4-.1-.5-.2c-.3-.3-.3-.7 0-1l4.9-4.9-4.9-4.9c-.3-.3-.3-.7 0-1 .3-.3.7-.3 1 0l4.9 4.9 4.9-4.9c.3-.3.7-.3 1 0 .3.3.3.7 0 1z"/>
               </svg>
               Powered by Tradr
             </div>

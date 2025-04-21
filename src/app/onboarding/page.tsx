@@ -136,6 +136,7 @@ export default function OnboardingPage() {
   const [isEditingSocials, setIsEditingSocials] = useState(false);
   const [newSocialPlatform, setNewSocialPlatform] = useState<SocialLink['platform']>('twitter');
   const [newSocialUrl, setNewSocialUrl] = useState('');
+  const [step, setStep] = useState<'edit' | 'preview'>('edit');
 
   // Initialize and maintain session
   useEffect(() => {
@@ -574,6 +575,9 @@ export default function OnboardingPage() {
             }
           ]}
           avatarUrl={avatarUrl}
+          onEditClick={() => setStep('edit')}
+          onShareClick={() => {}}
+          onThemeClick={() => {}}
         />
       )}
 

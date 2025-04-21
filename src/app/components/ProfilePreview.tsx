@@ -67,8 +67,15 @@ export default function ProfilePreview({
   avatarUrl,
   socialLinks,
   strategies,
-  links
-}: ProfilePreviewProps) {
+  links,
+  onThemeClick,
+  onEditClick,
+  onShareClick
+}: ProfilePreviewProps & {
+  onThemeClick?: () => void;
+  onEditClick?: () => void;
+  onShareClick?: () => void;
+}) {
   return (
     <div className="relative w-full max-w-lg mx-auto p-4">
       {/* Card Outline & Glow Effects */}
@@ -77,11 +84,39 @@ export default function ProfilePreview({
       
       {/* Main Card */}
       <div className="relative bg-gradient-to-b from-black/95 via-black/90 to-black/95 backdrop-blur-xl rounded-[2.5rem] overflow-hidden border border-white/10 shadow-2xl">
+        {/* Action Bar */}
+        <div className="absolute top-4 right-4 flex items-center gap-2">
+          <button 
+            onClick={onThemeClick}
+            className="p-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 transition-colors group"
+          >
+            <svg className="w-4 h-4 text-white/70 group-hover:text-white/90" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+            </svg>
+          </button>
+          <button 
+            onClick={onEditClick}
+            className="p-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 transition-colors group"
+          >
+            <svg className="w-4 h-4 text-white/70 group-hover:text-white/90" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+            </svg>
+          </button>
+          <button 
+            onClick={onShareClick}
+            className="p-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 transition-colors group"
+          >
+            <svg className="w-4 h-4 text-white/70 group-hover:text-white/90" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" />
+            </svg>
+          </button>
+        </div>
+
         {/* Content */}
-        <div className="px-8 pt-8 pb-6">
+        <div className="px-8 py-6">
           {/* Avatar and Username Section */}
           <div className="flex flex-col items-center">
-            <div className="relative w-24 h-24 mb-4">
+            <div className="relative w-20 h-20 mb-3">
               <div className="absolute inset-0 bg-gradient-to-tr from-violet-500 via-violet-400 to-violet-500/50 rounded-full animate-gradient-xy" />
               {avatarUrl ? (
                 <Image
@@ -89,27 +124,27 @@ export default function ProfilePreview({
                   alt={username}
                   fill
                   className="object-cover rounded-full border-2 border-black/50 relative"
-                  sizes="96px"
+                  sizes="80px"
                   priority
                 />
               ) : (
                 <div className="w-full h-full rounded-full bg-black/50 border-2 border-white/10 relative flex items-center justify-center">
-                  <span className="text-4xl font-display text-gray-400">{username.charAt(0).toUpperCase()}</span>
+                  <span className="text-3xl font-display text-gray-400">{username.charAt(0).toUpperCase()}</span>
                 </div>
               )}
               {/* Online Status Badge */}
-              <div className="absolute -bottom-1 -right-1 bg-profit rounded-full w-4 h-4 border-2 border-black shadow-lg" />
+              <div className="absolute -bottom-1 -right-1 bg-profit rounded-full w-3 h-3 border-2 border-black shadow-lg" />
             </div>
 
             {/* Username and Bio */}
-            <div className="text-center space-y-3">
-              <h1 className="text-2xl font-display font-medium text-white">@{username}</h1>
+            <div className="text-center space-y-2">
+              <h1 className="text-xl font-display font-medium text-white">@{username}</h1>
               {bio && <p className="font-mono text-sm text-gray-400 max-w-sm tracking-tight leading-relaxed">{bio}</p>}
             </div>
 
             {/* Tags */}
             {tags.length > 0 && (
-              <div className="flex flex-wrap gap-2 justify-center mt-4">
+              <div className="flex flex-wrap gap-1.5 justify-center mt-3">
                 {tags.map((tag, index) => {
                   const gradients = [
                     'from-violet-500/90 to-violet-700/90',
@@ -119,7 +154,7 @@ export default function ProfilePreview({
                   return (
                     <span
                       key={index}
-                      className={`bg-gradient-to-br ${gradients[index]} px-4 py-1.5 rounded-lg text-sm font-medium shadow-lg transition-all hover:scale-105 border border-white/10`}
+                      className={`bg-gradient-to-br ${gradients[index]} px-3 py-1 rounded-lg text-xs font-medium shadow-lg transition-all hover:scale-105 border border-white/10`}
                     >
                       #{tag}
                     </span>
@@ -131,22 +166,22 @@ export default function ProfilePreview({
 
           {/* Stats Section */}
           {strategies && strategies.length > 0 && (
-            <div className="mt-8">
-              <div className="bg-black/50 backdrop-blur rounded-2xl p-4 border border-white/10 shadow-lg">
-                <div className="grid grid-cols-3 gap-8">
+            <div className="mt-6">
+              <div className="bg-black/50 backdrop-blur rounded-xl p-3 border border-white/10 shadow-lg">
+                <div className="grid grid-cols-3 gap-6">
                   <div className="text-center">
-                    <p className={`font-mono text-xl font-medium tabular-nums ${strategies[0].stats.gain >= 0 ? 'text-profit' : 'text-loss'}`}>
+                    <p className={`font-mono text-lg font-medium tabular-nums ${strategies[0].stats.gain >= 0 ? 'text-profit' : 'text-loss'}`}>
                       {strategies[0].stats.gain >= 0 ? '+' : ''}{strategies[0].stats.gain}%
                     </p>
-                    <p className="text-xs text-gray-500 mt-1">Gain</p>
+                    <p className="text-xs text-gray-500">Gain</p>
                   </div>
                   <div className="text-center">
-                    <p className="font-mono text-xl font-medium text-white tabular-nums">{strategies[0].stats.winRate}%</p>
-                    <p className="text-xs text-gray-500 mt-1">Win Rate</p>
+                    <p className="font-mono text-lg font-medium text-white tabular-nums">{strategies[0].stats.winRate}%</p>
+                    <p className="text-xs text-gray-500">Win Rate</p>
                   </div>
                   <div className="text-center">
-                    <p className="font-mono text-xl font-medium text-violet-400 tabular-nums">{strategies[0].stats.riskRatio}</p>
-                    <p className="text-xs text-gray-500 mt-1">Avg RR</p>
+                    <p className="font-mono text-lg font-medium text-violet-400 tabular-nums">{strategies[0].stats.riskRatio}</p>
+                    <p className="text-xs text-gray-500">Avg RR</p>
                   </div>
                 </div>
               </div>
@@ -155,20 +190,20 @@ export default function ProfilePreview({
 
           {/* Links Section */}
           {links && links.length > 0 && (
-            <div className="mt-6">
+            <div className="mt-4">
               {links.map((link, index) => (
-                <div key={index} className="bg-black/50 backdrop-blur rounded-2xl p-5 border border-white/10 shadow-lg">
-                  <div className="flex flex-col space-y-1 mb-4">
-                    <h3 className="text-lg font-display text-white/90">{link.title}</h3>
-                    <p className="text-sm text-gray-400 font-medium">{link.description}</p>
+                <div key={index} className="bg-black/50 backdrop-blur rounded-xl p-4 border border-white/10 shadow-lg">
+                  <div className="flex flex-col space-y-1 mb-3">
+                    <h3 className="text-base font-display text-white/90">{link.title}</h3>
+                    <p className="text-xs text-gray-400 font-medium">{link.description}</p>
                   </div>
                   <Link
                     href={link.cta.url}
-                    className="group flex items-center justify-between bg-violet-600/20 hover:bg-violet-600/30 text-violet-300 px-4 py-3 rounded-xl font-display text-base transition-all active:scale-[0.99] border border-violet-500/20"
+                    className="group flex items-center justify-between bg-violet-600/20 hover:bg-violet-600/30 text-violet-300 px-3 py-2 rounded-lg font-display text-sm transition-all active:scale-[0.99] border border-violet-500/20"
                   >
                     <span className="font-medium">{link.cta.text}</span>
                     <svg 
-                      className="w-5 h-5 text-violet-400 transition-transform group-hover:translate-x-0.5" 
+                      className="w-4 h-4 text-violet-400 transition-transform group-hover:translate-x-0.5" 
                       fill="none" 
                       stroke="currentColor" 
                       viewBox="0 0 24 24"
@@ -182,9 +217,9 @@ export default function ProfilePreview({
           )}
 
           {/* Powered by Tradr */}
-          <div className="flex items-center justify-center gap-2 mt-8">
-            <div className="bg-[#0F0F12] rounded-lg px-3 py-1.5 flex items-center gap-2 text-sm text-white/90 font-medium border border-white/10 shadow-lg">
-              <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+          <div className="flex items-center justify-center gap-2 mt-6">
+            <div className="bg-[#0F0F12] rounded-lg px-3 py-1.5 flex items-center gap-2 text-xs text-white/90 font-medium border border-white/10 shadow-lg">
+              <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M19.4 6.1L14.5 11l4.9 4.9c.3.3.3.7 0 1-.1.1-.3.2-.5.2s-.4-.1-.5-.2l-4.9-4.9-4.9 4.9c-.1.1-.3.2-.5.2s-.4-.1-.5-.2c-.3-.3-.3-.7 0-1l4.9-4.9-4.9-4.9c-.3-.3-.3-.7 0-1 .3-.3.7-.3 1 0l4.9 4.9 4.9-4.9c.3-.3.7-.3 1 0 .3.3.3.7 0 1z"/>
               </svg>
               Powered by Tradr

@@ -70,107 +70,114 @@ export default function ProfilePreview({
   links
 }: ProfilePreviewProps) {
   return (
-    <div className="w-full max-w-lg mx-auto bg-black/40 backdrop-blur rounded-3xl overflow-hidden border border-white/5">
-      {/* Content */}
-      <div className="px-6 pt-8 pb-4">
-        {/* Avatar and Username Section */}
-        <div className="flex flex-col items-center">
-          <div className="relative w-24 h-24 mb-4">
-            <div className="absolute inset-0 bg-gradient-to-tr from-violet-500 via-violet-400 to-violet-500/50 rounded-full animate-gradient-xy" />
-            {avatarUrl ? (
-              <Image
-                src={avatarUrl}
-                alt={username}
-                fill
-                className="object-cover rounded-full border-2 border-surface-card relative"
-                sizes="96px"
-                priority
-              />
-            ) : (
-              <div className="w-full h-full rounded-full bg-surface-card border-2 border-surface-hover relative flex items-center justify-center">
-                <span className="text-4xl font-display text-gray-400">{username.charAt(0).toUpperCase()}</span>
+    <div className="relative w-full max-w-lg mx-auto">
+      {/* Card Outline */}
+      <div className="absolute inset-0 bg-gradient-to-b from-violet-500/20 to-violet-400/10 rounded-[2rem] blur-xl" />
+      <div className="absolute inset-0 bg-gradient-to-b from-violet-500/20 via-transparent to-transparent rounded-[2rem]" />
+      
+      {/* Main Card */}
+      <div className="relative w-full bg-black/40 backdrop-blur-xl rounded-[2rem] overflow-hidden border border-white/10">
+        {/* Content */}
+        <div className="px-8 pt-8 pb-6">
+          {/* Avatar and Username Section */}
+          <div className="flex flex-col items-center">
+            <div className="relative w-24 h-24 mb-4">
+              <div className="absolute inset-0 bg-gradient-to-tr from-violet-500 via-violet-400 to-violet-500/50 rounded-full animate-gradient-xy" />
+              {avatarUrl ? (
+                <Image
+                  src={avatarUrl}
+                  alt={username}
+                  fill
+                  className="object-cover rounded-full border-2 border-surface-card relative"
+                  sizes="96px"
+                  priority
+                />
+              ) : (
+                <div className="w-full h-full rounded-full bg-surface-card border-2 border-surface-hover relative flex items-center justify-center">
+                  <span className="text-4xl font-display text-gray-400">{username.charAt(0).toUpperCase()}</span>
+                </div>
+              )}
+              {/* Online Status Badge */}
+              <div className="absolute -bottom-1 -right-1 bg-profit rounded-full w-4 h-4 border-2 border-black" />
+            </div>
+
+            {/* Username and Bio */}
+            <div className="text-center space-y-3">
+              <h1 className="text-2xl font-display font-medium text-white">@{username}</h1>
+              {bio && <p className="font-mono text-sm text-gray-400 max-w-sm tracking-tight">{bio}</p>}
+            </div>
+
+            {/* Tags */}
+            {tags.length > 0 && (
+              <div className="flex flex-wrap gap-2 justify-center mt-4">
+                {tags.map((tag, index) => {
+                  const gradients = [
+                    'from-violet-500 to-violet-700',
+                    'from-blue-900 to-blue-950',
+                    'from-emerald-600 to-emerald-800'
+                  ];
+                  return (
+                    <span
+                      key={index}
+                      className={`bg-gradient-to-br ${gradients[index]} px-4 py-1.5 rounded-lg text-sm font-medium transition-all hover:scale-105`}
+                    >
+                      #{tag}
+                    </span>
+                  );
+                })}
               </div>
             )}
-            {/* Online Status Badge */}
-            <div className="absolute -bottom-1 -right-1 bg-profit rounded-full w-4 h-4 border-2 border-black" />
           </div>
 
-          {/* Username and Bio */}
-          <div className="text-center space-y-3">
-            <h1 className="text-2xl font-display font-medium text-white">@{username}</h1>
-            {bio && <p className="font-mono text-sm text-gray-400 max-w-sm tracking-tight">{bio}</p>}
-          </div>
-
-          {/* Tags */}
-          {tags.length > 0 && (
-            <div className="flex flex-wrap gap-2 justify-center mt-4">
-              {tags.map((tag, index) => {
-                const gradients = [
-                  'from-violet-500 to-violet-700',
-                  'from-blue-900 to-blue-950',
-                  'from-emerald-600 to-emerald-800'
-                ];
-                return (
-                  <span
-                    key={index}
-                    className={`bg-gradient-to-br ${gradients[index]} px-4 py-1.5 rounded-lg text-sm font-medium transition-all hover:scale-105`}
-                  >
-                    #{tag}
-                  </span>
-                );
-              })}
+          {/* Stats Section */}
+          {strategies && strategies.length > 0 && (
+            <div className="mt-8">
+              <div className="bg-surface-card/30 backdrop-blur rounded-2xl p-4 border border-white/5">
+                <div className="grid grid-cols-3 gap-8">
+                  <div className="text-center">
+                    <p className={`font-mono text-xl font-medium tabular-nums ${strategies[0].stats.gain >= 0 ? 'text-profit' : 'text-loss'}`}>
+                      {strategies[0].stats.gain >= 0 ? '+' : ''}{strategies[0].stats.gain}%
+                    </p>
+                    <p className="text-xs text-gray-500 mt-1">Gain</p>
+                  </div>
+                  <div className="text-center">
+                    <p className="font-mono text-xl font-medium text-white tabular-nums">{strategies[0].stats.winRate}%</p>
+                    <p className="text-xs text-gray-500 mt-1">Win Rate</p>
+                  </div>
+                  <div className="text-center">
+                    <p className="font-mono text-xl font-medium text-violet-400 tabular-nums">{strategies[0].stats.riskRatio}</p>
+                    <p className="text-xs text-gray-500 mt-1">Avg RR</p>
+                  </div>
+                </div>
+              </div>
             </div>
           )}
-        </div>
 
-        {/* Stats Section */}
-        {strategies && strategies.length > 0 && (
-          <div className="mt-8">
-            <div className="bg-surface-card/50 backdrop-blur rounded-2xl p-4">
-              <div className="grid grid-cols-3 gap-8">
-                <div className="text-center">
-                  <p className={`font-mono text-xl font-medium tabular-nums ${strategies[0].stats.gain >= 0 ? 'text-profit' : 'text-loss'}`}>
-                    {strategies[0].stats.gain >= 0 ? '+' : ''}{strategies[0].stats.gain}%
-                  </p>
-                  <p className="text-xs text-gray-500 mt-1">Gain</p>
+          {/* Links Section */}
+          {links && links.length > 0 && (
+            <div className="mt-6 space-y-4">
+              {links.map((link, index) => (
+                <div key={index} className="bg-surface-card/30 backdrop-blur rounded-2xl p-4 border border-white/5">
+                  <h3 className="text-xl font-display text-white">{link.title}</h3>
+                  <Link
+                    href={link.cta.url}
+                    className="mt-4 block w-full bg-gradient-to-r from-violet-600 to-violet-400 text-white text-center py-3 rounded-xl font-display text-lg font-medium transition-all hover:from-violet-500 hover:to-violet-300 active:scale-[0.99]"
+                  >
+                    {link.cta.text}
+                  </Link>
                 </div>
-                <div className="text-center">
-                  <p className="font-mono text-xl font-medium text-white tabular-nums">{strategies[0].stats.winRate}%</p>
-                  <p className="text-xs text-gray-500 mt-1">Win Rate</p>
-                </div>
-                <div className="text-center">
-                  <p className="font-mono text-xl font-medium text-violet-400 tabular-nums">{strategies[0].stats.riskRatio}</p>
-                  <p className="text-xs text-gray-500 mt-1">Avg RR</p>
-                </div>
-              </div>
+              ))}
             </div>
-          </div>
-        )}
+          )}
 
-        {/* Links Section */}
-        {links && links.length > 0 && (
-          <div className="mt-6 space-y-4">
-            {links.map((link, index) => (
-              <div key={index} className="bg-surface-card/50 backdrop-blur rounded-2xl p-4">
-                <h3 className="text-xl font-display text-white">{link.title}</h3>
-                <Link
-                  href={link.cta.url}
-                  className="mt-4 block w-full bg-gradient-to-r from-violet-600 to-violet-400 text-white text-center py-3 rounded-xl font-display text-lg font-medium transition-all hover:from-violet-500 hover:to-violet-300 active:scale-[0.99]"
-                >
-                  {link.cta.text}
-                </Link>
-              </div>
-            ))}
-          </div>
-        )}
-
-        {/* Powered by Tradr */}
-        <div className="flex items-center justify-center gap-2 mt-8">
-          <div className="bg-blue-600 rounded-lg px-3 py-1.5 flex items-center gap-2 text-sm text-white font-medium">
-            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M13.976 9.15c-2.172-.806-3.356-1.426-3.356-2.409 0-.831.683-1.305 1.901-1.305 2.227 0 4.515.858 6.09 1.631l.89-5.494C18.252.975 15.697 0 12.165 0 9.667 0 7.589.654 6.104 1.872 4.56 3.147 3.757 4.992 3.757 7.218c0 4.039 2.467 5.76 6.476 7.219 2.585.92 3.445 1.574 3.445 2.583 0 .98-.84 1.545-2.354 1.545-1.875 0-4.965-.921-6.99-2.109l-.9 5.555C5.175 22.99 8.385 24 11.714 24c2.641 0 4.843-.624 6.328-1.813 1.664-1.305 2.525-3.236 2.525-5.732 0-4.128-2.524-5.851-6.591-7.305z" />
-            </svg>
-            Powered by Tradr
+          {/* Powered by Tradr */}
+          <div className="flex items-center justify-center gap-2 mt-8">
+            <div className="bg-blue-600 rounded-lg px-3 py-1.5 flex items-center gap-2 text-sm text-white font-medium">
+              <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M13.976 9.15c-2.172-.806-3.356-1.426-3.356-2.409 0-.831.683-1.305 1.901-1.305 2.227 0 4.515.858 6.09 1.631l.89-5.494C18.252.975 15.697 0 12.165 0 9.667 0 7.589.654 6.104 1.872 4.56 3.147 3.757 4.992 3.757 7.218c0 4.039 2.467 5.76 6.476 7.219 2.585.92 3.445 1.574 3.445 2.583 0 .98-.84 1.545-2.354 1.545-1.875 0-4.965-.921-6.99-2.109l-.9 5.555C5.175 22.99 8.385 24 11.714 24c2.641 0 4.843-.624 6.328-1.813 1.664-1.305 2.525-3.236 2.525-5.732 0-4.128-2.524-5.851-6.591-7.305z" />
+              </svg>
+              Powered by Tradr
+            </div>
           </div>
         </div>
       </div>

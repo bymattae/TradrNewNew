@@ -79,7 +79,9 @@ export default function ProfilePreview({
   return (
     <div className="relative">
       {/* Background Glow Effect */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-[#7B61FF]/5 rounded-full blur-[100px]" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] 
+        bg-[radial-gradient(circle_at_center,rgba(123,97,255,0.15)_0%,transparent_60%)]" 
+      />
 
       {/* Main Card */}
       <div className="relative card">
@@ -88,7 +90,8 @@ export default function ProfilePreview({
           <div className="flex items-start gap-4">
             <div className="relative">
               <div className="w-16 h-16 rounded-full overflow-hidden bg-[#7B61FF]/20 
-                shadow-[inset_0_0_0.5px_rgba(255,255,255,0.1)]">
+                shadow-[inset_0_0_0.5px_rgba(255,255,255,0.1)]
+                border border-white/5">
                 {avatarUrl ? (
                   <Image
                     src={avatarUrl}
@@ -140,7 +143,7 @@ export default function ProfilePreview({
                   className="bg-white/5 rounded-xl p-4 border border-white/5
                     backdrop-blur-sm"
                 >
-                  <h3 className="text-title text-sm mb-3">
+                  <h3 className="strategy-title mb-3">
                     {strategy.title}
                   </h3>
                   <div className="grid grid-cols-3 gap-4">

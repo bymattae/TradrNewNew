@@ -11,16 +11,17 @@
 
 @layer components {
   .card {
-    @apply bg-[#1A1A1A] rounded-xl border border-[#262626]/15
-    shadow-[0px_8px_24px_rgba(0,0,0,0.6)]
+    @apply bg-[#1A1A1A] rounded-xl 
+    border border-white/5
+    shadow-[0px_12px_28px_rgba(0,0,0,0.6)]
     backdrop-blur-[2px]
     p-6 md:p-8;
   }
   
   .card-hover {
     @apply transition-all duration-300 ease-out
-    hover:shadow-[0px_12px_32px_rgba(0,0,0,0.7)]
-    hover:border-[#262626]/25;
+    hover:shadow-[0px_16px_32px_rgba(0,0,0,0.7)]
+    hover:border-white/10;
   }
 
   .btn-action {
@@ -28,7 +29,7 @@
     px-3 py-2 rounded-xl
     bg-black/50 backdrop-blur-md
     border border-white/5
-    text-[#AAAAAA] hover:text-white 
+    text-[#E5E5E5] hover:text-white 
     transition-all duration-200;
   }
 
@@ -58,6 +59,10 @@
   .text-description {
     @apply text-white/60 font-normal;
   }
+
+  .strategy-title {
+    @apply text-[17px] font-semibold tracking-tight text-white;
+  }
 }
 
 /* Floating animation for Hub button */
@@ -67,7 +72,7 @@
 }
 
 .animate-float {
-  animation: float 4s ease-in-out infinite;
+  animation: float 6s ease-in-out infinite;
 }
 
 /* Custom scrollbar styles */

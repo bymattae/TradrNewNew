@@ -104,12 +104,12 @@ export default function ProfilePreview({
       />
 
       {/* Main Card */}
-      <div className="relative bg-zinc-900/50 backdrop-blur-xl rounded-2xl border border-white/10">
+      <div className="relative bg-zinc-900/80 backdrop-blur-sm rounded-2xl border border-white/40 shadow-xl">
         <div className="p-4 space-y-3">
           {/* Profile Header */}
           <div className="flex items-center gap-3">
             <div className="relative">
-              <div className="w-16 h-16 rounded-full overflow-hidden bg-violet-500/20">
+              <div className="w-16 h-16 rounded-full overflow-hidden bg-violet-500/20 border border-white/20">
                 {avatarUrl ? (
                   <Image
                     src={avatarUrl}
@@ -130,7 +130,7 @@ export default function ProfilePreview({
                 @{username}
               </h2>
               {bio && (
-                <p className="text-white/60 font-sans mt-0.5 text-sm leading-relaxed line-clamp-2">
+                <p className="text-white/80 font-sans mt-0.5 text-sm leading-relaxed line-clamp-2">
                   {bio}
                 </p>
               )}
@@ -143,7 +143,8 @@ export default function ProfilePreview({
               {tags.map((tag, index) => (
                 <span
                   key={index}
-                  className="px-2 py-0.5 bg-white/5 rounded-full text-xs text-white/80 font-medium hover:bg-white/10 transition-colors"
+                  className="px-2 py-0.5 bg-white/10 rounded-full text-xs text-white/90 font-medium 
+                    hover:bg-white/20 transition-colors border border-white/20"
                 >
                   {tag}
                 </span>
@@ -152,7 +153,7 @@ export default function ProfilePreview({
           )}
 
           {/* Profile Section Divider */}
-          <div className="border-t border-neutral-700/40" />
+          <div className="border-t border-white/20" />
 
           {/* Strategies */}
           {strategies && strategies.length > 0 && (
@@ -160,26 +161,27 @@ export default function ProfilePreview({
               {strategies.map((strategy, index) => (
                 <div
                   key={index}
-                  className="bg-white/5 rounded-xl p-3 hover:bg-white/10 transition-colors"
+                  className="bg-white/10 rounded-xl p-3 hover:bg-white/15 transition-colors
+                    border border-white/20 shadow-lg"
                 >
                   <h3 className="font-display text-sm font-semibold text-white mb-1">
                     {strategy.title}
                   </h3>
                   <div className="grid grid-cols-3 gap-2">
                     <div>
-                      <p className="text-white/60 text-xs mb-0.5">Gain</p>
+                      <p className="text-white/70 text-xs mb-0.5">Gain</p>
                       <p className="font-mono text-green-400 font-medium text-sm">
                         +{strategy.stats.gain}%
                       </p>
                     </div>
                     <div>
-                      <p className="text-white/60 text-xs mb-0.5">Win Rate</p>
+                      <p className="text-white/70 text-xs mb-0.5">Win Rate</p>
                       <p className="font-mono text-white font-medium text-sm">
                         {strategy.stats.winRate}%
                       </p>
                     </div>
                     <div>
-                      <p className="text-white/60 text-xs mb-0.5">Risk Ratio</p>
+                      <p className="text-white/70 text-xs mb-0.5">Risk Ratio</p>
                       <p className="font-mono text-white font-medium text-sm">
                         {strategy.stats.riskRatio}
                       </p>
@@ -192,7 +194,7 @@ export default function ProfilePreview({
 
           {/* Strategy Section Divider */}
           {strategies && strategies.length > 0 && (
-            <div className="border-t border-neutral-700/40" />
+            <div className="border-t border-white/20" />
           )}
 
           {/* Links */}
@@ -220,7 +222,7 @@ export default function ProfilePreview({
 
           {/* Links Section Divider */}
           {links && links.length > 0 && (
-            <div className="border-t border-neutral-700/40" />
+            <div className="border-t border-white/20" />
           )}
 
           {/* Powered by Tradr */}

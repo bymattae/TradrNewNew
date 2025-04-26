@@ -81,14 +81,9 @@ export default function ProfilePreview({
   onThemeClick
 }: ProfilePreviewProps) {
   return (
-    <div className="h-screen flex flex-col items-center bg-black px-4 py-4">
+    <div className="min-h-screen flex flex-col items-center bg-black px-4 py-4 overflow-hidden">
       {/* Main Content Area */}
       <div className="w-full max-w-md space-y-4">
-        {/* Live Link Card */}
-        <div className="w-full bg-[rgba(255,255,255,0.03)] rounded-xl p-3 text-center">
-          <p className="text-sm text-[var(--text-secondary)]">Your Tradr is live</p>
-        </div>
-
         {/* Profile Card */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
@@ -162,7 +157,7 @@ export default function ProfilePreview({
         </motion.div>
 
         {/* Action Buttons */}
-        <div className="flex justify-center gap-3 mt-2">
+        <div className="flex justify-center gap-3">
           <button onClick={onEditClick} className="btn-action w-14 h-14 flex-col gap-1">
             <FiEdit3 className="w-5 h-5" />
             <span className="text-xs">Edit</span>

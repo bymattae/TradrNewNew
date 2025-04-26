@@ -1,12 +1,17 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { IoClose } from 'react-icons/io5';
 import { 
-  Home,
-  BarChart2,
-  Trophy,
-  Newspaper,
-  Boxes
-} from 'lucide-react';
+  RiHome5Line,
+  RiLineChartLine,
+  RiArrowRightUpLine,
+  RiFileList2Line,
+  RiIdCardLine,
+  RiVipDiamondLine,
+  RiUserLine,
+  RiAwardLine,
+  RiFileListLine,
+  RiSunLine
+} from 'react-icons/ri';
 import Image from 'next/image';
 
 interface HubMenuProps {
@@ -16,33 +21,64 @@ interface HubMenuProps {
 
 const menuItems = [
   { 
-    icon: Home, 
-    label: 'My Tradr', 
-    href: '/profile',
+    icon: RiHome5Line,
+    label: 'Home',
+    href: '/dashboard',
+    isActive: true,
     isComingSoon: false 
   },
   { 
-    icon: BarChart2, 
-    label: 'Strategies', 
+    icon: RiLineChartLine,
+    label: 'Invest',
     href: '/strategies',
     isComingSoon: false 
   },
   { 
-    icon: Trophy, 
-    label: 'Leaderboard', 
-    href: '/leaderboard',
-    isComingSoon: false 
-  },
-  { 
-    icon: Newspaper, 
-    label: 'Feed', 
-    href: '/feed',
+    icon: RiArrowRightUpLine,
+    label: 'Send',
+    href: '/send',
     isComingSoon: true 
   },
   { 
-    icon: Boxes, 
-    label: 'Tools', 
-    href: '/tools',
+    icon: RiFileList2Line,
+    label: 'Cheques',
+    href: '/cheques',
+    isComingSoon: true 
+  },
+  { 
+    icon: RiIdCardLine,
+    label: 'Cards',
+    href: '/cards',
+    isComingSoon: true 
+  },
+  { 
+    icon: RiVipDiamondLine,
+    label: 'Credit',
+    href: '/credit',
+    isComingSoon: true 
+  },
+  { 
+    icon: RiUserLine,
+    label: 'Save',
+    href: '/save',
+    isComingSoon: true 
+  },
+  { 
+    icon: RiAwardLine,
+    label: 'IPO',
+    href: '/ipo',
+    isComingSoon: true 
+  },
+  { 
+    icon: RiFileListLine,
+    label: 'Pay Bills',
+    href: '/bills',
+    isComingSoon: true 
+  },
+  { 
+    icon: RiSunLine,
+    label: 'Rewards',
+    href: '/rewards',
     isComingSoon: true 
   }
 ];
@@ -67,81 +103,101 @@ export default function HubMenu({ isOpen, onClose }: HubMenuProps) {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className="fixed inset-0 z-50 bg-gradient-to-b from-[#0D0D0D] to-[#151515] flex flex-col"
+            className="fixed inset-0 z-50 bg-[#0A0A0A] flex flex-col"
           >
             {/* Header */}
-            <div className="relative flex flex-col items-center justify-center px-6 py-8">
-              <h1 className="text-[24px] font-bold tracking-tight text-white mb-6">
-                Tradr Hub
+            <div className="relative flex items-center justify-between px-6 py-4">
+              <h1 className="text-[32px] font-bold text-white">
+                Hub
               </h1>
-              <div className="absolute w-16 h-[1px] bg-white/10 bottom-0" />
               <button
                 onClick={onClose}
-                className="absolute right-6 p-2 rounded-full hover:bg-white/10 transition-colors"
+                className="p-2 rounded-full hover:bg-white/5 transition-colors"
               >
                 <IoClose size={24} className="text-white" />
               </button>
             </div>
 
             {/* Menu Content */}
-            <div className="flex-1 px-8 py-12 overflow-y-auto">
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+            <div className="flex-1 px-4 py-6 overflow-y-auto">
+              <div className="grid grid-cols-3 gap-3">
                 {menuItems.map((item) => (
                   <motion.a
                     key={item.label}
                     href={item.isComingSoon ? '#' : item.href}
                     className={`
-                      flex flex-col items-center justify-center gap-6 py-8 px-4 rounded-2xl
-                      transition-all duration-300 ease-out
-                      bg-[#121212] hover:bg-[#151515]
-                      shadow-[0px_6px_16px_rgba(0,0,0,0.5)]
-                      ${item.isComingSoon 
-                        ? 'opacity-60 cursor-not-allowed' 
-                        : 'hover:shadow-[0px_8px_20px_rgba(0,0,0,0.6),0px_0px_0px_1px_rgba(123,97,255,0.3)]'
-                      }
+                      flex flex-col items-center gap-2 p-4 rounded-2xl
+                      transition-all duration-200
+                      ${item.isActive 
+                        ? 'bg-[#7B61FF]/10 text-[#7B61FF]' 
+                        : 'bg-[#121212] text-white hover:bg-[#151515]'}
+                      ${item.isComingSoon ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
                     `}
-                    whileHover={!item.isComingSoon ? { 
-                      scale: 1.02,
-                      transition: { duration: 0.2 }
-                    } : undefined}
+                    whileHover={!item.isComingSoon ? { scale: 1.02 } : undefined}
                     whileTap={!item.isComingSoon ? { scale: 0.98 } : undefined}
                   >
                     <item.icon 
-                      size={28} 
-                      className={`${item.isComingSoon ? 'text-[#AAAAAA]' : 'text-white'}`}
+                      size={24} 
+                      className="mb-1"
                       strokeWidth={1.5}
                     />
-                    <span className={`
-                      text-[15px] font-medium text-center
-                      ${item.isComingSoon ? 'text-[#AAAAAA]' : 'text-white'}
-                    `}>
+                    <span className="text-sm font-medium">
                       {item.label}
                     </span>
-                    {item.isComingSoon && (
-                      <span className="text-xs text-[#AAAAAA] mt-1 font-medium">
-                        Coming Soon
-                      </span>
-                    )}
                   </motion.a>
                 ))}
               </div>
             </div>
 
             {/* Footer */}
-            <div className="px-8 py-6 flex justify-center">
-              <div className="flex items-center gap-2 text-white/50 text-sm">
-                <div className="relative w-5 h-5">
+            <div className="px-6 py-8">
+              <div className="flex flex-col items-center gap-4">
+                <div className="flex items-center justify-center gap-8">
                   <Image
-                    src="https://rnfvzaelmwbbvfbsppir.supabase.co/storage/v1/object/public/assets/TradrIcon%20(1).png"
-                    alt="Tradr"
-                    fill
-                    sizes="20px"
-                    className="object-contain"
+                    src="/adq-logo.svg"
+                    alt="ADQ"
+                    width={40}
+                    height={20}
+                    className="text-white/50"
+                  />
+                  <Image
+                    src="/adh-logo.svg"
+                    alt="ADH"
+                    width={40}
+                    height={20}
+                    className="text-white/50"
+                  />
+                  <Image
+                    src="/e&-logo.svg"
+                    alt="e&"
+                    width={40}
+                    height={20}
+                    className="text-white/50"
+                  />
+                  <Image
+                    src="/fab-logo.svg"
+                    alt="FAB"
+                    width={40}
+                    height={20}
+                    className="text-white/50"
                   />
                 </div>
-                <span>Powered by</span>
-                <span className="font-medium">Tradr</span>
+                <p className="text-white/40 text-sm text-center">
+                  Licensed and regulated by the Central Bank UAE
+                </p>
               </div>
+            </div>
+
+            {/* Close Button */}
+            <div className="absolute bottom-12 left-1/2 -translate-x-1/2">
+              <motion.button
+                onClick={onClose}
+                className="w-14 h-14 rounded-full bg-[#7B61FF] flex items-center justify-center"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <IoClose size={24} className="text-white" />
+              </motion.button>
             </div>
           </motion.div>
         </>

@@ -23,7 +23,6 @@ export default function CopyableUrl({ username }: CopyableUrlProps) {
       transition={{ duration: 0.3 }}
     >
       <div className="flex items-center gap-3">
-        <span className="text-xl">🚀</span>
         <div>
           <p className="text-white/60 text-sm">Your Tradr is live:</p>
           <a 

@@ -107,9 +107,9 @@ export default function ProfilePreview({
 
         {/* Main Card */}
         <div className="relative bg-black/80 backdrop-blur-xl rounded-2xl border border-white/10 overflow-hidden h-full">
-          <div className="h-full overflow-auto py-5 px-6 space-y-4 scrollbar-hide">
+          <div className="h-full overflow-auto py-4 px-5 space-y-3 scrollbar-hide">
             {/* Profile Header */}
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3">
               <div className="relative">
                 <div className="w-16 h-16 rounded-full overflow-hidden bg-violet-500/20">
                   {avatarUrl ? (
@@ -141,11 +141,11 @@ export default function ProfilePreview({
 
             {/* Tags */}
             {tags.length > 0 && (
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-1.5">
                 {tags.map((tag, index) => (
                   <span
                     key={index}
-                    className="px-3 py-1 bg-white/5 rounded-full text-sm text-white/80 font-medium hover:bg-white/10 transition-colors"
+                    className="px-2 py-0.5 bg-white/5 rounded-full text-xs text-white/80 font-medium hover:bg-white/10 transition-colors"
                   >
                     {tag}
                   </span>
@@ -155,31 +155,31 @@ export default function ProfilePreview({
 
             {/* Strategies */}
             {strategies && strategies.length > 0 && (
-              <div className="space-y-4">
+              <div className="space-y-3">
                 {strategies.map((strategy, index) => (
                   <div
                     key={index}
-                    className="bg-white/5 rounded-xl p-4 hover:bg-white/10 transition-colors"
+                    className="bg-white/5 rounded-xl p-3 hover:bg-white/10 transition-colors"
                   >
-                    <h3 className="font-display text-lg font-semibold text-white mb-3">
+                    <h3 className="font-display text-base font-semibold text-white mb-2">
                       {strategy.title}
                     </h3>
-                    <div className="grid grid-cols-3 gap-3">
+                    <div className="grid grid-cols-3 gap-2">
                       <div>
-                        <p className="text-white/60 text-xs mb-1">Gain</p>
-                        <p className="font-mono text-green-400 font-medium">
+                        <p className="text-white/60 text-xs mb-0.5">Gain</p>
+                        <p className="font-mono text-green-400 font-medium text-sm">
                           +{strategy.stats.gain}%
                         </p>
                       </div>
                       <div>
-                        <p className="text-white/60 text-xs mb-1">Win Rate</p>
-                        <p className="font-mono text-white font-medium">
+                        <p className="text-white/60 text-xs mb-0.5">Win Rate</p>
+                        <p className="font-mono text-white font-medium text-sm">
                           {strategy.stats.winRate}%
                         </p>
                       </div>
                       <div>
-                        <p className="text-white/60 text-xs mb-1">Risk Ratio</p>
-                        <p className="font-mono text-white font-medium">
+                        <p className="text-white/60 text-xs mb-0.5">Risk Ratio</p>
+                        <p className="font-mono text-white font-medium text-sm">
                           {strategy.stats.riskRatio}
                         </p>
                       </div>
@@ -196,15 +196,15 @@ export default function ProfilePreview({
                   <a
                     key={index}
                     href={link.cta.url}
-                    className="block bg-white/5 rounded-xl p-4 hover:bg-white/10 transition-colors"
+                    className="block bg-white/5 rounded-xl p-3 hover:bg-white/10 transition-colors"
                   >
-                    <h3 className="font-display text-lg font-semibold text-white">
+                    <h3 className="font-display text-base font-semibold text-white">
                       {link.title}
                     </h3>
-                    <p className="text-white/60 text-sm mt-1 line-clamp-2">
+                    <p className="text-white/60 text-xs mt-1 line-clamp-2">
                       {link.description}
                     </p>
-                    <span className="inline-block mt-2 text-violet-400 text-sm font-medium">
+                    <span className="inline-block mt-2 text-violet-400 text-xs font-medium">
                       {link.cta.text} →
                     </span>
                   </a>
@@ -213,16 +213,16 @@ export default function ProfilePreview({
             )}
 
             {/* Powered by Tradr */}
-            <div className="flex items-center justify-center gap-2 pt-3 border-t border-white/10">
+            <div className="flex items-center justify-center gap-2 pt-2 border-t border-white/10">
               <p className="text-white/40 text-xs">Powered by</p>
-              <TradrIcon className="w-4 h-4 text-white/40" />
+              <TradrIcon className="w-3 h-3 text-white/40" />
             </div>
           </div>
         </div>
       </div>
 
       {/* Action Buttons */}
-      <div className="flex items-center justify-center gap-5 mt-3 pb-1">
+      <div className="flex items-center justify-center gap-4 mt-2">
         <button
           onClick={onEditClick}
           className="flex flex-col items-center gap-1 text-white/60 hover:text-white transition-colors group"

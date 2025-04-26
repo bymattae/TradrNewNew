@@ -15,7 +15,9 @@ export default function AuthenticatedLayout({
       <div className="flex-1 overflow-hidden">
         {children}
       </div>
-      <NavigationBar />
+      <div className="pb-[env(safe-area-inset-bottom)]">
+        <NavigationBar />
+      </div>
     </div>
   );
 } 

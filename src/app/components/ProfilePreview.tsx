@@ -139,38 +139,26 @@ export default function ProfilePreview({
         {/* Strategies */}
         {strategies && strategies.length > 0 && (
           <div className="mt-6">
-            <div className="flex items-center justify-between">
-              <h4 className="strategy-title">Current Strategy</h4>
-              <span className="text-description text-sm">Last 30 days</span>
-            </div>
-            <div className="mt-3 flex items-center gap-3">
-              <div className="flex-1 h-2 rounded-full bg-white/5 overflow-hidden">
-                <div className="h-full w-3/4 rounded-full bg-gradient-to-r from-[var(--brand-purple)] to-[var(--brand-purple-hover)]" />
-              </div>
-              <span className="text-white font-medium">
-                {strategies[0].stats.winRate}%
-              </span>
-            </div>
-
-            {/* Key Stats */}
-            <div className="grid grid-cols-3 gap-4 mt-4 pt-4 border-t border-white/5">
-              <div>
-                <p className="text-[13px] text-white/60 font-medium">Gain</p>
-                <p className="text-[15px] font-semibold text-white mt-1">
-                  +{strategies[0].stats.gain}%
-                </p>
-              </div>
-              <div>
-                <p className="text-[13px] text-white/60 font-medium">Win Rate</p>
-                <p className="text-[15px] font-semibold text-white mt-1">
-                  {strategies[0].stats.winRate}%
-                </p>
-              </div>
-              <div>
-                <p className="text-[13px] text-white/60 font-medium">Risk Ratio</p>
-                <p className="text-[15px] font-semibold text-white mt-1">
-                  {strategies[0].stats.riskRatio}
-                </p>
+            <div className="bg-white/5 rounded-xl p-4 border border-white/5 backdrop-blur-sm">
+              <div className="grid grid-cols-3 gap-4">
+                <div>
+                  <p className="text-[13px] text-white/60 font-medium">Gain</p>
+                  <p className="text-[15px] font-semibold text-white mt-1">
+                    +{strategies[0].stats.gain}%
+                  </p>
+                </div>
+                <div>
+                  <p className="text-[13px] text-white/60 font-medium">Win Rate</p>
+                  <p className="text-[15px] font-semibold text-white mt-1">
+                    {strategies[0].stats.winRate}%
+                  </p>
+                </div>
+                <div>
+                  <p className="text-[13px] text-white/60 font-medium">Risk Ratio</p>
+                  <p className="text-[15px] font-semibold text-white mt-1">
+                    {strategies[0].stats.riskRatio}
+                  </p>
+                </div>
               </div>
             </div>
           </div>

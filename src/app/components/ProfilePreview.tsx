@@ -81,12 +81,12 @@ export default function ProfilePreview({
   onThemeClick
 }: ProfilePreviewProps) {
   return (
-    <div className="h-screen flex flex-col items-center bg-black px-4 py-4 overflow-hidden">
+    <div className="h-screen flex flex-col items-center bg-black px-4 py-3 overflow-hidden">
       {/* Main Content Area */}
-      <div className="w-full max-w-md space-y-3">
+      <div className="w-full max-w-md space-y-2.5">
         {/* Live Status */}
-        <div className="w-full bg-gradient-to-b from-[rgba(255,255,255,0.03)] to-[rgba(255,255,255,0.01)] rounded-xl p-2.5 text-center border border-[rgba(255,255,255,0.03)] shadow-sm">
-          <p className="text-sm text-[var(--text-secondary)]">Your Tradr is live</p>
+        <div className="w-full bg-[#121212] rounded-xl p-2 text-center border border-[rgba(255,255,255,0.03)]">
+          <p className="text-[14px] text-[var(--text-secondary)]">Your Tradr is live</p>
         </div>
 
         {/* Profile Card */}
@@ -162,17 +162,17 @@ export default function ProfilePreview({
         </motion.div>
 
         {/* Action Buttons */}
-        <div className="flex justify-center gap-4">
-          <button onClick={onEditClick} className="btn-action w-16 h-16 flex-col gap-1.5">
-            <FiEdit3 className="w-6 h-6" />
+        <div className="flex justify-center gap-3">
+          <button onClick={onEditClick} className="btn-action w-16 h-16 flex-col gap-1.5 p-4">
+            <FiEdit3 className="w-5 h-5" />
             <span className="text-sm">Edit</span>
           </button>
-          <button onClick={onShareClick} className="btn-action w-16 h-16 flex-col gap-1.5">
-            <FiShare2 className="w-6 h-6" />
+          <button onClick={onShareClick} className="btn-action w-16 h-16 flex-col gap-1.5 p-4">
+            <FiShare2 className="w-5 h-5" />
             <span className="text-sm">Share</span>
           </button>
-          <button onClick={onThemeClick} className="btn-action w-16 h-16 flex-col gap-1.5">
-            <IoColorPaletteOutline className="w-6 h-6" />
+          <button onClick={onThemeClick} className="btn-action w-16 h-16 flex-col gap-1.5 p-4">
+            <IoColorPaletteOutline className="w-5 h-5" />
             <span className="text-sm">Theme</span>
           </button>
         </div>

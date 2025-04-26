@@ -60,7 +60,7 @@ const SocialIcons = {
   ),
   telegram: (
     <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-      <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+      <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.321.072.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
     </svg>
   )
 };
@@ -152,6 +152,9 @@ export default function ProfilePreview({
             </div>
           )}
 
+          {/* Profile Section Divider */}
+          <div className="border-t border-neutral-700/40" />
+
           {/* Strategies */}
           {strategies && strategies.length > 0 && (
             <div className="space-y-2">
@@ -188,6 +191,11 @@ export default function ProfilePreview({
             </div>
           )}
 
+          {/* Strategy Section Divider */}
+          {strategies && strategies.length > 0 && (
+            <div className="border-t border-neutral-700/40" />
+          )}
+
           {/* Links */}
           {links && links.length > 0 && (
             <div className="space-y-2">
@@ -211,49 +219,66 @@ export default function ProfilePreview({
             </div>
           )}
 
+          {/* Links Section Divider */}
+          {links && links.length > 0 && (
+            <div className="border-t border-neutral-700/40" />
+          )}
+
           {/* Powered by Tradr */}
-          <div className="flex items-center justify-center gap-2 pt-2 border-t border-white/10">
-            <p className="text-white/40 text-xs">Powered by</p>
-            <TradrIcon className="w-3 h-3 text-white/40" />
+          <div className="flex items-center justify-center gap-2 pt-2">
+            <div className="flex items-center gap-1.5 text-white/40 text-xs">
+              <TradrIcon className="w-3 h-3" />
+              <span>Powered by</span>
+              <span className="font-medium">Tradr</span>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Action Buttons */}
-      <div className="flex items-center justify-center gap-6 mt-4">
-        <button
-          onClick={onEditClick}
-          className="flex flex-col items-center gap-1.5 text-white/60 hover:text-white transition-colors group"
-        >
-          <div className="p-2.5 rounded-xl bg-white/5 group-hover:bg-white/10 transition-colors">
-            <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-            </svg>
-          </div>
-          <span className="text-xs font-medium">Edit</span>
-        </button>
-        <button
-          onClick={onShareClick}
-          className="flex flex-col items-center gap-1.5 text-white/60 hover:text-white transition-colors group"
-        >
-          <div className="p-2.5 rounded-xl bg-white/5 group-hover:bg-white/10 transition-colors">
-            <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
-            </svg>
-          </div>
-          <span className="text-xs font-medium">Share</span>
-        </button>
-        <button
-          onClick={onThemeClick}
-          className="flex flex-col items-center gap-1.5 text-white/60 hover:text-white transition-colors group"
-        >
-          <div className="p-2.5 rounded-xl bg-white/5 group-hover:bg-white/10 transition-colors">
-            <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
-            </svg>
-          </div>
-          <span className="text-xs font-medium">Theme</span>
-        </button>
+      {/* Action Buttons with Glow */}
+      <div className="relative mt-4">
+        <div className="absolute inset-0 bg-neutral-800/30 backdrop-blur-md rounded-2xl" />
+        <div className="relative flex items-center justify-center gap-6 p-2">
+          <motion.button
+            onClick={onEditClick}
+            className="flex flex-col items-center gap-1.5 text-white/60 hover:text-white transition-colors group"
+            whileTap={{ scale: 1.05 }}
+            transition={{ duration: 0.1 }}
+          >
+            <div className="p-2.5 rounded-xl bg-white/5 group-hover:bg-white/10 transition-colors">
+              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+              </svg>
+            </div>
+            <span className="text-xs font-medium">Edit</span>
+          </motion.button>
+          <motion.button
+            onClick={onShareClick}
+            className="flex flex-col items-center gap-1.5 text-white/60 hover:text-white transition-colors group"
+            whileTap={{ scale: 1.05 }}
+            transition={{ duration: 0.1 }}
+          >
+            <div className="p-2.5 rounded-xl bg-white/5 group-hover:bg-white/10 transition-colors">
+              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+              </svg>
+            </div>
+            <span className="text-xs font-medium">Share</span>
+          </motion.button>
+          <motion.button
+            onClick={onThemeClick}
+            className="flex flex-col items-center gap-1.5 text-white/60 hover:text-white transition-colors group"
+            whileTap={{ scale: 1.05 }}
+            transition={{ duration: 0.1 }}
+          >
+            <div className="p-2.5 rounded-xl bg-white/5 group-hover:bg-white/10 transition-colors">
+              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
+              </svg>
+            </div>
+            <span className="text-xs font-medium">Theme</span>
+          </motion.button>
+        </div>
       </div>
     </div>
   );

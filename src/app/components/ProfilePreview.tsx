@@ -81,7 +81,15 @@ export default function ProfilePreview({
   onThemeClick
 }: ProfilePreviewProps) {
   return (
-    <div className="min-h-screen flex flex-col items-center bg-black p-6">
+    <div className="min-h-screen flex flex-col items-center bg-black px-6 pt-8">
+      {/* Header */}
+      <div className="w-full max-w-md text-center mb-6">
+        <h1 className="text-2xl font-bold mb-2">My Tradr</h1>
+        <div className="bg-[rgba(255,255,255,0.03)] rounded-xl p-4">
+          <p className="text-sm text-[var(--text-secondary)]">Your Tradr is live</p>
+        </div>
+      </div>
+
       {/* Main Content Area */}
       <div className="w-full max-w-md space-y-6">
         {/* Profile Card */}

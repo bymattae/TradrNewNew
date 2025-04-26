@@ -120,26 +120,28 @@ export default function ProfilePreview({
           </div>
 
           {/* Stats Section */}
-          <div className="px-6 py-4">
-            <div className="grid grid-cols-3 gap-3">
-              <div className="text-center">
-                <p className="text-lg font-bold text-[var(--brand-purple)]">+47%</p>
-                <p className="text-xs text-[var(--text-secondary)]">Gain</p>
-              </div>
-              <div className="text-center">
-                <p className="text-lg font-bold text-[var(--brand-purple)]">89%</p>
-                <p className="text-xs text-[var(--text-secondary)]">Win Rate</p>
-              </div>
-              <div className="text-center">
-                <p className="text-lg font-bold text-[var(--brand-purple)]">2.5</p>
-                <p className="text-xs text-[var(--text-secondary)]">Risk Ratio</p>
+          <div className="px-6 pb-4">
+            <div className="bg-[#121212] rounded-xl py-2 px-3">
+              <div className="grid grid-cols-3 gap-3">
+                <div className="text-center">
+                  <p className="text-lg font-bold text-[var(--brand-purple)]">+47%</p>
+                  <p className="text-xs text-[var(--text-secondary)]">Gain</p>
+                </div>
+                <div className="text-center">
+                  <p className="text-lg font-bold text-[var(--brand-purple)]">89%</p>
+                  <p className="text-xs text-[var(--text-secondary)]">Win Rate</p>
+                </div>
+                <div className="text-center">
+                  <p className="text-lg font-bold text-[var(--brand-purple)]">2.5</p>
+                  <p className="text-xs text-[var(--text-secondary)]">Risk Ratio</p>
+                </div>
               </div>
             </div>
           </div>
 
           {/* CTA Section */}
-          <div className="px-6 py-4">
-            <div className="text-center space-y-2">
+          <div className="px-6 pb-4">
+            <div className="bg-[#181818] rounded-xl py-2 px-3 text-center space-y-2">
               <h3 className="text-base font-semibold">Premium Strategy Course</h3>
               <p className="text-sm text-[var(--text-secondary)]">Follow my trades in real-time</p>
               <button className="btn-primary w-4/5 mx-auto py-3.5 px-4">
@@ -149,7 +151,7 @@ export default function ProfilePreview({
           </div>
 
           {/* Footer */}
-          <div className="px-6 py-4">
+          <div className="px-6 pb-6 pt-2">
             <p className="text-sm text-center text-[var(--text-secondary)]">
               powered by tradr
             </p>
@@ -157,7 +159,7 @@ export default function ProfilePreview({
         </motion.div>
 
         {/* Action Buttons */}
-        <div className="flex justify-center gap-4 mt-3">
+        <div className="flex justify-center gap-4 mt-2">
           <button onClick={onEditClick} className="btn-action w-20 h-20 flex-col gap-1.5 p-4">
             <FiEdit3 className="w-[22px] h-[22px]" />
             <span className="text-[14px]">Edit</span>

@@ -88,8 +88,8 @@ export default function ProfilePreview({
         {/* Profile header */}
         <div className="flex items-center gap-4">
           <div className="relative">
-            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[var(--brand-purple)] to-[var(--brand-purple-hover)] p-[1px]">
-              <div className="w-full h-full rounded-full bg-[var(--card-background)] p-[2px]">
+            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[var(--brand-primary)] to-[var(--brand-secondary)] p-[1px]">
+              <div className="w-full h-full rounded-full bg-[var(--button-background)] p-[2px]">
                 {avatarUrl ? (
                   <Image
                     src={avatarUrl}
@@ -99,7 +99,7 @@ export default function ProfilePreview({
                     className="rounded-full"
                   />
                 ) : (
-                  <div className="w-full h-full flex items-center justify-center text-xl font-bold text-[#7B61FF]">
+                  <div className="w-full h-full flex items-center justify-center text-xl font-bold text-[var(--brand-primary)]">
                     {username[0].toUpperCase()}
                   </div>
                 )}
@@ -127,8 +127,8 @@ export default function ProfilePreview({
             {tags.map((tag, index) => (
               <span
                 key={index}
-                className="px-2.5 py-1 bg-white/5 rounded-lg text-xs text-white/70 font-medium 
-                  border border-white/5 backdrop-blur-sm"
+                className="px-2.5 py-1 bg-[var(--button-background)] rounded-lg text-xs text-[var(--text-secondary)]
+                  border border-[var(--divider)] backdrop-blur-sm"
               >
                 {tag}
               </span>
@@ -139,23 +139,23 @@ export default function ProfilePreview({
         {/* Strategies */}
         {strategies && strategies.length > 0 && (
           <div className="mt-4">
-            <div className="bg-[#0A0A0A]/80 rounded-xl p-4">
+            <div className="bg-[var(--button-background)] rounded-xl p-4">
               <div className="grid grid-cols-3 gap-6">
                 <div>
-                  <p className="text-[13px] text-white/60 font-medium">Gain</p>
-                  <p className="text-[15px] font-semibold text-white mt-1.5">
+                  <p className="text-[13px] text-[var(--text-secondary)] font-medium">Gain</p>
+                  <p className="text-[15px] font-semibold text-[var(--text-primary)] mt-1.5">
                     +{strategies[0].stats.gain}%
                   </p>
                 </div>
                 <div>
-                  <p className="text-[13px] text-white/60 font-medium">Win Rate</p>
-                  <p className="text-[15px] font-semibold text-white mt-1.5">
+                  <p className="text-[13px] text-[var(--text-secondary)] font-medium">Win Rate</p>
+                  <p className="text-[15px] font-semibold text-[var(--text-primary)] mt-1.5">
                     {strategies[0].stats.winRate}%
                   </p>
                 </div>
                 <div>
-                  <p className="text-[13px] text-white/60 font-medium">Risk Ratio</p>
-                  <p className="text-[15px] font-semibold text-white mt-1.5">
+                  <p className="text-[13px] text-[var(--text-secondary)] font-medium">Risk Ratio</p>
+                  <p className="text-[15px] font-semibold text-[var(--text-primary)] mt-1.5">
                     {strategies[0].stats.riskRatio}
                   </p>
                 </div>
@@ -171,8 +171,9 @@ export default function ProfilePreview({
               <a
                 key={index}
                 href={link.cta.url}
-                className="block bg-white/5 rounded-xl p-4 border border-white/5
-                  backdrop-blur-sm hover:bg-white/10 transition-all duration-200"
+                className="block bg-[var(--button-background)] rounded-xl p-4 border border-[var(--divider)]
+                  backdrop-blur-sm hover:bg-[var(--button-background)] hover:border-[var(--brand-primary)]/20 
+                  hover:shadow-[0px_4px_12px_rgba(123,79,255,0.15)] transition-all duration-200"
               >
                 <h3 className="text-title text-sm">
                   {link.title}
@@ -180,7 +181,7 @@ export default function ProfilePreview({
                 <p className="text-description text-xs mt-1 line-clamp-2">
                   {link.description}
                 </p>
-                <span className="inline-block mt-2 text-[#7B61FF] text-xs font-medium">
+                <span className="inline-block mt-2 text-[var(--brand-secondary)] text-xs font-medium">
                   {link.cta.text} →
                 </span>
               </a>
@@ -189,8 +190,8 @@ export default function ProfilePreview({
         )}
 
         {/* Powered by Tradr */}
-        <div className="mt-6 pt-4 border-t border-white/10">
-          <div className="flex items-center justify-center gap-1.5 text-white/60 text-[11px]">
+        <div className="mt-6 pt-4 border-t border-[var(--divider)]">
+          <div className="flex items-center justify-center gap-1.5 text-[var(--text-secondary)] text-[11px]">
             <div className="relative w-3 h-3 flex-shrink-0">
               <Image
                 src="https://rnfvzaelmwbbvfbsppir.supabase.co/storage/v1/object/public/assets/TradrIcon%20(1).png"

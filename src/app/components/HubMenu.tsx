@@ -73,18 +73,18 @@ export default function HubMenu({ isOpen, onClose }: HubMenuProps) {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className="fixed inset-0 z-50 bg-[#0A0A0A] flex flex-col"
+            className="fixed inset-0 z-50 bg-[var(--background)] flex flex-col"
           >
             {/* Header */}
-            <div className="relative flex items-center justify-between px-6 py-4">
-              <h1 className="text-[32px] font-bold text-white">
-                Hub
+            <div className="relative flex items-center justify-between px-6 py-4 border-b border-[var(--divider)]">
+              <h1 className="text-[32px] font-bold text-[var(--text-primary)]">
+                Tradr Hub
               </h1>
               <button
                 onClick={onClose}
-                className="p-2 rounded-full hover:bg-white/5 transition-colors"
+                className="p-2 rounded-full hover:bg-[var(--button-background)] transition-colors"
               >
-                <IoClose size={24} className="text-white" />
+                <IoClose size={24} className="text-[var(--text-primary)]" />
               </button>
             </div>
 
@@ -98,10 +98,10 @@ export default function HubMenu({ isOpen, onClose }: HubMenuProps) {
                     href={item.href}
                     className={`
                       flex flex-col items-center gap-2 p-4 rounded-2xl
-                      transition-all duration-200
+                      transition-all duration-200 border
                       ${item.isActive 
-                        ? 'bg-[#7B61FF]/10 text-[#7B61FF]' 
-                        : 'bg-[#121212] text-white hover:bg-[#151515]'}
+                        ? 'bg-[var(--brand-primary)]/10 text-[var(--brand-primary)] border-[var(--brand-primary)]/20 shadow-[0_4px_12px_rgba(123,79,255,0.15)]' 
+                        : 'bg-[var(--card-background)] text-[var(--text-primary)] border-[var(--divider)] hover:bg-[var(--button-background)] hover:border-[rgba(123,79,255,0.2)]'}
                       cursor-pointer
                     `}
                     whileHover={{ scale: 1.02 }}
@@ -109,7 +109,7 @@ export default function HubMenu({ isOpen, onClose }: HubMenuProps) {
                   >
                     <item.icon 
                       size={24} 
-                      className="mb-1"
+                      className={`mb-1 ${item.isActive ? 'drop-shadow-[0_0_4px_rgba(123,79,255,0.3)]' : ''}`}
                       strokeWidth={1.5}
                     />
                     <span className="text-sm font-medium">
@@ -122,11 +122,12 @@ export default function HubMenu({ isOpen, onClose }: HubMenuProps) {
               {/* Coming Soon Items */}
               <div className="flex justify-center gap-3">
                 {comingSoonItems.map((item) => (
-                  <motion.a
+                  <motion.div
                     key={item.label}
                     className="flex flex-col items-center gap-2 p-4 rounded-2xl
-                      bg-[#121212] text-white opacity-50 cursor-not-allowed
-                      transition-all duration-200 w-[160px]"
+                      bg-[var(--button-background)] text-[var(--text-secondary)] opacity-60 cursor-not-allowed
+                      transition-all duration-200 w-[160px] border border-[var(--divider)]
+                      shadow-[inset_0_1px_1px_rgba(0,0,0,0.1)]"
                   >
                     <item.icon 
                       size={24} 
@@ -135,45 +136,45 @@ export default function HubMenu({ isOpen, onClose }: HubMenuProps) {
                     />
                     <span className="text-sm font-medium">
                       {item.label}
-                      <span className="block text-xs opacity-75 mt-0.5">
+                      <span className="block text-xs mt-0.5">
                         Coming Soon
                       </span>
                     </span>
-                  </motion.a>
+                  </motion.div>
                 ))}
               </div>
             </div>
 
             {/* Footer */}
-            <div className="px-6 py-8">
+            <div className="px-6 py-8 border-t border-[var(--divider)]">
               <div className="flex items-center justify-center gap-8">
                 <Image
                   src="/adq-logo.svg"
                   alt="ADQ"
                   width={40}
                   height={20}
-                  className="text-white/50"
+                  className="opacity-50 hover:opacity-70 transition-opacity"
                 />
                 <Image
                   src="/adh-logo.svg"
                   alt="ADH"
                   width={40}
                   height={20}
-                  className="text-white/50"
+                  className="opacity-50 hover:opacity-70 transition-opacity"
                 />
                 <Image
                   src="/e&-logo.svg"
                   alt="e&"
                   width={40}
                   height={20}
-                  className="text-white/50"
+                  className="opacity-50 hover:opacity-70 transition-opacity"
                 />
                 <Image
                   src="/fab-logo.svg"
                   alt="FAB"
                   width={40}
                   height={20}
-                  className="text-white/50"
+                  className="opacity-50 hover:opacity-70 transition-opacity"
                 />
               </div>
             </div>

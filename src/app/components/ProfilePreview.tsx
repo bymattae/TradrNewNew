@@ -81,8 +81,8 @@ export default function ProfilePreview({
   onThemeClick
 }: ProfilePreviewProps) {
   return (
-    <div className="min-h-screen flex flex-col">
-      {/* Main Profile Card */}
+    <div className="h-screen flex flex-col justify-between overflow-hidden bg-[var(--background)]">
+      {/* Main Content Area */}
       <div className="flex-1 flex items-center justify-center p-4">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
@@ -155,8 +155,8 @@ export default function ProfilePreview({
         </motion.div>
       </div>
 
-      {/* Bottom Toolbar */}
-      <div className="w-full bg-[var(--background)] border-t border-[rgba(255,255,255,0.03)]">
+      {/* Bottom Action Bar */}
+      <div className="w-full bg-[var(--background)] border-t border-[rgba(255,255,255,0.03)] mt-6">
         <div className="max-w-md mx-auto px-4 py-3">
           <div className="flex justify-center gap-4">
             <button className="btn-action w-16 h-16 flex-col gap-1.5">

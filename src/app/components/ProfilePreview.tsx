@@ -81,9 +81,14 @@ export default function ProfilePreview({
   onThemeClick
 }: ProfilePreviewProps) {
   return (
-    <div className="min-h-screen flex flex-col items-center bg-black px-4 py-4 overflow-hidden">
+    <div className="h-screen flex flex-col items-center bg-black px-4 py-4 overflow-hidden">
       {/* Main Content Area */}
-      <div className="w-full max-w-md space-y-4">
+      <div className="w-full max-w-md space-y-3">
+        {/* Live Status */}
+        <div className="w-full bg-gradient-to-b from-[rgba(255,255,255,0.03)] to-[rgba(255,255,255,0.01)] rounded-xl p-2.5 text-center border border-[rgba(255,255,255,0.03)] shadow-sm">
+          <p className="text-sm text-[var(--text-secondary)]">Your Tradr is live</p>
+        </div>
+
         {/* Profile Card */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
@@ -150,25 +155,25 @@ export default function ProfilePreview({
 
           {/* Footer */}
           <div className="px-4 py-3 border-t border-[rgba(255,255,255,0.03)]">
-            <p className="text-xs text-center text-[var(--text-secondary)]">
+            <p className="text-sm text-center text-[var(--text-secondary)]">
               powered by tradr
             </p>
           </div>
         </motion.div>
 
         {/* Action Buttons */}
-        <div className="flex justify-center gap-3">
-          <button onClick={onEditClick} className="btn-action w-14 h-14 flex-col gap-1">
-            <FiEdit3 className="w-5 h-5" />
-            <span className="text-xs">Edit</span>
+        <div className="flex justify-center gap-4">
+          <button onClick={onEditClick} className="btn-action w-16 h-16 flex-col gap-1.5">
+            <FiEdit3 className="w-6 h-6" />
+            <span className="text-sm">Edit</span>
           </button>
-          <button onClick={onShareClick} className="btn-action w-14 h-14 flex-col gap-1">
-            <FiShare2 className="w-5 h-5" />
-            <span className="text-xs">Share</span>
+          <button onClick={onShareClick} className="btn-action w-16 h-16 flex-col gap-1.5">
+            <FiShare2 className="w-6 h-6" />
+            <span className="text-sm">Share</span>
           </button>
-          <button onClick={onThemeClick} className="btn-action w-14 h-14 flex-col gap-1">
-            <IoColorPaletteOutline className="w-5 h-5" />
-            <span className="text-xs">Theme</span>
+          <button onClick={onThemeClick} className="btn-action w-16 h-16 flex-col gap-1.5">
+            <IoColorPaletteOutline className="w-6 h-6" />
+            <span className="text-sm">Theme</span>
           </button>
         </div>
       </div>

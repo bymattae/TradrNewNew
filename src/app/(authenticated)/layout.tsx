@@ -11,8 +11,8 @@ export default function AuthenticatedLayout({
   children,
 }: AuthenticatedLayoutProps) {
   return (
-    <div className="h-[100vh] h-[100dvh] overflow-hidden bg-black flex flex-col">
-      <div className="flex-1 overflow-hidden">
+    <div className="h-[100dvh] overflow-hidden bg-black flex flex-col">
+      <div className="flex-1 overflow-y-auto">
         {children}
       </div>
       <div className="pb-[env(safe-area-inset-bottom)]">

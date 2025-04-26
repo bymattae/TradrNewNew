@@ -80,10 +80,10 @@ export default function DashboardPage() {
   ];
 
   return (
-    <div className="h-full overflow-hidden flex flex-col pt-3 px-4 pb-2">
-      <div className="flex-1 min-h-0 max-w-lg mx-auto w-full flex flex-col">
+    <div className="h-full flex flex-col pt-2 px-4 pb-2">
+      <div className="max-w-lg mx-auto w-full flex flex-col">
         {/* Top Navigation */}
-        <div className="flex items-center justify-between mb-2">
+        <div className="flex items-center justify-between mb-3">
           <h1 className="text-2xl font-bold text-white">My Tradr</h1>
           <button 
             onClick={() => router.push('/settings')} 
@@ -98,14 +98,14 @@ export default function DashboardPage() {
 
         {/* URL Display */}
         {profile && (
-          <div className="mb-2">
+          <div className="mb-3">
             <CopyableUrl username={profile.username} />
           </div>
         )}
 
-        {/* Profile Preview - Flex to fill remaining space */}
-        <div className="flex-1 min-h-0 overflow-hidden">
-          {profile && (
+        {/* Profile Preview - Natural sizing */}
+        {profile && (
+          <div className="mb-3">
             <ProfilePreview
               username={profile.username || currentUser?.email?.split('@')[0] || 'trader'}
               avatarUrl={profile.avatar_url}
@@ -117,8 +117,8 @@ export default function DashboardPage() {
               onEditClick={() => router.push('/onboarding')}
               onShareClick={() => {}}
             />
-          )}
-        </div>
+          </div>
+        )}
       </div>
     </div>
   );

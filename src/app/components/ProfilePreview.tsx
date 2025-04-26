@@ -78,151 +78,149 @@ export default function ProfilePreview({
   onThemeClick
 }: ProfilePreviewProps) {
   return (
-    <div className="relative h-full flex flex-col">
-      <div className="flex-1 min-h-0 overflow-hidden">
-        {/* LED Outline Animation */}
-        <motion.div
-          className="absolute inset-0 rounded-2xl"
-          style={{
-            background: `conic-gradient(
-              from 0deg at 50% 50%,
-              rgba(167, 139, 250, 0.5),
-              rgba(139, 92, 246, 0.5),
-              rgba(124, 58, 237, 0.5),
-              rgba(139, 92, 246, 0.5),
-              rgba(167, 139, 250, 0.5)
-            )`,
-            filter: 'blur(20px)',
-            opacity: 0.5
-          }}
-          animate={{
-            rotate: [0, 360]
-          }}
-          transition={{
-            duration: 8,
-            repeat: Infinity,
-            ease: "linear"
-          }}
-        />
+    <div className="relative">
+      {/* LED Outline Animation */}
+      <motion.div
+        className="absolute inset-0 rounded-2xl"
+        style={{
+          background: `conic-gradient(
+            from 0deg at 50% 50%,
+            rgba(167, 139, 250, 0.5),
+            rgba(139, 92, 246, 0.5),
+            rgba(124, 58, 237, 0.5),
+            rgba(139, 92, 246, 0.5),
+            rgba(167, 139, 250, 0.5)
+          )`,
+          filter: 'blur(20px)',
+          opacity: 0.5
+        }}
+        animate={{
+          rotate: [0, 360]
+        }}
+        transition={{
+          duration: 8,
+          repeat: Infinity,
+          ease: "linear"
+        }}
+      />
 
-        {/* Main Card */}
-        <div className="relative bg-black/80 backdrop-blur-xl rounded-2xl border border-white/10 overflow-hidden h-full">
-          <div className="h-full overflow-auto py-4 px-5 space-y-3 scrollbar-hide">
-            {/* Profile Header */}
-            <div className="flex items-center gap-3">
-              <div className="relative">
-                <div className="w-16 h-16 rounded-full overflow-hidden bg-violet-500/20">
-                  {avatarUrl ? (
-                    <Image
-                      src={avatarUrl}
-                      alt={username}
-                      width={64}
-                      height={64}
-                      className="object-cover"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center text-xl font-bold text-violet-500">
-                      {username[0].toUpperCase()}
-                    </div>
-                  )}
-                </div>
-              </div>
-              <div>
-                <h2 className="text-2xl font-display font-bold text-white tracking-tight">
-                  @{username}
-                </h2>
-                {bio && (
-                  <p className="text-white/60 font-sans mt-1 text-sm leading-relaxed line-clamp-2">
-                    {bio}
-                  </p>
+      {/* Main Card */}
+      <div className="relative bg-zinc-900/50 backdrop-blur-xl rounded-2xl border border-white/10">
+        <div className="p-4 space-y-3">
+          {/* Profile Header */}
+          <div className="flex items-center gap-3">
+            <div className="relative">
+              <div className="w-14 h-14 rounded-full overflow-hidden bg-violet-500/20">
+                {avatarUrl ? (
+                  <Image
+                    src={avatarUrl}
+                    alt={username}
+                    width={56}
+                    height={56}
+                    className="object-cover"
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center text-xl font-bold text-violet-500">
+                    {username[0].toUpperCase()}
+                  </div>
                 )}
               </div>
             </div>
+            <div>
+              <h2 className="text-xl font-display font-bold text-white tracking-tight">
+                @{username}
+              </h2>
+              {bio && (
+                <p className="text-white/60 font-sans mt-0.5 text-sm leading-relaxed line-clamp-2">
+                  {bio}
+                </p>
+              )}
+            </div>
+          </div>
 
-            {/* Tags */}
-            {tags.length > 0 && (
-              <div className="flex flex-wrap gap-1.5">
-                {tags.map((tag, index) => (
-                  <span
-                    key={index}
-                    className="px-2 py-0.5 bg-white/5 rounded-full text-xs text-white/80 font-medium hover:bg-white/10 transition-colors"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            )}
+          {/* Tags */}
+          {tags.length > 0 && (
+            <div className="flex flex-wrap gap-1.5">
+              {tags.map((tag, index) => (
+                <span
+                  key={index}
+                  className="px-2 py-0.5 bg-white/5 rounded-full text-xs text-white/80 font-medium hover:bg-white/10 transition-colors"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+          )}
 
-            {/* Strategies */}
-            {strategies && strategies.length > 0 && (
-              <div className="space-y-3">
-                {strategies.map((strategy, index) => (
-                  <div
-                    key={index}
-                    className="bg-white/5 rounded-xl p-3 hover:bg-white/10 transition-colors"
-                  >
-                    <h3 className="font-display text-base font-semibold text-white mb-2">
-                      {strategy.title}
-                    </h3>
-                    <div className="grid grid-cols-3 gap-2">
-                      <div>
-                        <p className="text-white/60 text-xs mb-0.5">Gain</p>
-                        <p className="font-mono text-green-400 font-medium text-sm">
-                          +{strategy.stats.gain}%
-                        </p>
-                      </div>
-                      <div>
-                        <p className="text-white/60 text-xs mb-0.5">Win Rate</p>
-                        <p className="font-mono text-white font-medium text-sm">
-                          {strategy.stats.winRate}%
-                        </p>
-                      </div>
-                      <div>
-                        <p className="text-white/60 text-xs mb-0.5">Risk Ratio</p>
-                        <p className="font-mono text-white font-medium text-sm">
-                          {strategy.stats.riskRatio}
-                        </p>
-                      </div>
+          {/* Strategies */}
+          {strategies && strategies.length > 0 && (
+            <div className="space-y-2">
+              {strategies.map((strategy, index) => (
+                <div
+                  key={index}
+                  className="bg-white/5 rounded-xl p-3 hover:bg-white/10 transition-colors"
+                >
+                  <h3 className="font-display text-sm font-semibold text-white mb-1.5">
+                    {strategy.title}
+                  </h3>
+                  <div className="grid grid-cols-3 gap-2">
+                    <div>
+                      <p className="text-white/60 text-xs mb-0.5">Gain</p>
+                      <p className="font-mono text-green-400 font-medium text-sm">
+                        +{strategy.stats.gain}%
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-white/60 text-xs mb-0.5">Win Rate</p>
+                      <p className="font-mono text-white font-medium text-sm">
+                        {strategy.stats.winRate}%
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-white/60 text-xs mb-0.5">Risk Ratio</p>
+                      <p className="font-mono text-white font-medium text-sm">
+                        {strategy.stats.riskRatio}
+                      </p>
                     </div>
                   </div>
-                ))}
-              </div>
-            )}
-
-            {/* Links */}
-            {links && links.length > 0 && (
-              <div className="space-y-3">
-                {links.map((link, index) => (
-                  <a
-                    key={index}
-                    href={link.cta.url}
-                    className="block bg-white/5 rounded-xl p-3 hover:bg-white/10 transition-colors"
-                  >
-                    <h3 className="font-display text-base font-semibold text-white">
-                      {link.title}
-                    </h3>
-                    <p className="text-white/60 text-xs mt-1 line-clamp-2">
-                      {link.description}
-                    </p>
-                    <span className="inline-block mt-2 text-violet-400 text-xs font-medium">
-                      {link.cta.text} →
-                    </span>
-                  </a>
-                ))}
-              </div>
-            )}
-
-            {/* Powered by Tradr */}
-            <div className="flex items-center justify-center gap-2 pt-2 border-t border-white/10">
-              <p className="text-white/40 text-xs">Powered by</p>
-              <TradrIcon className="w-3 h-3 text-white/40" />
+                </div>
+              ))}
             </div>
+          )}
+
+          {/* Links */}
+          {links && links.length > 0 && (
+            <div className="space-y-2">
+              {links.map((link, index) => (
+                <a
+                  key={index}
+                  href={link.cta.url}
+                  className="block bg-white/5 rounded-xl p-3 hover:bg-white/10 transition-colors"
+                >
+                  <h3 className="font-display text-sm font-semibold text-white">
+                    {link.title}
+                  </h3>
+                  <p className="text-white/60 text-xs mt-1 line-clamp-2">
+                    {link.description}
+                  </p>
+                  <span className="inline-block mt-1.5 text-violet-400 text-xs font-medium">
+                    {link.cta.text} →
+                  </span>
+                </a>
+              ))}
+            </div>
+          )}
+
+          {/* Powered by Tradr */}
+          <div className="flex items-center justify-center gap-2 pt-2 border-t border-white/10">
+            <p className="text-white/40 text-xs">Powered by</p>
+            <TradrIcon className="w-3 h-3 text-white/40" />
           </div>
         </div>
       </div>
 
       {/* Action Buttons */}
-      <div className="flex items-center justify-center gap-4 mt-2">
+      <div className="flex items-center justify-center gap-4 mt-3">
         <button
           onClick={onEditClick}
           className="flex flex-col items-center gap-1 text-white/60 hover:text-white transition-colors group"

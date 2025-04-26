@@ -136,14 +136,11 @@ export default function ProfilePreview({
           </div>
         )}
 
-        {/* Divider */}
-        <div className="h-px bg-white/5 my-6" />
-
         {/* Strategies */}
         {strategies && strategies.length > 0 && (
-          <div>
-            <div className="bg-white/5 rounded-xl p-4 border border-white/5 backdrop-blur-sm">
-              <div className="grid grid-cols-3 gap-6 p-4">
+          <div className="mt-4">
+            <div className="bg-[#0A0A0A]/80 rounded-xl p-4">
+              <div className="grid grid-cols-3 gap-6">
                 <div>
                   <p className="text-[13px] text-white/60 font-medium">Gain</p>
                   <p className="text-[15px] font-semibold text-white mt-1.5">
@@ -167,12 +164,9 @@ export default function ProfilePreview({
           </div>
         )}
 
-        {/* Divider */}
-        <div className="h-px bg-white/5 my-8" />
-
         {/* Links */}
         {links && links.length > 0 && (
-          <div className="space-y-3">
+          <div className="space-y-3 mt-7">
             {links.map((link, index) => (
               <a
                 key={index}
@@ -195,7 +189,7 @@ export default function ProfilePreview({
         )}
 
         {/* Powered by Tradr */}
-        <div className="pt-6 mt-6 border-t border-white/10">
+        <div className="mt-6 pt-4 border-t border-white/10">
           <div className="flex items-center justify-center gap-1.5 text-white/60 text-[11px]">
             <div className="relative w-3 h-3 flex-shrink-0">
               <Image

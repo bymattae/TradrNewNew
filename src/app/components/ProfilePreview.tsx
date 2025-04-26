@@ -83,7 +83,7 @@ export default function ProfilePreview({
   return (
     <div className="h-screen flex flex-col items-center justify-center overflow-hidden bg-[var(--background)] p-4">
       {/* Main Content Area */}
-      <div className="w-full max-w-md space-y-6">
+      <div className="w-full max-w-md space-y-4">
         {/* Profile Card */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
@@ -92,24 +92,24 @@ export default function ProfilePreview({
           className="w-full bg-gradient-to-b from-[#141414] to-[#0A0A0A] rounded-3xl shadow-lg border border-[rgba(255,255,255,0.03)] overflow-hidden"
         >
           {/* Profile Header */}
-          <div className="p-6">
-            <div className="flex flex-col items-center text-center space-y-4">
-              <div className="relative w-20 h-20">
+          <div className="p-4">
+            <div className="flex flex-col items-center text-center space-y-3">
+              <div className="relative w-16 h-16">
                 <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[var(--brand-purple)] to-[rgba(255,255,255,0.1)] p-[2px]">
                   <Image
                     src="/avatar.png"
                     alt="Profile"
-                    width={80}
-                    height={80}
+                    width={64}
+                    height={64}
                     className="rounded-full object-cover w-full h-full"
                   />
                 </div>
               </div>
-              <div className="space-y-1">
+              <div className="space-y-0.5">
                 <h2 className="text-xl font-bold tracking-tight">mattjames.eth</h2>
                 <p className="text-sm text-[var(--text-secondary)]">Professional Trader</p>
               </div>
-              <div className="flex flex-wrap justify-center gap-1.5">
+              <div className="flex flex-wrap justify-center gap-1">
                 {['#crypto', '#defi', '#trading'].map((tag) => (
                   <span key={tag} className="px-2 py-0.5 text-xs rounded-full bg-[rgba(255,255,255,0.05)] text-[var(--text-secondary)]">
                     {tag}
@@ -120,8 +120,8 @@ export default function ProfilePreview({
           </div>
 
           {/* Stats Section */}
-          <div className="px-6 py-4 border-t border-b border-[rgba(255,255,255,0.03)]">
-            <div className="grid grid-cols-3 gap-3">
+          <div className="px-4 py-3 border-t border-b border-[rgba(255,255,255,0.03)]">
+            <div className="grid grid-cols-3 gap-2">
               <div className="text-center">
                 <p className="text-lg font-bold text-[var(--brand-purple)]">+47%</p>
                 <p className="text-xs text-[var(--text-secondary)]">Gain</p>
@@ -138,17 +138,17 @@ export default function ProfilePreview({
           </div>
 
           {/* CTA Section */}
-          <div className="p-6">
-            <div className="text-center space-y-3">
+          <div className="p-4">
+            <div className="text-center space-y-2">
               <h3 className="text-base font-semibold">Premium Strategy Course</h3>
-              <button className="btn-primary w-full">
+              <button className="btn-primary w-full py-2.5">
                 Get Access Now
               </button>
             </div>
           </div>
 
           {/* Footer */}
-          <div className="px-6 py-3 border-t border-[rgba(255,255,255,0.03)] bg-[rgba(255,255,255,0.02)]">
+          <div className="px-4 py-2.5 border-t border-[rgba(255,255,255,0.03)] bg-[rgba(255,255,255,0.02)]">
             <p className="text-xs text-center text-[var(--text-secondary)]">
               powered by tradr
             </p>
@@ -156,16 +156,16 @@ export default function ProfilePreview({
         </motion.div>
 
         {/* Action Buttons */}
-        <div className="flex justify-center gap-4">
-          <button className="btn-action w-16 h-16 flex-col gap-1.5">
+        <div className="flex justify-center gap-3">
+          <button className="btn-action w-14 h-14 flex-col gap-1">
             <FiEdit3 className="w-5 h-5" />
             <span className="text-xs">Edit</span>
           </button>
-          <button className="btn-action w-16 h-16 flex-col gap-1.5">
+          <button className="btn-action w-14 h-14 flex-col gap-1">
             <FiShare2 className="w-5 h-5" />
             <span className="text-xs">Share</span>
           </button>
-          <button className="btn-action w-16 h-16 flex-col gap-1.5">
+          <button className="btn-action w-14 h-14 flex-col gap-1">
             <IoColorPaletteOutline className="w-5 h-5" />
             <span className="text-xs">Theme</span>
           </button>
@@ -173,7 +173,7 @@ export default function ProfilePreview({
       </div>
 
       {/* Hub Button */}
-      <div className="fixed left-6 bottom-6 z-50">
+      <div className="fixed left-6 bottom-20 z-50">
         <HubButton onClick={() => {}} />
       </div>
     </div>

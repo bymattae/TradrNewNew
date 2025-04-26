@@ -36,7 +36,7 @@
 
   .btn-action {
     @apply flex flex-col items-center gap-1.5 p-2 rounded-xl text-[var(--text-secondary)]
-      hover:bg-[var(--button-background)]/50 transition-colors duration-200;
+      hover:bg-opacity-50 hover:bg-[var(--button-background)] transition-colors duration-200;
   }
 
   .btn-primary {

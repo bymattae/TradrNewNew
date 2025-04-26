@@ -8,7 +8,7 @@
     --card-background: #111111;
     --card-hover: #1A1A1A;
     --text-primary: #FFFFFF;
-    --text-secondary: #A0A0A0;
+    --text-secondary: rgba(255, 255, 255, 0.6);
     --brand-purple: #7048E8;
     --brand-purple-hover: #5F3DD3;
     --brand-green: #22C55E;
@@ -28,7 +28,7 @@
 
 @layer components {
   .card {
-    @apply bg-[var(--card-background)] rounded-xl transition-all;
+    @apply w-full bg-[var(--card-background)] rounded-2xl transition-all;
   }
 
   .card-hover {
@@ -36,19 +36,23 @@
   }
 
   .btn-primary {
-    @apply bg-[var(--brand-purple)] hover:bg-[var(--brand-purple-hover)] text-white font-medium px-6 py-3 rounded-lg transition-colors;
+    @apply w-full bg-[var(--brand-purple)] hover:bg-[var(--brand-purple-hover)] text-white font-medium py-4 px-6 rounded-xl text-lg transition-colors;
   }
 
   .btn-action {
-    @apply bg-[var(--card-background)] hover:bg-[var(--card-hover)] p-4 rounded-xl transition-colors;
+    @apply bg-[var(--card-background)] hover:bg-[var(--card-hover)] p-4 rounded-xl transition-colors flex flex-col items-center;
+  }
+
+  .btn-action-label {
+    @apply text-xs mt-1 text-[var(--text-secondary)];
   }
 
   .tag {
-    @apply bg-[#222222] px-3 py-1 rounded-full text-xs text-[var(--text-secondary)];
+    @apply bg-[var(--card-hover)] px-3 py-1 rounded-full text-xs text-[var(--text-secondary)];
   }
 
-  .stats-card {
-    @apply bg-[var(--background)] rounded-xl p-4;
+  .stats-grid {
+    @apply w-full grid grid-cols-3 gap-4;
   }
 
   .stats-value {

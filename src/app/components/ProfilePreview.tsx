@@ -85,7 +85,7 @@ export default function ProfilePreview({
       {/* Main Content Area */}
       <div className="w-full max-w-md space-y-2.5">
         {/* Live Status */}
-        <div className="w-full bg-[#121212] rounded-xl p-2 text-center border border-[rgba(255,255,255,0.03)]">
+        <div className="w-full bg-gradient-to-b from-[#121212] to-[#0A0A0A] rounded-xl p-2 text-center border border-[rgba(255,255,255,0.03)]">
           <p className="text-[14px] text-[var(--text-secondary)]">Your Tradr is live</p>
         </div>
 
@@ -94,11 +94,11 @@ export default function ProfilePreview({
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="w-full bg-gradient-to-b from-[#141414] to-[#0A0A0A] rounded-3xl shadow-lg border border-[rgba(255,255,255,0.03)] overflow-hidden"
+          className="w-full bg-[#111111] rounded-2xl shadow-lg border border-[rgba(255,255,255,0.03)] overflow-hidden"
         >
           {/* Profile Header */}
           <div className="p-4">
-            <div className="flex flex-col items-center text-center space-y-2">
+            <div className="flex flex-col items-center text-center space-y-1.5">
               <div className="relative w-16 h-16">
                 <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[var(--brand-purple)] to-[rgba(255,255,255,0.1)] p-[2px]">
                   <Image
@@ -125,7 +125,7 @@ export default function ProfilePreview({
           </div>
 
           {/* Stats Section */}
-          <div className="px-4 py-3 border-t border-b border-[rgba(255,255,255,0.03)]">
+          <div className="px-4 py-3">
             <div className="grid grid-cols-3 gap-3">
               <div className="text-center">
                 <p className="text-lg font-bold text-[var(--brand-purple)]">+47%</p>
@@ -143,11 +143,11 @@ export default function ProfilePreview({
           </div>
 
           {/* CTA Section */}
-          <div className="p-4 bg-[rgba(255,255,255,0.02)]">
+          <div className="p-4">
             <div className="text-center space-y-2">
               <h3 className="text-base font-semibold">Premium Strategy Course</h3>
               <p className="text-sm text-[var(--text-secondary)]">Follow my trades in real-time</p>
-              <button className="btn-primary w-full py-2.5">
+              <button className="btn-primary w-4/5 mx-auto py-3 px-4 hover:bg-[#6a3de8] transition-colors">
                 Get Access Now
               </button>
             </div>

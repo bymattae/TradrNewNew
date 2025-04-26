@@ -80,10 +80,10 @@ export default function DashboardPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-black p-4">
-      <div className="max-w-lg mx-auto space-y-6">
+    <div className="h-full overflow-hidden flex flex-col pt-3 px-4">
+      <div className="flex-1 min-h-0 max-w-lg mx-auto w-full flex flex-col">
         {/* Top Navigation */}
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex items-center justify-between mb-3">
           <h1 className="text-2xl font-bold text-white">My Tradr</h1>
           <button 
             onClick={() => router.push('/settings')} 
@@ -98,23 +98,27 @@ export default function DashboardPage() {
 
         {/* URL Display */}
         {profile && (
-          <CopyableUrl username={profile.username} />
+          <div className="mb-3">
+            <CopyableUrl username={profile.username} />
+          </div>
         )}
 
-        {/* Profile Preview */}
-        {profile && (
-          <ProfilePreview
-            username={profile.username || currentUser?.email?.split('@')[0] || 'trader'}
-            avatarUrl={profile.avatar_url}
-            bio={profile.bio}
-            tags={profile.tags || []}
-            strategies={mockStrategies}
-            links={mockLinks}
-            onThemeClick={() => {}}
-            onEditClick={() => router.push('/onboarding')}
-            onShareClick={() => {}}
-          />
-        )}
+        {/* Profile Preview - Flex to fill remaining space */}
+        <div className="flex-1 min-h-0 overflow-auto pb-2">
+          {profile && (
+            <ProfilePreview
+              username={profile.username || currentUser?.email?.split('@')[0] || 'trader'}
+              avatarUrl={profile.avatar_url}
+              bio={profile.bio}
+              tags={profile.tags || []}
+              strategies={mockStrategies}
+              links={mockLinks}
+              onThemeClick={() => {}}
+              onEditClick={() => router.push('/onboarding')}
+              onShareClick={() => {}}
+            />
+          )}
+        </div>
       </div>
     </div>
   );

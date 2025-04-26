@@ -11,8 +11,10 @@ export default function AuthenticatedLayout({
   children,
 }: AuthenticatedLayoutProps) {
   return (
-    <div className="min-h-screen bg-black pb-20">
-      {children}
+    <div className="h-[100vh] h-[100dvh] overflow-hidden bg-black flex flex-col">
+      <div className="flex-1 overflow-hidden">
+        {children}
+      </div>
       <NavigationBar />
     </div>
   );

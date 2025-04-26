@@ -17,13 +17,13 @@ export default function CopyableUrl({ username }: CopyableUrlProps) {
 
   return (
     <motion.div 
-      className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-4 flex items-center justify-between gap-4"
+      className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-3 flex items-center justify-between gap-3"
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
     >
       <div className="flex items-center gap-3">
-        <span className="text-2xl">🚀</span>
+        <span className="text-xl">🚀</span>
         <div>
           <p className="text-white/60 text-sm">Your Tradr is live:</p>
           <a 
@@ -52,7 +52,7 @@ export default function CopyableUrl({ username }: CopyableUrlProps) {
         <motion.span
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: copied ? 1 : 0, y: copied ? 0 : 20 }}
-          className="absolute -bottom-8 left-1/2 -translate-x-1/2 text-xs text-white/60 whitespace-nowrap"
+          className="absolute -bottom-6 left-1/2 -translate-x-1/2 text-xs text-white/60 whitespace-nowrap"
         >
           Copied!
         </motion.span>

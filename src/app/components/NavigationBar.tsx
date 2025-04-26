@@ -38,7 +38,7 @@ export default function NavigationBar() {
   ];
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-black border-t border-white/10 px-4 py-2">
+    <nav className="bg-black border-t border-white/10 py-1.5 px-4">
       <div className="max-w-lg mx-auto">
         <div className="flex justify-around items-center">
           {navigation.map((item) => {
@@ -47,12 +47,12 @@ export default function NavigationBar() {
               <Link
                 key={item.name}
                 href={item.href}
-                className={`flex flex-col items-center p-2 rounded-xl transition-colors ${
+                className={`flex flex-col items-center p-1.5 rounded-xl transition-colors ${
                   isActive ? 'text-violet-400' : 'text-zinc-400 hover:text-zinc-300'
                 }`}
               >
                 <div>{item.icon}</div>
-                <span className="text-xs mt-1">{item.name}</span>
+                <span className="text-xs mt-0.5">{item.name}</span>
               </Link>
             );
           })}

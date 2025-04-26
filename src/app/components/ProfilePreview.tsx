@@ -151,6 +151,28 @@ export default function ProfilePreview({
                 {strategies[0].stats.winRate}%
               </span>
             </div>
+
+            {/* Key Stats */}
+            <div className="grid grid-cols-3 gap-4 mt-4 pt-4 border-t border-white/5">
+              <div>
+                <p className="text-[13px] text-white/60 font-medium">Gain</p>
+                <p className="text-[15px] font-semibold text-white mt-1">
+                  +{strategies[0].stats.gain}%
+                </p>
+              </div>
+              <div>
+                <p className="text-[13px] text-white/60 font-medium">Win Rate</p>
+                <p className="text-[15px] font-semibold text-white mt-1">
+                  {strategies[0].stats.winRate}%
+                </p>
+              </div>
+              <div>
+                <p className="text-[13px] text-white/60 font-medium">Risk Ratio</p>
+                <p className="text-[15px] font-semibold text-white mt-1">
+                  {strategies[0].stats.riskRatio}
+                </p>
+              </div>
+            </div>
           </div>
         )}
 

@@ -84,16 +84,6 @@ export default function ProfilePreview({
     <div className="h-screen flex flex-col items-center bg-black px-4 py-3 overflow-hidden">
       {/* Main Content Area */}
       <div className="w-full max-w-md flex flex-col h-full">
-        {/* URL Display - Thinner and cleaner */}
-        <div className="w-full bg-[#181818] rounded-xl p-2.5 mb-3 flex items-center justify-between">
-          <p className="text-sm font-normal text-[#A0A0A0]">tradr.co/@{username}</p>
-          <button className="text-[#A0A0A0] hover:text-white transition-colors">
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-            </svg>
-          </button>
-        </div>
-        
         {/* Scrollable Profile Preview */}
         <div className="flex-grow overflow-y-auto mb-4 rounded-2xl">
           <motion.div 

@@ -104,12 +104,14 @@ export default function ProfilePreview({
       />
 
       {/* Main Card */}
-      <div className="relative bg-[#1A1A1A]/90 rounded-2xl border border-neutral-800 shadow-[0px_4px_20px_rgba(0,0,0,0.5)]">
+      <div className="relative bg-[#1A1A1A]/90 rounded-2xl border border-neutral-800 
+        shadow-[0px_4px_20px_rgba(0,0,0,0.5),inset_0_0_0.5px_rgba(255,255,255,0.05)]">
         <div className="p-4 space-y-3">
           {/* Profile Header */}
           <div className="flex items-center gap-3">
             <div className="relative">
-              <div className="w-16 h-16 rounded-full overflow-hidden bg-[#7B61FF]/20 border border-neutral-800">
+              <div className="w-16 h-16 rounded-full overflow-hidden bg-[#7B61FF]/20 border border-neutral-800
+                shadow-[inset_0_0_0.5px_rgba(255,255,255,0.05)]">
                 {avatarUrl ? (
                   <Image
                     src={avatarUrl}
@@ -226,15 +228,15 @@ export default function ProfilePreview({
             <div className="border-t border-neutral-800" />
           )}
 
-          {/* Powered by Tradr */}
-          <div className="flex items-center justify-center gap-2 pt-1">
-            <div className="flex items-center gap-1.5 text-[#AAAAAA] text-xs">
-              <div className="relative w-3.5 h-3.5 flex-shrink-0">
+          {/* Powered by Tradr - Updated styling */}
+          <div className="pt-4 mt-2 border-t border-white/10">
+            <div className="flex items-center justify-center gap-1.5 text-white/70 text-[11px]">
+              <div className="relative w-3 h-3 flex-shrink-0">
                 <Image
                   src="https://rnfvzaelmwbbvfbsppir.supabase.co/storage/v1/object/public/assets/TradrIcon%20(1).png"
                   alt="Tradr"
                   fill
-                  sizes="14px"
+                  sizes="12px"
                   className="object-contain"
                 />
               </div>
@@ -245,17 +247,19 @@ export default function ProfilePreview({
         </div>
       </div>
 
-      {/* Action Buttons with Glow */}
-      <div className="relative mt-3">
-        <div className="absolute inset-0 bg-[#1A1A1A]/80 backdrop-blur-sm rounded-2xl shadow-[0_4px_12px_rgba(123,97,255,0.2)]" />
+      {/* Action Buttons with Glow - Updated spacing and animations */}
+      <div className="relative mt-5">
+        <div className="absolute inset-0 bg-[#1A1A1A]/80 backdrop-blur-sm rounded-2xl 
+          shadow-[0_4px_12px_rgba(123,97,255,0.2),inset_0_0_0.5px_rgba(255,255,255,0.05)]" />
         <div className="relative flex items-center justify-center gap-6 p-2">
           <motion.button
             onClick={onEditClick}
             className="flex flex-col items-center gap-1 text-[#AAAAAA] hover:text-white transition-colors group"
             whileTap={{ scale: 1.05 }}
-            transition={{ duration: 0.1 }}
+            transition={{ type: "spring", stiffness: 400, damping: 15 }}
           >
-            <div className="p-2 rounded-xl bg-[#262626]/50 group-hover:bg-[#262626] transition-colors">
+            <div className="p-2 rounded-xl bg-[#262626]/50 group-hover:bg-[#262626] transition-colors
+              shadow-[inset_0_0_0.5px_rgba(255,255,255,0.05)]">
               <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
               </svg>
@@ -267,9 +271,10 @@ export default function ProfilePreview({
             onClick={onShareClick}
             className="flex flex-col items-center gap-1 text-[#AAAAAA] hover:text-white transition-colors group"
             whileTap={{ scale: 1.05 }}
-            transition={{ duration: 0.1 }}
+            transition={{ type: "spring", stiffness: 400, damping: 15 }}
           >
-            <div className="p-2 rounded-xl bg-[#262626]/50 group-hover:bg-[#262626] transition-colors">
+            <div className="p-2 rounded-xl bg-[#262626]/50 group-hover:bg-[#262626] transition-colors
+              shadow-[inset_0_0_0.5px_rgba(255,255,255,0.05)]">
               <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
               </svg>
@@ -281,9 +286,10 @@ export default function ProfilePreview({
             onClick={onThemeClick}
             className="flex flex-col items-center gap-1 text-[#AAAAAA] hover:text-white transition-colors group"
             whileTap={{ scale: 1.05 }}
-            transition={{ duration: 0.1 }}
+            transition={{ type: "spring", stiffness: 400, damping: 15 }}
           >
-            <div className="p-2 rounded-xl bg-[#262626]/50 group-hover:bg-[#262626] transition-colors">
+            <div className="p-2 rounded-xl bg-[#262626]/50 group-hover:bg-[#262626] transition-colors
+              shadow-[inset_0_0_0.5px_rgba(255,255,255,0.05)]">
               <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
               </svg>

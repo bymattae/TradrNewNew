@@ -78,40 +78,17 @@ export default function ProfilePreview({
 }: ProfilePreviewProps) {
   return (
     <div className="relative">
-      {/* LED Outline Animation */}
-      <motion.div
-        className="absolute inset-0 rounded-2xl"
-        style={{
-          background: `conic-gradient(
-            from 0deg at 50% 50%,
-            rgba(167, 139, 250, 0.5),
-            rgba(139, 92, 246, 0.5),
-            rgba(124, 58, 237, 0.5),
-            rgba(139, 92, 246, 0.5),
-            rgba(167, 139, 250, 0.5)
-          )`,
-          filter: 'blur(20px)',
-          opacity: 0.5
-        }}
-        animate={{
-          rotate: [0, 360]
-        }}
-        transition={{
-          duration: 8,
-          repeat: Infinity,
-          ease: "linear"
-        }}
-      />
+      {/* Background Glow Effect */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-[#7B61FF]/5 rounded-full blur-[100px]" />
 
       {/* Main Card */}
-      <div className="relative bg-[#1A1A1A]/90 rounded-2xl border border-neutral-800 
-        shadow-[0px_4px_20px_rgba(0,0,0,0.5),inset_0_0_0.5px_rgba(255,255,255,0.05)]">
-        <div className="p-4 space-y-3">
+      <div className="relative card">
+        <div className="space-y-6">
           {/* Profile Header */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-start gap-4">
             <div className="relative">
-              <div className="w-16 h-16 rounded-full overflow-hidden bg-[#7B61FF]/20 border border-neutral-800
-                shadow-[inset_0_0_0.5px_rgba(255,255,255,0.05)]">
+              <div className="w-16 h-16 rounded-full overflow-hidden bg-[#7B61FF]/20 
+                shadow-[inset_0_0_0.5px_rgba(255,255,255,0.1)]">
                 {avatarUrl ? (
                   <Image
                     src={avatarUrl}
@@ -127,12 +104,12 @@ export default function ProfilePreview({
                 )}
               </div>
             </div>
-            <div>
-              <h2 className="text-xl font-display font-bold text-white tracking-tight">
+            <div className="flex-1 min-w-0">
+              <h2 className="text-title text-xl">
                 @{username}
               </h2>
               {bio && (
-                <p className="text-[#AAAAAA] font-sans mt-0.5 text-sm leading-relaxed line-clamp-2">
+                <p className="text-description mt-1 text-sm leading-relaxed line-clamp-2">
                   {bio}
                 </p>
               )}
@@ -141,12 +118,12 @@ export default function ProfilePreview({
 
           {/* Tags */}
           {tags.length > 0 && (
-            <div className="flex flex-wrap gap-1.5">
+            <div className="flex flex-wrap gap-2">
               {tags.map((tag, index) => (
                 <span
                   key={index}
-                  className="px-2 py-0.5 bg-[#262626] rounded-full text-xs text-[#AAAAAA] font-medium 
-                    border border-neutral-800"
+                  className="px-2.5 py-1 bg-white/5 rounded-lg text-xs text-white/70 font-medium 
+                    border border-white/5 backdrop-blur-sm"
                 >
                   {tag}
                 </span>
@@ -154,36 +131,33 @@ export default function ProfilePreview({
             </div>
           )}
 
-          {/* Profile Section Divider */}
-          <div className="border-t border-neutral-800" />
-
           {/* Strategies */}
           {strategies && strategies.length > 0 && (
-            <div className="space-y-2">
+            <div className="space-y-3">
               {strategies.map((strategy, index) => (
                 <div
                   key={index}
-                  className="bg-[#262626] rounded-xl p-3 border border-neutral-800
-                    shadow-[0px_4px_20px_rgba(0,0,0,0.5)]"
+                  className="bg-white/5 rounded-xl p-4 border border-white/5
+                    backdrop-blur-sm"
                 >
-                  <h3 className="font-display text-sm font-semibold text-white mb-1">
+                  <h3 className="text-title text-sm mb-3">
                     {strategy.title}
                   </h3>
-                  <div className="grid grid-cols-3 gap-2">
+                  <div className="grid grid-cols-3 gap-4">
                     <div>
-                      <p className="text-[#AAAAAA] text-xs mb-0.5">Gain</p>
+                      <p className="text-label text-xs mb-1">Gain</p>
                       <p className="font-mono text-[#7B61FF] font-medium text-sm">
                         +{strategy.stats.gain}%
                       </p>
                     </div>
                     <div>
-                      <p className="text-[#AAAAAA] text-xs mb-0.5">Win Rate</p>
+                      <p className="text-label text-xs mb-1">Win Rate</p>
                       <p className="font-mono text-white font-medium text-sm">
                         {strategy.stats.winRate}%
                       </p>
                     </div>
                     <div>
-                      <p className="text-[#AAAAAA] text-xs mb-0.5">Risk Ratio</p>
+                      <p className="text-label text-xs mb-1">Risk Ratio</p>
                       <p className="font-mono text-white font-medium text-sm">
                         {strategy.stats.riskRatio}
                       </p>
@@ -194,28 +168,23 @@ export default function ProfilePreview({
             </div>
           )}
 
-          {/* Strategy Section Divider */}
-          {strategies && strategies.length > 0 && (
-            <div className="border-t border-neutral-800" />
-          )}
-
           {/* Links */}
           {links && links.length > 0 && (
-            <div className="space-y-2">
+            <div className="space-y-3">
               {links.map((link, index) => (
                 <a
                   key={index}
                   href={link.cta.url}
-                  className="block bg-[#262626] rounded-xl p-3 border border-neutral-800
-                    shadow-[0px_4px_20px_rgba(0,0,0,0.5)]"
+                  className="block bg-white/5 rounded-xl p-4 border border-white/5
+                    backdrop-blur-sm hover:bg-white/10 transition-all duration-200"
                 >
-                  <h3 className="font-display text-sm font-semibold text-white">
+                  <h3 className="text-title text-sm">
                     {link.title}
                   </h3>
-                  <p className="text-[#AAAAAA] text-xs mt-0.5 line-clamp-2">
+                  <p className="text-description text-xs mt-1 line-clamp-2">
                     {link.description}
                   </p>
-                  <span className="inline-block mt-1 text-[#7B61FF] text-xs font-medium">
+                  <span className="inline-block mt-2 text-[#7B61FF] text-xs font-medium">
                     {link.cta.text} →
                   </span>
                 </a>
@@ -223,14 +192,9 @@ export default function ProfilePreview({
             </div>
           )}
 
-          {/* Links Section Divider */}
-          {links && links.length > 0 && (
-            <div className="border-t border-neutral-800" />
-          )}
-
-          {/* Powered by Tradr - Updated styling */}
+          {/* Powered by Tradr */}
           <div className="pt-4 mt-2 border-t border-white/10">
-            <div className="flex items-center justify-center gap-1.5 text-white/70 text-[11px]">
+            <div className="flex items-center justify-center gap-1.5 text-white/60 text-[11px]">
               <div className="relative w-3 h-3 flex-shrink-0">
                 <Image
                   src="https://rnfvzaelmwbbvfbsppir.supabase.co/storage/v1/object/public/assets/TradrIcon%20(1).png"
@@ -247,53 +211,42 @@ export default function ProfilePreview({
         </div>
       </div>
 
-      {/* Action Buttons with Glow - Updated spacing and animations */}
-      <div className="relative mt-5">
-        <div className="absolute inset-0 bg-[#1A1A1A]/80 backdrop-blur-sm rounded-2xl 
-          shadow-[0_4px_12px_rgba(123,97,255,0.2),inset_0_0_0.5px_rgba(255,255,255,0.05)]" />
-        <div className="relative flex items-center justify-center gap-6 p-2">
+      {/* Action Buttons */}
+      <div className="relative mt-4">
+        <div className="flex items-center justify-center gap-4">
           <motion.button
             onClick={onEditClick}
-            className="flex flex-col items-center gap-1 text-[#AAAAAA] hover:text-white transition-colors group"
+            className="btn-action"
             whileTap={{ scale: 1.05 }}
             transition={{ type: "spring", stiffness: 400, damping: 15 }}
           >
-            <div className="p-2 rounded-xl bg-[#262626]/50 group-hover:bg-[#262626] transition-colors
-              shadow-[inset_0_0_0.5px_rgba(255,255,255,0.05)]">
-              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-              </svg>
-            </div>
+            <svg className="w-[22px] h-[22px]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+            </svg>
             <span className="text-xs font-medium">Edit</span>
           </motion.button>
 
           <motion.button
             onClick={onShareClick}
-            className="flex flex-col items-center gap-1 text-[#AAAAAA] hover:text-white transition-colors group"
+            className="btn-action"
             whileTap={{ scale: 1.05 }}
             transition={{ type: "spring", stiffness: 400, damping: 15 }}
           >
-            <div className="p-2 rounded-xl bg-[#262626]/50 group-hover:bg-[#262626] transition-colors
-              shadow-[inset_0_0_0.5px_rgba(255,255,255,0.05)]">
-              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
-              </svg>
-            </div>
+            <svg className="w-[22px] h-[22px]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+            </svg>
             <span className="text-xs font-medium">Share</span>
           </motion.button>
 
           <motion.button
             onClick={onThemeClick}
-            className="flex flex-col items-center gap-1 text-[#AAAAAA] hover:text-white transition-colors group"
+            className="btn-action"
             whileTap={{ scale: 1.05 }}
             transition={{ type: "spring", stiffness: 400, damping: 15 }}
           >
-            <div className="p-2 rounded-xl bg-[#262626]/50 group-hover:bg-[#262626] transition-colors
-              shadow-[inset_0_0_0.5px_rgba(255,255,255,0.05)]">
-              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
-              </svg>
-            </div>
+            <svg className="w-[22px] h-[22px]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
+            </svg>
             <span className="text-xs font-medium">Theme</span>
           </motion.button>
         </div>

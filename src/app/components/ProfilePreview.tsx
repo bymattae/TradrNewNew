@@ -81,101 +81,102 @@ export default function ProfilePreview({
   onThemeClick
 }: ProfilePreviewProps) {
   return (
-    <div className="app-container pb-24">
-      {/* Profile Card */}
-      <motion.div 
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="profile-card overflow-hidden"
-      >
-        {/* Profile Header */}
-        <div className="px-6 pt-8 pb-6">
-          <div className="flex flex-col items-center text-center">
-            <div className="avatar-container w-24 h-24 mb-4">
-              <Image
-                src="/avatar.png"
-                alt="Profile"
-                width={96}
-                height={96}
-                className="rounded-full object-cover"
-              />
-            </div>
-            <div className="space-y-2">
-              <h2 className="text-xl font-bold tracking-tight">mattjames.eth</h2>
-              <p className="text-[var(--text-secondary)] text-sm">Professional Trader</p>
-              <div className="flex flex-wrap justify-center gap-2 mt-3">
+    <div className="min-h-screen flex flex-col">
+      {/* Main Profile Card */}
+      <div className="flex-1 flex items-center justify-center p-4">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="w-full max-w-md bg-gradient-to-b from-[#141414] to-[#0A0A0A] rounded-3xl shadow-lg border border-[rgba(255,255,255,0.03)] overflow-hidden"
+        >
+          {/* Profile Header */}
+          <div className="p-6">
+            <div className="flex flex-col items-center text-center space-y-4">
+              <div className="relative w-20 h-20">
+                <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[var(--brand-purple)] to-[rgba(255,255,255,0.1)] p-[2px]">
+                  <Image
+                    src="/avatar.png"
+                    alt="Profile"
+                    width={80}
+                    height={80}
+                    className="rounded-full object-cover w-full h-full"
+                  />
+                </div>
+              </div>
+              <div className="space-y-1">
+                <h2 className="text-xl font-bold tracking-tight">mattjames.eth</h2>
+                <p className="text-sm text-[var(--text-secondary)]">Professional Trader</p>
+              </div>
+              <div className="flex flex-wrap justify-center gap-1.5">
                 {['#crypto', '#defi', '#trading'].map((tag) => (
-                  <span key={tag} className="px-3 py-1 text-xs rounded-full bg-[rgba(255,255,255,0.05)] text-[var(--text-secondary)]">
+                  <span key={tag} className="px-2 py-0.5 text-xs rounded-full bg-[rgba(255,255,255,0.05)] text-[var(--text-secondary)]">
                     {tag}
                   </span>
                 ))}
               </div>
             </div>
           </div>
-        </div>
 
-        {/* Stats Section */}
-        <div className="px-6 py-6 border-t border-b border-[rgba(255,255,255,0.03)]">
-          <div className="stats-card">
-            <div className="grid grid-cols-3 gap-4">
+          {/* Stats Section */}
+          <div className="px-6 py-4 border-t border-b border-[rgba(255,255,255,0.03)]">
+            <div className="grid grid-cols-3 gap-3">
               <div className="text-center">
-                <p className="text-xl font-bold mb-1">47%</p>
+                <p className="text-lg font-bold text-[var(--brand-purple)]">+47%</p>
+                <p className="text-xs text-[var(--text-secondary)]">Gain</p>
+              </div>
+              <div className="text-center">
+                <p className="text-lg font-bold text-[var(--brand-purple)]">89%</p>
                 <p className="text-xs text-[var(--text-secondary)]">Win Rate</p>
               </div>
               <div className="text-center">
-                <p className="text-xl font-bold mb-1">$14.2K</p>
-                <p className="text-xs text-[var(--text-secondary)]">Profit</p>
-              </div>
-              <div className="text-center">
-                <p className="text-xl font-bold mb-1">89</p>
-                <p className="text-xs text-[var(--text-secondary)]">Trades</p>
+                <p className="text-lg font-bold text-[var(--brand-purple)]">2.5</p>
+                <p className="text-xs text-[var(--text-secondary)]">Risk Ratio</p>
               </div>
             </div>
           </div>
-        </div>
 
-        {/* CTA Section */}
-        <div className="px-6 pt-8 pb-10">
-          <div className="text-center space-y-4">
-            <h3 className="text-lg font-semibold">Get Premium Access</h3>
-            <p className="text-sm text-[var(--text-secondary)]">
-              Follow my trades and strategies in real-time
+          {/* CTA Section */}
+          <div className="p-6">
+            <div className="text-center space-y-3">
+              <h3 className="text-base font-semibold">Premium Strategy Course</h3>
+              <button className="btn-primary w-full">
+                Get Access Now
+              </button>
+            </div>
+          </div>
+
+          {/* Footer */}
+          <div className="px-6 py-3 border-t border-[rgba(255,255,255,0.03)] bg-[rgba(255,255,255,0.02)]">
+            <p className="text-xs text-center text-[var(--text-secondary)]">
+              powered by tradr
             </p>
-            <button className="btn-primary w-full mt-2">
-              Get Access Now
+          </div>
+        </motion.div>
+      </div>
+
+      {/* Bottom Toolbar */}
+      <div className="w-full bg-[var(--background)] border-t border-[rgba(255,255,255,0.03)]">
+        <div className="max-w-md mx-auto px-4 py-3">
+          <div className="flex justify-center gap-4">
+            <button className="btn-action w-16 h-16 flex-col gap-1.5">
+              <FiEdit3 className="w-5 h-5" />
+              <span className="text-xs">Edit</span>
+            </button>
+            <button className="btn-action w-16 h-16 flex-col gap-1.5">
+              <FiShare2 className="w-5 h-5" />
+              <span className="text-xs">Share</span>
+            </button>
+            <button className="btn-action w-16 h-16 flex-col gap-1.5">
+              <IoColorPaletteOutline className="w-5 h-5" />
+              <span className="text-xs">Theme</span>
             </button>
           </div>
-        </div>
-
-        {/* Footer */}
-        <div className="px-6 py-4 border-t border-[rgba(255,255,255,0.03)] bg-[rgba(255,255,255,0.02)]">
-          <p className="text-xs text-center text-[var(--text-secondary)]">
-            Powered by Tradr
-          </p>
-        </div>
-      </motion.div>
-
-      {/* Bottom Action Bar */}
-      <div className="bottom-actions">
-        <div className="actions-container">
-          <button className="btn-action w-[72px] h-[72px] flex-col gap-2">
-            <FiEdit3 className="w-5 h-5" />
-            <span className="text-xs">Edit</span>
-          </button>
-          <button className="btn-action w-[72px] h-[72px] flex-col gap-2">
-            <FiShare2 className="w-5 h-5" />
-            <span className="text-xs">Share</span>
-          </button>
-          <button className="btn-action w-[72px] h-[72px] flex-col gap-2">
-            <IoColorPaletteOutline className="w-5 h-5" />
-            <span className="text-xs">Theme</span>
-          </button>
         </div>
       </div>
 
       {/* Hub Button */}
-      <div className="fixed left-6 bottom-32 z-50">
+      <div className="fixed left-6 bottom-6 z-50">
         <HubButton onClick={() => {}} />
       </div>
     </div>

@@ -172,7 +172,7 @@ export default function ProfilePreview({
                 key={index}
                 href={link.cta.url}
                 className="block bg-[var(--button-background)] rounded-xl p-4 border border-[var(--divider)]
-                  backdrop-blur-sm hover:bg-[var(--button-background)] hover:border-[var(--brand-primary)]/20 
+                  backdrop-blur-sm hover:bg-[var(--button-background)] hover:border-[rgba(123,79,255,0.2)]
                   hover:shadow-[0px_4px_12px_rgba(123,79,255,0.15)] transition-all duration-200"
               >
                 <h3 className="text-title text-sm">

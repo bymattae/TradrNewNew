@@ -160,20 +160,31 @@ export default function ProfilePreview({
           </motion.div>
         </div>
 
-        {/* Action Buttons */}
-        <div className="flex justify-center gap-5 py-2">
-          <button onClick={onEditClick} className="btn-action w-24 h-24 flex-col gap-1 p-5 bg-[#1A1A1A] shadow-md">
-            <FiEdit3 className="w-7 h-7" />
-            <span className="text-[14px]">Edit</span>
-          </button>
-          <button onClick={onShareClick} className="btn-action w-24 h-24 flex-col gap-1 p-5 bg-[#1A1A1A] shadow-md">
-            <FiShare2 className="w-7 h-7" />
-            <span className="text-[14px]">Share</span>
-          </button>
-          <button onClick={onThemeClick} className="btn-action w-24 h-24 flex-col gap-1 p-5 bg-[#1A1A1A] shadow-md">
-            <IoColorPaletteOutline className="w-7 h-7" />
-            <span className="text-[14px]">Theme</span>
-          </button>
+        {/* New Action Buttons Section */}
+        <div className="w-full mb-4">
+          <div className="flex justify-center gap-4">
+            <button 
+              onClick={onEditClick} 
+              className="flex flex-col items-center justify-center bg-[#1A1A1A] w-[85px] h-[90px] rounded-xl shadow-sm border border-[rgba(255,255,255,0.03)]"
+            >
+              <FiEdit3 className="w-7 h-7 mb-2" />
+              <span className="text-sm font-medium">Edit</span>
+            </button>
+            <button 
+              onClick={onShareClick} 
+              className="flex flex-col items-center justify-center bg-[#1A1A1A] w-[85px] h-[90px] rounded-xl shadow-sm border border-[rgba(255,255,255,0.03)]"
+            >
+              <FiShare2 className="w-7 h-7 mb-2" />
+              <span className="text-sm font-medium">Share</span>
+            </button>
+            <button 
+              onClick={onThemeClick} 
+              className="flex flex-col items-center justify-center bg-[#1A1A1A] w-[85px] h-[90px] rounded-xl shadow-sm border border-[rgba(255,255,255,0.03)]"
+            >
+              <IoColorPaletteOutline className="w-7 h-7 mb-2" />
+              <span className="text-sm font-medium">Theme</span>
+            </button>
+          </div>
         </div>
       </div>
 

@@ -226,13 +226,16 @@ export default function ProfilePreview({
           {/* Powered by Tradr */}
           <div className="flex items-center justify-center gap-2 pt-1">
             <div className="flex items-center gap-1.5 text-white/40 text-xs">
-              <Image
-                src="https://rnfvzaelmwbbvfbsppir.supabase.co/storage/v1/object/public/assets/TradrIcon%20(1).png"
-                alt="Tradr"
-                width={14}
-                height={14}
-                className="w-3.5 h-3.5"
-              />
+              <div className="relative w-3.5 h-3.5 flex-shrink-0">
+                <Image
+                  src="https://rnfvzaelmwbbvfbsppir.supabase.co/storage/v1/object/public/assets/TradrIcon%20(1).png"
+                  alt="Tradr"
+                  fill
+                  sizes="14px"
+                  className="object-contain"
+                  priority
+                />
+              </div>
               <span>Powered by</span>
               <span className="font-medium">Tradr</span>
             </div>

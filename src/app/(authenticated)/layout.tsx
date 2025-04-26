@@ -1,7 +1,8 @@
 'use client';
 
-import { ReactNode } from 'react';
-import NavigationBar from '@/app/components/NavigationBar';
+import { ReactNode, useState } from 'react';
+import HubButton from '@/app/components/HubButton';
+import HubMenu from '@/app/components/HubMenu';
 
 interface AuthenticatedLayoutProps {
   children: ReactNode;
@@ -10,14 +11,15 @@ interface AuthenticatedLayoutProps {
 export default function AuthenticatedLayout({
   children,
 }: AuthenticatedLayoutProps) {
+  const [isHubMenuOpen, setIsHubMenuOpen] = useState(false);
+
   return (
     <div className="h-[100dvh] overflow-hidden bg-black flex flex-col">
       <div className="flex-1 overflow-y-auto">
         {children}
       </div>
-      <div className="pb-[env(safe-area-inset-bottom)]">
-        <NavigationBar />
-      </div>
+      <HubButton onClick={() => setIsHubMenuOpen(true)} />
+      <HubMenu isOpen={isHubMenuOpen} onClose={() => setIsHubMenuOpen(false)} />
     </div>
   );
 } 

@@ -97,7 +97,7 @@ export default function ProfilePreview({
           className="w-full bg-[#111111] rounded-2xl shadow-lg border border-[rgba(255,255,255,0.03)] overflow-hidden"
         >
           {/* Profile Header */}
-          <div className="p-4">
+          <div className="p-6">
             <div className="flex flex-col items-center text-center space-y-1.5">
               <div className="relative w-16 h-16">
                 <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[var(--brand-purple)] to-[rgba(255,255,255,0.1)] p-[2px]">
@@ -125,7 +125,7 @@ export default function ProfilePreview({
           </div>
 
           {/* Stats Section */}
-          <div className="px-4 py-3">
+          <div className="px-6 py-4">
             <div className="grid grid-cols-3 gap-3">
               <div className="text-center">
                 <p className="text-lg font-bold text-[var(--brand-purple)]">+47%</p>
@@ -143,18 +143,18 @@ export default function ProfilePreview({
           </div>
 
           {/* CTA Section */}
-          <div className="p-4">
+          <div className="px-6 py-4">
             <div className="text-center space-y-2">
               <h3 className="text-base font-semibold">Premium Strategy Course</h3>
               <p className="text-sm text-[var(--text-secondary)]">Follow my trades in real-time</p>
-              <button className="btn-primary w-4/5 mx-auto py-3 px-4 hover:bg-[#6a3de8] transition-colors">
+              <button className="btn-primary w-4/5 mx-auto py-3.5 px-4 hover:bg-[#6a3de8] transition-colors">
                 Get Access Now
               </button>
             </div>
           </div>
 
           {/* Footer */}
-          <div className="px-4 py-3 border-t border-[rgba(255,255,255,0.03)]">
+          <div className="px-6 py-4 border-t border-[rgba(255,255,255,0.03)]">
             <p className="text-sm text-center text-[var(--text-secondary)]">
               powered by tradr
             </p>
@@ -162,18 +162,18 @@ export default function ProfilePreview({
         </motion.div>
 
         {/* Action Buttons */}
-        <div className="flex justify-center gap-3">
+        <div className="flex justify-center gap-3 mt-3">
           <button onClick={onEditClick} className="btn-action w-16 h-16 flex-col gap-1.5 p-4">
-            <FiEdit3 className="w-5 h-5" />
-            <span className="text-sm">Edit</span>
+            <FiEdit3 className="w-[22px] h-[22px]" />
+            <span className="text-[14px]">Edit</span>
           </button>
           <button onClick={onShareClick} className="btn-action w-16 h-16 flex-col gap-1.5 p-4">
-            <FiShare2 className="w-5 h-5" />
-            <span className="text-sm">Share</span>
+            <FiShare2 className="w-[22px] h-[22px]" />
+            <span className="text-[14px]">Share</span>
           </button>
           <button onClick={onThemeClick} className="btn-action w-16 h-16 flex-col gap-1.5 p-4">
-            <IoColorPaletteOutline className="w-5 h-5" />
-            <span className="text-sm">Theme</span>
+            <IoColorPaletteOutline className="w-[22px] h-[22px]" />
+            <span className="text-[14px]">Theme</span>
           </button>
         </div>
       </div>

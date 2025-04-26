@@ -81,95 +81,107 @@ export default function ProfilePreview({
   onThemeClick
 }: ProfilePreviewProps) {
   return (
-    <div className="h-screen flex flex-col items-center justify-center bg-black px-4 py-3 overflow-hidden">
+    <div className="h-screen flex flex-col items-center bg-black px-4 py-3 overflow-hidden">
       {/* Main Content Area */}
-      <div className="w-full max-w-md space-y-4">
-        {/* Profile Card */}
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="w-full bg-[#111111] rounded-2xl shadow-lg border border-[rgba(255,255,255,0.03)] overflow-hidden"
-        >
-          {/* Profile Header */}
-          <div className="p-6 mb-4">
-            <div className="bg-[#141414] rounded-2xl p-6 shadow-sm flex flex-col items-center text-center space-y-1.5">
-              <div className="relative w-16 h-16">
-                <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[var(--brand-purple)] to-[rgba(255,255,255,0.1)] p-[2px]">
-                  <Image
-                    src="/avatar.png"
-                    alt="Profile"
-                    width={64}
-                    height={64}
-                    className="rounded-full object-cover w-full h-full"
-                  />
+      <div className="w-full max-w-md flex flex-col h-full">
+        {/* URL Display - Thinner and cleaner */}
+        <div className="w-full bg-[#181818] rounded-xl p-2.5 mb-3 flex items-center justify-between">
+          <p className="text-sm font-normal text-[#A0A0A0]">tradr.co/@{username}</p>
+          <button className="text-[#A0A0A0] hover:text-white transition-colors">
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+            </svg>
+          </button>
+        </div>
+        
+        {/* Scrollable Profile Preview */}
+        <div className="flex-grow overflow-y-auto mb-4 rounded-2xl">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="w-full bg-[#151515] rounded-2xl shadow-lg border border-[rgba(255,255,255,0.03)] overflow-hidden"
+          >
+            {/* Profile Header */}
+            <div className="p-4">
+              <div className="bg-[#181818] rounded-2xl p-5 shadow-sm flex flex-col items-center text-center space-y-2">
+                <div className="relative w-16 h-16">
+                  <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[var(--brand-purple)] to-[rgba(255,255,255,0.1)] p-[2px]">
+                    <Image
+                      src="/avatar.png"
+                      alt="Profile"
+                      width={64}
+                      height={64}
+                      className="rounded-full object-cover w-full h-full"
+                    />
+                  </div>
                 </div>
-              </div>
-              <div className="space-y-1">
-                <h2 className="text-xl font-bold tracking-tight">mattjames.eth</h2>
-                <p className="text-sm text-[var(--text-secondary)]">Professional Trader</p>
-              </div>
-              <div className="flex flex-wrap justify-center gap-1.5">
-                {['#crypto', '#defi', '#trading'].map((tag) => (
-                  <span key={tag} className="px-2 py-0.5 text-xs rounded-full bg-[rgba(255,255,255,0.05)] text-[var(--text-secondary)]">
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* Stats Section */}
-          <div className="px-6 mb-4">
-            <div className="bg-[#121212] rounded-2xl p-6 shadow-sm">
-              <div className="grid grid-cols-3 gap-3">
-                <div className="text-center">
-                  <p className="text-lg font-bold text-[var(--brand-purple)]">+47%</p>
-                  <p className="text-xs text-[var(--text-secondary)]">Gain</p>
+                <div className="space-y-1">
+                  <h2 className="text-xl font-bold tracking-tight">mattjames.eth</h2>
+                  <p className="text-sm font-normal text-[#A0A0A0]">Professional Trader</p>
                 </div>
-                <div className="text-center">
-                  <p className="text-lg font-bold text-[var(--brand-purple)]">89%</p>
-                  <p className="text-xs text-[var(--text-secondary)]">Win Rate</p>
-                </div>
-                <div className="text-center">
-                  <p className="text-lg font-bold text-[var(--brand-purple)]">2.5</p>
-                  <p className="text-xs text-[var(--text-secondary)]">Risk Ratio</p>
+                <div className="flex flex-wrap justify-center gap-1.5">
+                  {['#crypto', '#defi', '#trading'].map((tag) => (
+                    <span key={tag} className="px-2 py-0.5 text-xs rounded-full bg-[rgba(255,255,255,0.05)] text-[#A0A0A0]">
+                      {tag}
+                    </span>
+                  ))}
                 </div>
               </div>
             </div>
-          </div>
 
-          {/* CTA Section */}
-          <div className="px-6 mb-4">
-            <div className="bg-[#151515] rounded-2xl p-6 shadow-sm text-center space-y-3">
-              <h3 className="text-base font-semibold">Premium Strategy Course</h3>
-              <p className="text-sm text-[var(--text-secondary)]">Follow my trades in real-time</p>
-              <button className="btn-primary w-4/5 mx-auto py-3.5 px-4">
-                Get Access Now
-              </button>
+            {/* Stats Section */}
+            <div className="px-4 mb-4">
+              <div className="bg-[#181818] rounded-2xl p-5 shadow-sm">
+                <div className="grid grid-cols-3 gap-3">
+                  <div className="text-center">
+                    <p className="text-lg font-bold text-[var(--brand-purple)]">+47%</p>
+                    <p className="text-xs font-normal text-[#A0A0A0]">Gain</p>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-lg font-bold text-[var(--brand-purple)]">89%</p>
+                    <p className="text-xs font-normal text-[#A0A0A0]">Win Rate</p>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-lg font-bold text-[var(--brand-purple)]">2.5</p>
+                    <p className="text-xs font-normal text-[#A0A0A0]">Risk Ratio</p>
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
 
-          {/* Footer */}
-          <div className="px-6 pb-6">
-            <p className="text-sm text-center text-[var(--text-secondary)]">
-              powered by tradr
-            </p>
-          </div>
-        </motion.div>
+            {/* CTA Section */}
+            <div className="px-4 mb-4">
+              <div className="bg-[#181818] rounded-2xl p-5 shadow-sm text-center space-y-3">
+                <h3 className="text-base font-semibold">Premium Strategy Course</h3>
+                <p className="text-sm font-normal text-[#A0A0A0]">Follow my trades in real-time</p>
+                <button className="btn-primary w-4/5 mx-auto py-3 px-4">
+                  Get Access Now
+                </button>
+              </div>
+            </div>
+
+            {/* Footer */}
+            <div className="px-6 py-4">
+              <p className="text-sm text-center font-normal text-[#A0A0A0]">
+                powered by tradr
+              </p>
+            </div>
+          </motion.div>
+        </div>
 
         {/* Action Buttons */}
-        <div className="flex justify-center gap-5">
-          <button onClick={onEditClick} className="btn-action w-24 h-24 flex-col gap-1.5 p-4">
-            <FiEdit3 className="w-6 h-6" />
+        <div className="flex justify-center gap-5 py-2">
+          <button onClick={onEditClick} className="btn-action w-24 h-24 flex-col gap-1 p-5 bg-[#1A1A1A] shadow-md">
+            <FiEdit3 className="w-7 h-7" />
             <span className="text-[14px]">Edit</span>
           </button>
-          <button onClick={onShareClick} className="btn-action w-24 h-24 flex-col gap-1.5 p-4">
-            <FiShare2 className="w-6 h-6" />
+          <button onClick={onShareClick} className="btn-action w-24 h-24 flex-col gap-1 p-5 bg-[#1A1A1A] shadow-md">
+            <FiShare2 className="w-7 h-7" />
             <span className="text-[14px]">Share</span>
           </button>
-          <button onClick={onThemeClick} className="btn-action w-24 h-24 flex-col gap-1.5 p-4">
-            <IoColorPaletteOutline className="w-6 h-6" />
+          <button onClick={onThemeClick} className="btn-action w-24 h-24 flex-col gap-1 p-5 bg-[#1A1A1A] shadow-md">
+            <IoColorPaletteOutline className="w-7 h-7" />
             <span className="text-[14px]">Theme</span>
           </button>
         </div>

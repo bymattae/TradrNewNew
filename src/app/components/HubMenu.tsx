@@ -3,14 +3,9 @@ import { IoClose } from 'react-icons/io5';
 import { 
   RiHome5Line,
   RiLineChartLine,
-  RiArrowRightUpLine,
-  RiFileList2Line,
-  RiIdCardLine,
-  RiVipDiamondLine,
-  RiUserLine,
-  RiAwardLine,
-  RiFileListLine,
-  RiSunLine
+  RiTrophyLine,
+  RiNewspaperLine,
+  RiToolsLine
 } from 'react-icons/ri';
 import Image from 'next/image';
 
@@ -29,56 +24,26 @@ const menuItems = [
   },
   { 
     icon: RiLineChartLine,
-    label: 'Invest',
+    label: 'Strategies',
     href: '/strategies',
     isComingSoon: false 
   },
   { 
-    icon: RiArrowRightUpLine,
-    label: 'Send',
-    href: '/send',
+    icon: RiTrophyLine,
+    label: 'Leaderboard',
+    href: '/leaderboard',
+    isComingSoon: false 
+  },
+  { 
+    icon: RiNewspaperLine,
+    label: 'Feed',
+    href: '/feed',
     isComingSoon: true 
   },
   { 
-    icon: RiFileList2Line,
-    label: 'Cheques',
-    href: '/cheques',
-    isComingSoon: true 
-  },
-  { 
-    icon: RiIdCardLine,
-    label: 'Cards',
-    href: '/cards',
-    isComingSoon: true 
-  },
-  { 
-    icon: RiVipDiamondLine,
-    label: 'Credit',
-    href: '/credit',
-    isComingSoon: true 
-  },
-  { 
-    icon: RiUserLine,
-    label: 'Save',
-    href: '/save',
-    isComingSoon: true 
-  },
-  { 
-    icon: RiAwardLine,
-    label: 'IPO',
-    href: '/ipo',
-    isComingSoon: true 
-  },
-  { 
-    icon: RiFileListLine,
-    label: 'Pay Bills',
-    href: '/bills',
-    isComingSoon: true 
-  },
-  { 
-    icon: RiSunLine,
-    label: 'Rewards',
-    href: '/rewards',
+    icon: RiToolsLine,
+    label: 'Tools',
+    href: '/tools',
     isComingSoon: true 
   }
 ];
@@ -143,6 +108,11 @@ export default function HubMenu({ isOpen, onClose }: HubMenuProps) {
                     />
                     <span className="text-sm font-medium">
                       {item.label}
+                      {item.isComingSoon && (
+                        <span className="block text-xs opacity-75 mt-0.5">
+                          Coming Soon
+                        </span>
+                      )}
                     </span>
                   </motion.a>
                 ))}
@@ -151,40 +121,35 @@ export default function HubMenu({ isOpen, onClose }: HubMenuProps) {
 
             {/* Footer */}
             <div className="px-6 py-8">
-              <div className="flex flex-col items-center gap-4">
-                <div className="flex items-center justify-center gap-8">
-                  <Image
-                    src="/adq-logo.svg"
-                    alt="ADQ"
-                    width={40}
-                    height={20}
-                    className="text-white/50"
-                  />
-                  <Image
-                    src="/adh-logo.svg"
-                    alt="ADH"
-                    width={40}
-                    height={20}
-                    className="text-white/50"
-                  />
-                  <Image
-                    src="/e&-logo.svg"
-                    alt="e&"
-                    width={40}
-                    height={20}
-                    className="text-white/50"
-                  />
-                  <Image
-                    src="/fab-logo.svg"
-                    alt="FAB"
-                    width={40}
-                    height={20}
-                    className="text-white/50"
-                  />
-                </div>
-                <p className="text-white/40 text-sm text-center">
-                  Licensed and regulated by the Central Bank UAE
-                </p>
+              <div className="flex items-center justify-center gap-8">
+                <Image
+                  src="/adq-logo.svg"
+                  alt="ADQ"
+                  width={40}
+                  height={20}
+                  className="text-white/50"
+                />
+                <Image
+                  src="/adh-logo.svg"
+                  alt="ADH"
+                  width={40}
+                  height={20}
+                  className="text-white/50"
+                />
+                <Image
+                  src="/e&-logo.svg"
+                  alt="e&"
+                  width={40}
+                  height={20}
+                  className="text-white/50"
+                />
+                <Image
+                  src="/fab-logo.svg"
+                  alt="FAB"
+                  width={40}
+                  height={20}
+                  className="text-white/50"
+                />
               </div>
             </div>
 

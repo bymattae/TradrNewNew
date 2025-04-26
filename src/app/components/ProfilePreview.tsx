@@ -81,14 +81,15 @@ export default function ProfilePreview({
   onThemeClick
 }: ProfilePreviewProps) {
   return (
-    <div className="h-screen flex flex-col justify-between overflow-hidden bg-[var(--background)]">
+    <div className="h-screen flex flex-col items-center justify-center overflow-hidden bg-[var(--background)] p-4">
       {/* Main Content Area */}
-      <div className="flex-1 flex items-center justify-center p-4">
+      <div className="w-full max-w-md space-y-6">
+        {/* Profile Card */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="w-full max-w-md bg-gradient-to-b from-[#141414] to-[#0A0A0A] rounded-3xl shadow-lg border border-[rgba(255,255,255,0.03)] overflow-hidden"
+          className="w-full bg-gradient-to-b from-[#141414] to-[#0A0A0A] rounded-3xl shadow-lg border border-[rgba(255,255,255,0.03)] overflow-hidden"
         >
           {/* Profile Header */}
           <div className="p-6">
@@ -153,25 +154,21 @@ export default function ProfilePreview({
             </p>
           </div>
         </motion.div>
-      </div>
 
-      {/* Bottom Action Bar */}
-      <div className="w-full bg-[var(--background)] border-t border-[rgba(255,255,255,0.03)] mt-6">
-        <div className="max-w-md mx-auto px-4 py-3">
-          <div className="flex justify-center gap-4">
-            <button className="btn-action w-16 h-16 flex-col gap-1.5">
-              <FiEdit3 className="w-5 h-5" />
-              <span className="text-xs">Edit</span>
-            </button>
-            <button className="btn-action w-16 h-16 flex-col gap-1.5">
-              <FiShare2 className="w-5 h-5" />
-              <span className="text-xs">Share</span>
-            </button>
-            <button className="btn-action w-16 h-16 flex-col gap-1.5">
-              <IoColorPaletteOutline className="w-5 h-5" />
-              <span className="text-xs">Theme</span>
-            </button>
-          </div>
+        {/* Action Buttons */}
+        <div className="flex justify-center gap-4">
+          <button className="btn-action w-16 h-16 flex-col gap-1.5">
+            <FiEdit3 className="w-5 h-5" />
+            <span className="text-xs">Edit</span>
+          </button>
+          <button className="btn-action w-16 h-16 flex-col gap-1.5">
+            <FiShare2 className="w-5 h-5" />
+            <span className="text-xs">Share</span>
+          </button>
+          <button className="btn-action w-16 h-16 flex-col gap-1.5">
+            <IoColorPaletteOutline className="w-5 h-5" />
+            <span className="text-xs">Theme</span>
+          </button>
         </div>
       </div>
 

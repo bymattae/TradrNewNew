@@ -4,6 +4,9 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
 import { RiArrowRightLine } from 'react-icons/ri';
+import { FiEdit3, FiShare2 } from 'react-icons/fi';
+import { IoColorPaletteOutline } from 'react-icons/io5';
+import HubButton from './HubButton';
 
 interface SocialLink {
   platform: 'twitter' | 'instagram' | 'youtube' | 'tiktok' | 'telegram';
@@ -78,177 +81,91 @@ export default function ProfilePreview({
   onThemeClick
 }: ProfilePreviewProps) {
   return (
-    <div className="relative group">
-      {/* Glow effect */}
-      <div className="absolute inset-0 -z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-        <div className="absolute inset-0 bg-[var(--brand-purple)]/20 blur-[100px] rounded-[100px]" />
-      </div>
+    <div className="app-container relative">
+      {/* Profile Card */}
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="profile-card"
+      >
+        {/* Profile Header */}
+        <div className="profile-section">
+          <div className="flex items-center gap-4">
+            <div className="avatar-container">
+              <img
+                src="/avatar.png"
+                alt="Profile"
+                className="w-full h-full rounded-full object-cover"
+              />
+            </div>
+            <div>
+              <h2 className="text-2xl font-bold tracking-tight">mattjames.eth</h2>
+              <p className="text-[var(--text-secondary)]">Professional Trader</p>
+            </div>
+          </div>
+        </div>
 
-      <div className="card card-hover p-6">
-        {/* Profile header */}
-        <div className="flex items-center gap-4">
-          <div className="relative">
-            <div className="w-14 h-14 rounded-full bg-gradient-to-br from-[#7048E8] to-[#5c3cd6] p-[1px]">
-              <div className="w-full h-full rounded-full bg-[var(--button-background)] p-[2px]">
-                {avatarUrl ? (
-                  <Image
-                    src={avatarUrl}
-                    alt={username}
-                    width={56}
-                    height={56}
-                    className="rounded-full"
-                  />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center text-xl font-bold text-[#7048E8]">
-                    {username[0].toUpperCase()}
-                  </div>
-                )}
+        {/* Stats Section */}
+        <div className="profile-section">
+          <div className="stats-card">
+            <div className="grid grid-cols-3 gap-8">
+              <div className="text-center">
+                <p className="text-2xl font-bold">47%</p>
+                <p className="text-sm text-[var(--text-secondary)]">Win Rate</p>
+              </div>
+              <div className="text-center">
+                <p className="text-2xl font-bold">$14.2K</p>
+                <p className="text-sm text-[var(--text-secondary)]">Profit</p>
+              </div>
+              <div className="text-center">
+                <p className="text-2xl font-bold">89</p>
+                <p className="text-sm text-[var(--text-secondary)]">Trades</p>
               </div>
             </div>
           </div>
-          <div className="flex-1">
-            <h3 className="text-title text-lg font-semibold">
-              @{username}
-            </h3>
-            {bio && (
-              <p className="text-description text-sm">
-                {bio}
-              </p>
-            )}
-          </div>
-          <button className="btn-action">
-            <RiArrowRightLine className="w-5 h-5" />
+        </div>
+
+        {/* CTA Section */}
+        <div className="profile-section text-center">
+          <h3 className="text-xl font-semibold mb-2">Get Premium Access</h3>
+          <p className="text-[var(--text-secondary)] mb-6">
+            Follow my trades and strategies in real-time
+          </p>
+          <button className="btn-primary w-full">
+            Get Access Now
           </button>
         </div>
 
-        {/* Tags */}
-        {tags.length > 0 && (
-          <div className="flex flex-wrap gap-2 mt-2">
-            {tags.map((tag, index) => (
-              <span
-                key={index}
-                className="px-2.5 py-1 bg-[var(--button-background)] rounded-lg text-xs text-[var(--text-secondary)]
-                  border border-[var(--divider)] backdrop-blur-sm"
-              >
-                {tag}
-              </span>
-            ))}
-          </div>
-        )}
+        {/* Footer */}
+        <div className="profile-section border-t border-[var(--divider)] text-center">
+          <p className="text-sm text-[var(--text-secondary)]">
+            Powered by Tradr
+          </p>
+        </div>
+      </motion.div>
 
-        {/* Stats */}
-        {strategies && strategies.length > 0 && (
-          <div className="mt-4">
-            <div className="bg-[var(--button-background)] rounded-2xl p-4 shadow-[0_4px_16px_rgba(0,0,0,0.1)]">
-              <div className="grid grid-cols-3 gap-8">
-                <div>
-                  <p className="text-[13px] text-[var(--text-secondary)] font-medium">Gain</p>
-                  <p className="text-[15px] font-semibold text-[#7048E8] mt-1.5">
-                    +{strategies[0].stats.gain}%
-                  </p>
-                </div>
-                <div>
-                  <p className="text-[13px] text-[var(--text-secondary)] font-medium">Win Rate</p>
-                  <p className="text-[15px] font-semibold text-[var(--text-primary)] mt-1.5">
-                    {strategies[0].stats.winRate}%
-                  </p>
-                </div>
-                <div>
-                  <p className="text-[13px] text-[var(--text-secondary)] font-medium">Risk Ratio</p>
-                  <p className="text-[15px] font-semibold text-[var(--text-primary)] mt-1.5">
-                    {strategies[0].stats.riskRatio}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Links */}
-        {links && links.length > 0 && (
-          <div className="space-y-3 mt-7">
-            {links.map((link, index) => (
-              <a
-                key={index}
-                href={link.cta.url}
-                className="block bg-[#141414] rounded-2xl px-5 py-4 border border-[var(--divider)]
-                  backdrop-blur-sm hover:bg-[var(--button-background)] 
-                  shadow-[0_4px_16px_rgba(0,0,0,0.1)]
-                  transition-all duration-200"
-              >
-                <h3 className="text-title text-sm">
-                  {link.title}
-                </h3>
-                <p className="text-description text-xs mt-1 line-clamp-2">
-                  {link.description}
-                </p>
-                <button className="mt-3 px-5 py-2 bg-[#7048E8] hover:bg-[#5c3cd6] 
-                  rounded-full text-white text-xs font-medium
-                  transition-colors duration-200">
-                  {link.cta.text} →
-                </button>
-              </a>
-            ))}
-          </div>
-        )}
-
-        {/* Powered by Tradr */}
-        <div className="mt-6 pt-4 border-t border-[var(--divider)]">
-          <div className="flex items-center justify-center gap-1.5 text-[var(--text-secondary)] text-[11px]">
-            <div className="relative w-3 h-3 flex-shrink-0">
-              <Image
-                src="https://rnfvzaelmwbbvfbsppir.supabase.co/storage/v1/object/public/assets/TradrIcon%20(1).png"
-                alt="Tradr"
-                fill
-                sizes="12px"
-                className="object-contain"
-              />
-            </div>
-            <span>Powered by</span>
-            <span className="font-medium">Tradr</span>
-          </div>
+      {/* Bottom Action Bar */}
+      <div className="bottom-actions">
+        <div className="actions-container">
+          <button className="btn-action">
+            <FiEdit3 className="w-6 h-6" />
+            <span className="text-sm">Edit</span>
+          </button>
+          <button className="btn-action">
+            <FiShare2 className="w-6 h-6" />
+            <span className="text-sm">Share</span>
+          </button>
+          <button className="btn-action">
+            <IoColorPaletteOutline className="w-6 h-6" />
+            <span className="text-sm">Theme</span>
+          </button>
         </div>
       </div>
 
-      {/* Action Buttons */}
-      <div className="relative mt-4">
-        <div className="flex items-center justify-center gap-6">
-          <motion.button
-            onClick={onEditClick}
-            className="btn-action scale-95"
-            whileTap={{ scale: 0.9 }}
-            transition={{ type: "spring", stiffness: 400, damping: 15 }}
-          >
-            <svg className="w-[22px] h-[22px]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-            </svg>
-            <span className="text-xs font-medium">Edit</span>
-          </motion.button>
-
-          <motion.button
-            onClick={onShareClick}
-            className="btn-action scale-95"
-            whileTap={{ scale: 0.9 }}
-            transition={{ type: "spring", stiffness: 400, damping: 15 }}
-          >
-            <svg className="w-[22px] h-[22px]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
-            </svg>
-            <span className="text-xs font-medium">Share</span>
-          </motion.button>
-
-          <motion.button
-            onClick={onThemeClick}
-            className="btn-action scale-95"
-            whileTap={{ scale: 0.9 }}
-            transition={{ type: "spring", stiffness: 400, damping: 15 }}
-          >
-            <svg className="w-[22px] h-[22px]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
-            </svg>
-            <span className="text-xs font-medium">Theme</span>
-          </motion.button>
-        </div>
+      {/* Hub Button */}
+      <div className="fixed left-6 bottom-24 z-50">
+        <HubButton onClick={() => {}} />
       </div>
     </div>
   );

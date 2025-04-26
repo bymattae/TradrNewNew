@@ -5,103 +5,121 @@
 @layer base {
   :root {
     /* Core backgrounds */
-    --background: #000000;
+    --background: #0A0A0A;
+    --background-rgb: 10, 10, 10;
     --card-background: #121212;
-    --button-background: #0D0D0D;
+    --card-background-rgb: 18, 18, 18;
+    --button-background: #1A1A1A;
+    --button-background-hover: #222222;
+    --divider: rgba(255, 255, 255, 0.1);
     
     /* Text colors */
-    --text-primary: #FFFFFF;
-    --text-secondary: #7D7D7D;
-    --divider: #1E1E1E;
+    --text-primary: rgba(255, 255, 255, 0.9);
+    --text-secondary: rgba(255, 255, 255, 0.6);
+    --text-tertiary: rgba(255, 255, 255, 0.4);
     
     /* Brand colors */
-    --brand-primary: #7B4FFF;
-    --brand-secondary: #9B6CFF;
-    --brand-hover: #8B61FF;
+    --brand-purple: #7048E8;
+    --brand-purple-rgb: 112, 72, 232;
+    --brand-purple-hover: #8160EA;
+    
+    --success: #22C55E;
+    --warning: #F59E0B;
+    --error: #EF4444;
   }
 
   body {
-    @apply bg-[var(--background)];
+    @apply bg-[var(--background)] min-h-screen text-[var(--text-primary)];
   }
 }
 
 @layer components {
-  .card {
-    @apply bg-[var(--card-background)] rounded-2xl border border-[var(--divider)] shadow-[0_4px_16px_rgba(0,0,0,0.1)];
+  .app-container {
+    @apply relative w-full max-w-lg mx-auto px-4;
   }
-  
-  .card-hover {
-    @apply hover:border-[rgba(123,79,255,0.2)] transition-all duration-200;
+
+  .profile-card {
+    @apply relative rounded-3xl bg-gradient-to-b from-[#141414] to-[#0A0A0A] shadow-lg border border-[rgba(255,255,255,0.03)];
+  }
+
+  .profile-section {
+    @apply p-6;
+  }
+
+  .avatar-container {
+    @apply relative w-16 h-16 rounded-full p-[2px] bg-gradient-to-br from-[var(--brand-purple)] to-[rgba(255,255,255,0.1)];
+  }
+
+  .stats-card {
+    @apply relative rounded-2xl bg-[rgba(255,255,255,0.02)] shadow-inner border border-[rgba(255,255,255,0.03)] p-4;
+  }
+
+  .bottom-actions {
+    @apply fixed bottom-0 left-0 right-0 bg-gradient-to-t from-[var(--background)] via-[var(--background)] to-transparent pt-8 pb-6;
+  }
+
+  .actions-container {
+    @apply max-w-lg mx-auto px-4 flex justify-between items-center gap-4;
   }
 
   .btn-action {
-    @apply flex flex-col items-center gap-1.5 p-2 rounded-xl text-[var(--text-secondary)]
-      hover:bg-opacity-50 hover:bg-[var(--button-background)] transition-colors duration-200;
+    @apply flex items-center justify-center px-4 py-2 rounded-xl bg-[var(--button-background)] text-[var(--text-primary)] 
+    hover:bg-[var(--button-background-hover)] transition-all duration-200 hover:scale-105;
   }
 
   .btn-primary {
-    @apply bg-[#7048E8] hover:bg-[#5c3cd6] text-white font-medium
-      rounded-full px-5 py-2 transition-colors duration-200;
+    @apply flex items-center justify-center px-6 py-3 rounded-xl bg-[var(--brand-purple)] text-white font-medium
+    hover:bg-[var(--brand-purple-hover)] transition-all duration-200 hover:scale-105 shadow-lg;
+    box-shadow: 0 4px 14px rgba(112, 72, 232, 0.2);
   }
 
   .btn-secondary {
-    @apply bg-[var(--button-background)]
-    hover:bg-[var(--button-background)]
-    hover:border-[rgba(123,79,255,0.2)]
-    backdrop-blur-md
-    text-[var(--text-secondary)] 
-    hover:text-[var(--text-primary)]
-    rounded-xl px-4 py-2.5
-    font-medium transition-all duration-200
-    border border-[var(--divider)];
+    @apply flex items-center justify-center px-6 py-3 rounded-xl border border-[rgba(255,255,255,0.1)] 
+    hover:bg-[rgba(255,255,255,0.05)] transition-all duration-200;
   }
 
-  .text-title {
-    @apply text-[var(--text-primary)] font-semibold;
+  .card {
+    @apply rounded-2xl bg-[var(--card-background)] p-6 border border-[rgba(255,255,255,0.03)] 
+    hover:bg-[rgba(255,255,255,0.02)] transition-all duration-200;
   }
 
-  .text-label {
-    @apply text-[var(--text-secondary)] font-medium;
+  .title {
+    @apply text-2xl font-semibold text-[var(--text-primary)];
   }
 
-  .text-description {
-    @apply text-[var(--text-secondary)];
+  .subtitle {
+    @apply text-base text-[var(--text-secondary)];
   }
 
-  .strategy-title {
-    @apply text-[17px] font-semibold tracking-tight text-[var(--text-primary)];
+  .label {
+    @apply text-sm font-medium text-[var(--text-secondary)];
+  }
+
+  .value {
+    @apply text-lg font-semibold text-[var(--text-primary)];
   }
 }
 
-/* Custom scrollbar styles */
+/* Custom scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  @apply w-1;
 }
 
 ::-webkit-scrollbar-track {
-  @apply bg-[var(--background)];
+  @apply bg-transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-[var(--divider)] hover:bg-[var(--text-secondary)] rounded transition-colors;
+  @apply bg-white/10 rounded-full hover:bg-white/20 transition-colors;
 }
 
-/* Remove float animation as we're using Framer Motion now */
-.animate-float {
-  animation: none;
+/* Hub button animation */
+@keyframes softPulse {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.05); opacity: 0.9; }
+  100% { transform: scale(1); opacity: 1; }
 }
 
-@keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-3px); }
-}
-
-/* Dark mode scrollbar */
-.dark ::-webkit-scrollbar-thumb {
-  @apply bg-[var(--divider)];
-}
-
-.dark ::-webkit-scrollbar-thumb:hover {
-  @apply bg-[var(--text-secondary)];
+.hub-pulse {
+  animation: softPulse 10s ease-in-out infinite;
 }

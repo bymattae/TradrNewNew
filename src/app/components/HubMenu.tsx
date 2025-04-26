@@ -1,12 +1,13 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { IoClose } from 'react-icons/io5';
 import { 
-  HiHome,
-  HiChartBar,
-  HiTrophy,
-  HiNewspaper,
-  HiCube,
-} from 'react-icons/hi2';
+  Home,
+  BarChart2,
+  Trophy,
+  Newspaper,
+  Boxes
+} from 'lucide-react';
+import Image from 'next/image';
 
 interface HubMenuProps {
   isOpen: boolean;
@@ -15,31 +16,31 @@ interface HubMenuProps {
 
 const menuItems = [
   { 
-    icon: HiHome, 
+    icon: Home, 
     label: 'My Tradr', 
     href: '/profile',
     isComingSoon: false 
   },
   { 
-    icon: HiChartBar, 
+    icon: BarChart2, 
     label: 'Strategies', 
     href: '/strategies',
     isComingSoon: false 
   },
   { 
-    icon: HiTrophy, 
+    icon: Trophy, 
     label: 'Leaderboard', 
     href: '/leaderboard',
     isComingSoon: false 
   },
   { 
-    icon: HiNewspaper, 
+    icon: Newspaper, 
     label: 'Feed', 
     href: '/feed',
     isComingSoon: true 
   },
   { 
-    icon: HiCube, 
+    icon: Boxes, 
     label: 'Tools', 
     href: '/tools',
     isComingSoon: true 
@@ -70,7 +71,7 @@ export default function HubMenu({ isOpen, onClose }: HubMenuProps) {
           >
             {/* Header */}
             <div className="relative flex flex-col items-center justify-center px-6 py-8">
-              <h1 className="text-[20px] font-bold tracking-tight text-white">
+              <h1 className="text-[24px] font-bold tracking-tight text-white mb-6">
                 Tradr Hub
               </h1>
               <div className="absolute w-16 h-[1px] bg-white/10 bottom-0" />
@@ -84,32 +85,34 @@ export default function HubMenu({ isOpen, onClose }: HubMenuProps) {
 
             {/* Menu Content */}
             <div className="flex-1 px-8 py-12 overflow-y-auto">
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4 max-w-4xl mx-auto">
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
                 {menuItems.map((item) => (
                   <motion.a
                     key={item.label}
                     href={item.isComingSoon ? '#' : item.href}
                     className={`
-                      flex flex-col items-center justify-center gap-8 py-8 px-4 rounded-xl
-                      transition-all duration-200 ease-out
-                      bg-[#1A1A1A]
-                      shadow-[0px_4px_12px_rgba(0,0,0,0.3)]
+                      flex flex-col items-center justify-center gap-6 py-8 px-4 rounded-2xl
+                      transition-all duration-300 ease-out
+                      bg-[#121212] hover:bg-[#151515]
+                      shadow-[0px_6px_16px_rgba(0,0,0,0.5)]
                       ${item.isComingSoon 
                         ? 'opacity-60 cursor-not-allowed' 
-                        : 'hover:shadow-[0px_4px_12px_rgba(0,0,0,0.3),0px_0px_0px_1px_#7B61FF]'
+                        : 'hover:shadow-[0px_8px_20px_rgba(0,0,0,0.6),0px_0px_0px_1px_rgba(123,97,255,0.3)]'
                       }
                     `}
-                    whileHover={!item.isComingSoon ? { scale: 1.02 } : undefined}
-                    whileTap={!item.isComingSoon ? { scale: 1.05 } : undefined}
-                    transition={{ type: "spring", stiffness: 400, damping: 15 }}
+                    whileHover={!item.isComingSoon ? { 
+                      scale: 1.02,
+                      transition: { duration: 0.2 }
+                    } : undefined}
+                    whileTap={!item.isComingSoon ? { scale: 0.98 } : undefined}
                   >
                     <item.icon 
-                      size={36} 
+                      size={28} 
                       className={`${item.isComingSoon ? 'text-[#AAAAAA]' : 'text-white'}`}
-                      strokeWidth={2}
+                      strokeWidth={1.5}
                     />
                     <span className={`
-                      text-[15px] font-semibold text-center
+                      text-[15px] font-medium text-center
                       ${item.isComingSoon ? 'text-[#AAAAAA]' : 'text-white'}
                     `}>
                       {item.label}
@@ -121,6 +124,23 @@ export default function HubMenu({ isOpen, onClose }: HubMenuProps) {
                     )}
                   </motion.a>
                 ))}
+              </div>
+            </div>
+
+            {/* Footer */}
+            <div className="px-8 py-6 flex justify-center">
+              <div className="flex items-center gap-2 text-white/50 text-sm">
+                <div className="relative w-5 h-5">
+                  <Image
+                    src="https://rnfvzaelmwbbvfbsppir.supabase.co/storage/v1/object/public/assets/TradrIcon%20(1).png"
+                    alt="Tradr"
+                    fill
+                    sizes="20px"
+                    className="object-contain"
+                  />
+                </div>
+                <span>Powered by</span>
+                <span className="font-medium">Tradr</span>
               </div>
             </div>
           </motion.div>

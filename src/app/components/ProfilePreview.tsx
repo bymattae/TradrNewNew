@@ -104,12 +104,12 @@ export default function ProfilePreview({
       />
 
       {/* Main Card */}
-      <div className="relative bg-zinc-900/80 backdrop-blur-sm rounded-2xl border border-white/40 shadow-xl">
+      <div className="relative bg-[#1A1A1A]/90 rounded-2xl border border-neutral-800 shadow-[0px_4px_20px_rgba(0,0,0,0.5)]">
         <div className="p-4 space-y-3">
           {/* Profile Header */}
           <div className="flex items-center gap-3">
             <div className="relative">
-              <div className="w-16 h-16 rounded-full overflow-hidden bg-violet-500/20 border border-white/20">
+              <div className="w-16 h-16 rounded-full overflow-hidden bg-[#7B61FF]/20 border border-neutral-800">
                 {avatarUrl ? (
                   <Image
                     src={avatarUrl}
@@ -119,7 +119,7 @@ export default function ProfilePreview({
                     className="object-cover"
                   />
                 ) : (
-                  <div className="w-full h-full flex items-center justify-center text-xl font-bold text-violet-500">
+                  <div className="w-full h-full flex items-center justify-center text-xl font-bold text-[#7B61FF]">
                     {username[0].toUpperCase()}
                   </div>
                 )}
@@ -130,7 +130,7 @@ export default function ProfilePreview({
                 @{username}
               </h2>
               {bio && (
-                <p className="text-white/80 font-sans mt-0.5 text-sm leading-relaxed line-clamp-2">
+                <p className="text-[#AAAAAA] font-sans mt-0.5 text-sm leading-relaxed line-clamp-2">
                   {bio}
                 </p>
               )}
@@ -143,8 +143,8 @@ export default function ProfilePreview({
               {tags.map((tag, index) => (
                 <span
                   key={index}
-                  className="px-2 py-0.5 bg-white/10 rounded-full text-xs text-white/90 font-medium 
-                    hover:bg-white/20 transition-colors border border-white/20"
+                  className="px-2 py-0.5 bg-[#262626] rounded-full text-xs text-[#AAAAAA] font-medium 
+                    border border-neutral-800"
                 >
                   {tag}
                 </span>
@@ -153,7 +153,7 @@ export default function ProfilePreview({
           )}
 
           {/* Profile Section Divider */}
-          <div className="border-t border-white/20" />
+          <div className="border-t border-neutral-800" />
 
           {/* Strategies */}
           {strategies && strategies.length > 0 && (
@@ -161,27 +161,27 @@ export default function ProfilePreview({
               {strategies.map((strategy, index) => (
                 <div
                   key={index}
-                  className="bg-white/10 rounded-xl p-3 hover:bg-white/15 transition-colors
-                    border border-white/20 shadow-lg"
+                  className="bg-[#262626] rounded-xl p-3 border border-neutral-800
+                    shadow-[0px_4px_20px_rgba(0,0,0,0.5)]"
                 >
                   <h3 className="font-display text-sm font-semibold text-white mb-1">
                     {strategy.title}
                   </h3>
                   <div className="grid grid-cols-3 gap-2">
                     <div>
-                      <p className="text-white/70 text-xs mb-0.5">Gain</p>
-                      <p className="font-mono text-green-400 font-medium text-sm">
+                      <p className="text-[#AAAAAA] text-xs mb-0.5">Gain</p>
+                      <p className="font-mono text-[#7B61FF] font-medium text-sm">
                         +{strategy.stats.gain}%
                       </p>
                     </div>
                     <div>
-                      <p className="text-white/70 text-xs mb-0.5">Win Rate</p>
+                      <p className="text-[#AAAAAA] text-xs mb-0.5">Win Rate</p>
                       <p className="font-mono text-white font-medium text-sm">
                         {strategy.stats.winRate}%
                       </p>
                     </div>
                     <div>
-                      <p className="text-white/70 text-xs mb-0.5">Risk Ratio</p>
+                      <p className="text-[#AAAAAA] text-xs mb-0.5">Risk Ratio</p>
                       <p className="font-mono text-white font-medium text-sm">
                         {strategy.stats.riskRatio}
                       </p>
@@ -194,7 +194,7 @@ export default function ProfilePreview({
 
           {/* Strategy Section Divider */}
           {strategies && strategies.length > 0 && (
-            <div className="border-t border-white/20" />
+            <div className="border-t border-neutral-800" />
           )}
 
           {/* Links */}
@@ -204,15 +204,16 @@ export default function ProfilePreview({
                 <a
                   key={index}
                   href={link.cta.url}
-                  className="block bg-white/5 rounded-xl p-3 hover:bg-white/10 transition-colors"
+                  className="block bg-[#262626] rounded-xl p-3 border border-neutral-800
+                    shadow-[0px_4px_20px_rgba(0,0,0,0.5)]"
                 >
                   <h3 className="font-display text-sm font-semibold text-white">
                     {link.title}
                   </h3>
-                  <p className="text-white/60 text-xs mt-0.5 line-clamp-2">
+                  <p className="text-[#AAAAAA] text-xs mt-0.5 line-clamp-2">
                     {link.description}
                   </p>
-                  <span className="inline-block mt-1 text-violet-400 text-xs font-medium">
+                  <span className="inline-block mt-1 text-[#7B61FF] text-xs font-medium">
                     {link.cta.text} →
                   </span>
                 </a>
@@ -222,12 +223,12 @@ export default function ProfilePreview({
 
           {/* Links Section Divider */}
           {links && links.length > 0 && (
-            <div className="border-t border-white/20" />
+            <div className="border-t border-neutral-800" />
           )}
 
           {/* Powered by Tradr */}
           <div className="flex items-center justify-center gap-2 pt-1">
-            <div className="flex items-center gap-1.5 text-white/40 text-xs">
+            <div className="flex items-center gap-1.5 text-[#AAAAAA] text-xs">
               <div className="relative w-3.5 h-3.5 flex-shrink-0">
                 <Image
                   src="https://rnfvzaelmwbbvfbsppir.supabase.co/storage/v1/object/public/assets/TradrIcon%20(1).png"
@@ -235,7 +236,6 @@ export default function ProfilePreview({
                   fill
                   sizes="14px"
                   className="object-contain"
-                  priority
                 />
               </div>
               <span>Powered by</span>
@@ -247,41 +247,43 @@ export default function ProfilePreview({
 
       {/* Action Buttons with Glow */}
       <div className="relative mt-3">
-        <div className="absolute inset-0 bg-neutral-800/30 backdrop-blur-md rounded-2xl" />
+        <div className="absolute inset-0 bg-[#1A1A1A]/80 backdrop-blur-sm rounded-2xl shadow-[0_4px_12px_rgba(123,97,255,0.2)]" />
         <div className="relative flex items-center justify-center gap-6 p-2">
           <motion.button
             onClick={onEditClick}
-            className="flex flex-col items-center gap-1 text-white/60 hover:text-white transition-colors group"
+            className="flex flex-col items-center gap-1 text-[#AAAAAA] hover:text-white transition-colors group"
             whileTap={{ scale: 1.05 }}
             transition={{ duration: 0.1 }}
           >
-            <div className="p-2 rounded-xl bg-white/5 group-hover:bg-white/10 transition-colors">
+            <div className="p-2 rounded-xl bg-[#262626]/50 group-hover:bg-[#262626] transition-colors">
               <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
               </svg>
             </div>
             <span className="text-xs font-medium">Edit</span>
           </motion.button>
+
           <motion.button
             onClick={onShareClick}
-            className="flex flex-col items-center gap-1 text-white/60 hover:text-white transition-colors group"
+            className="flex flex-col items-center gap-1 text-[#AAAAAA] hover:text-white transition-colors group"
             whileTap={{ scale: 1.05 }}
             transition={{ duration: 0.1 }}
           >
-            <div className="p-2 rounded-xl bg-white/5 group-hover:bg-white/10 transition-colors">
+            <div className="p-2 rounded-xl bg-[#262626]/50 group-hover:bg-[#262626] transition-colors">
               <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
               </svg>
             </div>
             <span className="text-xs font-medium">Share</span>
           </motion.button>
+
           <motion.button
             onClick={onThemeClick}
-            className="flex flex-col items-center gap-1 text-white/60 hover:text-white transition-colors group"
+            className="flex flex-col items-center gap-1 text-[#AAAAAA] hover:text-white transition-colors group"
             whileTap={{ scale: 1.05 }}
             transition={{ duration: 0.1 }}
           >
-            <div className="p-2 rounded-xl bg-white/5 group-hover:bg-white/10 transition-colors">
+            <div className="p-2 rounded-xl bg-[#262626]/50 group-hover:bg-[#262626] transition-colors">
               <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
               </svg>

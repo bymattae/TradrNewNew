@@ -10,12 +10,11 @@ export default function HubButton({ onClick }: HubButtonProps) {
     <motion.button
       onClick={onClick}
       whileTap={{ scale: 0.95 }}
-      className="fixed bottom-8 left-8 z-30 
-        bg-gradient-to-r from-indigo-600 to-indigo-700
-        hover:from-indigo-500 hover:to-indigo-600
+      className="fixed bottom-20 left-[22%] -translate-x-1/2 z-30 
+        bg-[#7B61FF] hover:bg-[#8B74FF]
         text-white rounded-full p-5
-        shadow-[0_8px_16px_-4px_rgba(99,102,241,0.5)] 
-        hover:shadow-[0_12px_20px_-4px_rgba(99,102,241,0.6)]
+        shadow-[0_6px_12px_rgba(123,97,255,0.4)]
+        hover:shadow-[0_8px_16px_rgba(123,97,255,0.5)]
         backdrop-blur-sm
         transition-all duration-200 ease-out
         flex items-center justify-center"

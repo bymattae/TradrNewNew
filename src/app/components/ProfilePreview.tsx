@@ -81,7 +81,7 @@ export default function ProfilePreview({
   onThemeClick
 }: ProfilePreviewProps) {
   return (
-    <div className="h-screen flex flex-col items-center bg-black px-4 py-3 overflow-hidden">
+    <div className="h-screen flex flex-col items-center justify-center bg-black px-4 py-3 overflow-hidden">
       {/* Main Content Area */}
       <div className="w-full max-w-md space-y-4">
         {/* Profile Card */}
@@ -92,8 +92,8 @@ export default function ProfilePreview({
           className="w-full bg-[#111111] rounded-2xl shadow-lg border border-[rgba(255,255,255,0.03)] overflow-hidden"
         >
           {/* Profile Header */}
-          <div className="p-6">
-            <div className="flex flex-col items-center text-center space-y-1.5">
+          <div className="p-6 mb-4">
+            <div className="bg-[#141414] rounded-2xl p-6 shadow-sm flex flex-col items-center text-center space-y-1.5">
               <div className="relative w-16 h-16">
                 <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[var(--brand-purple)] to-[rgba(255,255,255,0.1)] p-[2px]">
                   <Image
@@ -120,8 +120,8 @@ export default function ProfilePreview({
           </div>
 
           {/* Stats Section */}
-          <div className="px-6 pb-6">
-            <div className="bg-[#121212] rounded-3xl p-6">
+          <div className="px-6 mb-4">
+            <div className="bg-[#121212] rounded-2xl p-6 shadow-sm">
               <div className="grid grid-cols-3 gap-3">
                 <div className="text-center">
                   <p className="text-lg font-bold text-[var(--brand-purple)]">+47%</p>
@@ -140,8 +140,8 @@ export default function ProfilePreview({
           </div>
 
           {/* CTA Section */}
-          <div className="px-6 pb-6">
-            <div className="bg-[#121212] rounded-3xl p-6 text-center space-y-3">
+          <div className="px-6 mb-4">
+            <div className="bg-[#151515] rounded-2xl p-6 shadow-sm text-center space-y-3">
               <h3 className="text-base font-semibold">Premium Strategy Course</h3>
               <p className="text-sm text-[var(--text-secondary)]">Follow my trades in real-time</p>
               <button className="btn-primary w-4/5 mx-auto py-3.5 px-4">

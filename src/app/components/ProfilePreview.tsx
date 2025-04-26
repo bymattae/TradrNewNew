@@ -81,17 +81,17 @@ export default function ProfilePreview({
   onThemeClick
 }: ProfilePreviewProps) {
   return (
-    <div className="min-h-screen flex flex-col items-center bg-black px-6 pt-8">
+    <div className="min-h-screen flex flex-col items-center bg-black px-4 py-6">
       {/* Header */}
-      <div className="w-full max-w-md text-center mb-6">
-        <h1 className="text-2xl font-bold mb-2">My Tradr</h1>
-        <div className="bg-[rgba(255,255,255,0.03)] rounded-xl p-4">
+      <div className="w-full max-w-md text-center mb-4">
+        <h1 className="text-2xl font-bold mb-3">My Tradr</h1>
+        <div className="bg-[rgba(255,255,255,0.03)] rounded-xl p-3">
           <p className="text-sm text-[var(--text-secondary)]">Your Tradr is live</p>
         </div>
       </div>
 
       {/* Main Content Area */}
-      <div className="w-full max-w-md space-y-6">
+      <div className="w-full max-w-md space-y-4">
         {/* Profile Card */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
@@ -100,8 +100,8 @@ export default function ProfilePreview({
           className="w-full bg-gradient-to-b from-[#141414] to-[#0A0A0A] rounded-3xl shadow-lg border border-[rgba(255,255,255,0.03)] overflow-hidden"
         >
           {/* Profile Header */}
-          <div className="p-6">
-            <div className="flex flex-col items-center text-center space-y-4">
+          <div className="p-5">
+            <div className="flex flex-col items-center text-center space-y-3">
               <div className="relative w-16 h-16">
                 <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[var(--brand-purple)] to-[rgba(255,255,255,0.1)] p-[2px]">
                   <Image
@@ -128,7 +128,7 @@ export default function ProfilePreview({
           </div>
 
           {/* Stats Section */}
-          <div className="px-6 py-4 border-t border-b border-[rgba(255,255,255,0.03)]">
+          <div className="px-5 py-4 border-t border-b border-[rgba(255,255,255,0.03)]">
             <div className="grid grid-cols-3 gap-3">
               <div className="text-center">
                 <p className="text-lg font-bold text-[var(--brand-purple)]">+47%</p>
@@ -146,8 +146,8 @@ export default function ProfilePreview({
           </div>
 
           {/* CTA Section */}
-          <div className="p-6">
-            <div className="text-center space-y-3">
+          <div className="p-5">
+            <div className="text-center space-y-2">
               <h3 className="text-base font-semibold">Premium Strategy Course</h3>
               <button className="btn-primary w-full py-2.5">
                 Get Access Now
@@ -156,7 +156,7 @@ export default function ProfilePreview({
           </div>
 
           {/* Footer */}
-          <div className="px-6 py-3 border-t border-[rgba(255,255,255,0.03)] bg-[rgba(255,255,255,0.02)]">
+          <div className="px-5 py-3 border-t border-[rgba(255,255,255,0.03)] bg-[rgba(255,255,255,0.02)]">
             <p className="text-xs text-center text-[var(--text-secondary)]">
               powered by tradr
             </p>
@@ -164,7 +164,7 @@ export default function ProfilePreview({
         </motion.div>
 
         {/* Action Buttons */}
-        <div className="flex justify-center gap-4">
+        <div className="flex justify-center gap-3">
           <button className="btn-action w-14 h-14 flex-col gap-1">
             <FiEdit3 className="w-5 h-5" />
             <span className="text-xs">Edit</span>

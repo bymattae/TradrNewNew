@@ -81,11 +81,11 @@ export default function ProfilePreview({
   onThemeClick
 }: ProfilePreviewProps) {
   return (
-    <div className="h-screen flex flex-col items-center bg-black px-4 py-3 overflow-hidden">
+    <div className="min-h-screen flex flex-col items-center bg-black px-4 py-3">
       {/* Main Content Area */}
-      <div className="w-full max-w-md flex flex-col h-full">
+      <div className="w-full max-w-md flex flex-col">
         {/* Scrollable Profile Preview */}
-        <div className="flex-grow overflow-y-auto mb-4 rounded-2xl">
+        <div className="w-full max-h-[70vh] overflow-y-auto mb-6 rounded-2xl">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -160,8 +160,8 @@ export default function ProfilePreview({
           </motion.div>
         </div>
 
-        {/* New Action Buttons Section */}
-        <div className="w-full mb-4">
+        {/* Action Buttons Section - Outside scrollable container */}
+        <div className="w-full mb-6">
           <div className="flex justify-center gap-4">
             <button 
               onClick={onEditClick} 

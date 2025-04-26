@@ -5,8 +5,8 @@
 @layer base {
   :root {
     --background: #000000;
-    --card-background: #111111;
-    --card-hover: #1A1A1A;
+    --card-background: #0D0D0D;
+    --card-hover: #151515;
     --text-primary: #FFFFFF;
     --text-secondary: rgba(255, 255, 255, 0.6);
     --brand-purple: #7048E8;
@@ -28,7 +28,7 @@
 
 @layer components {
   .card {
-    @apply w-full bg-[var(--card-background)] rounded-2xl transition-all;
+    @apply w-full bg-[var(--card-background)] rounded-3xl shadow-lg transition-all;
   }
 
   .card-hover {
@@ -36,27 +36,27 @@
   }
 
   .btn-primary {
-    @apply w-full bg-[var(--brand-purple)] hover:bg-[var(--brand-purple-hover)] text-white font-medium py-4 px-6 rounded-xl text-lg transition-colors;
+    @apply w-full bg-[var(--brand-purple)] hover:bg-[var(--brand-purple-hover)] text-white font-semibold py-4 px-6 rounded-2xl text-lg transition-colors;
   }
 
   .btn-action {
-    @apply bg-[var(--card-background)] hover:bg-[var(--card-hover)] p-4 rounded-xl transition-colors flex flex-col items-center;
+    @apply bg-[var(--card-background)] hover:bg-[var(--card-hover)] p-4 rounded-2xl transition-colors flex flex-col items-center;
   }
 
   .btn-action-label {
-    @apply text-xs mt-1 text-[var(--text-secondary)];
+    @apply text-xs mt-1.5 text-[var(--text-secondary)];
   }
 
   .tag {
-    @apply bg-[var(--card-hover)] px-3 py-1 rounded-full text-xs text-[var(--text-secondary)];
+    @apply bg-[var(--card-hover)] px-3 py-1.5 rounded-full text-xs text-[var(--text-secondary)];
   }
 
   .stats-grid {
-    @apply w-full grid grid-cols-3 gap-4;
+    @apply w-full grid grid-cols-3 gap-6;
   }
 
   .stats-value {
-    @apply text-xl font-bold;
+    @apply text-xl font-bold mb-1;
   }
 
   .stats-label {
@@ -66,15 +66,7 @@
 
 /* Custom scrollbar */
 ::-webkit-scrollbar {
-  @apply w-1;
-}
-
-::-webkit-scrollbar-track {
-  @apply bg-transparent;
-}
-
-::-webkit-scrollbar-thumb {
-  @apply bg-white/10 rounded-full hover:bg-white/20 transition-colors;
+  display: none;
 }
 
 /* Hub button animation */

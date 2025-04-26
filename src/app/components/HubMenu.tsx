@@ -4,9 +4,11 @@ import {
   RiHome5Line,
   RiLineChartLine,
   RiTrophyLine,
-  RiNewspaperLine,
-  RiToolsLine
 } from 'react-icons/ri';
+import { 
+  RssIcon,
+  Wrench
+} from 'lucide-react';
 import Image from 'next/image';
 
 interface HubMenuProps {
@@ -33,18 +35,21 @@ const menuItems = [
     label: 'Leaderboard',
     href: '/leaderboard',
     isComingSoon: false 
-  },
-  { 
-    icon: RiNewspaperLine,
+  }
+];
+
+const comingSoonItems = [
+  {
+    icon: RssIcon,
     label: 'Feed',
     href: '/feed',
-    isComingSoon: true 
+    isComingSoon: true
   },
-  { 
-    icon: RiToolsLine,
+  {
+    icon: Wrench,
     label: 'Tools',
     href: '/tools',
-    isComingSoon: true 
+    isComingSoon: true
   }
 ];
 
@@ -85,21 +90,22 @@ export default function HubMenu({ isOpen, onClose }: HubMenuProps) {
 
             {/* Menu Content */}
             <div className="flex-1 px-4 py-6 overflow-y-auto">
-              <div className="grid grid-cols-3 gap-3">
+              {/* Main Menu Items */}
+              <div className="grid grid-cols-3 gap-3 mb-6">
                 {menuItems.map((item) => (
                   <motion.a
                     key={item.label}
-                    href={item.isComingSoon ? '#' : item.href}
+                    href={item.href}
                     className={`
                       flex flex-col items-center gap-2 p-4 rounded-2xl
                       transition-all duration-200
                       ${item.isActive 
                         ? 'bg-[#7B61FF]/10 text-[#7B61FF]' 
                         : 'bg-[#121212] text-white hover:bg-[#151515]'}
-                      ${item.isComingSoon ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
+                      cursor-pointer
                     `}
-                    whileHover={!item.isComingSoon ? { scale: 1.02 } : undefined}
-                    whileTap={!item.isComingSoon ? { scale: 0.98 } : undefined}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
                   >
                     <item.icon 
                       size={24} 
@@ -108,11 +114,30 @@ export default function HubMenu({ isOpen, onClose }: HubMenuProps) {
                     />
                     <span className="text-sm font-medium">
                       {item.label}
-                      {item.isComingSoon && (
-                        <span className="block text-xs opacity-75 mt-0.5">
-                          Coming Soon
-                        </span>
-                      )}
+                    </span>
+                  </motion.a>
+                ))}
+              </div>
+
+              {/* Coming Soon Items */}
+              <div className="flex justify-center gap-3">
+                {comingSoonItems.map((item) => (
+                  <motion.a
+                    key={item.label}
+                    className="flex flex-col items-center gap-2 p-4 rounded-2xl
+                      bg-[#121212] text-white opacity-50 cursor-not-allowed
+                      transition-all duration-200 w-[160px]"
+                  >
+                    <item.icon 
+                      size={24} 
+                      className="mb-1"
+                      strokeWidth={1.5}
+                    />
+                    <span className="text-sm font-medium">
+                      {item.label}
+                      <span className="block text-xs opacity-75 mt-0.5">
+                        Coming Soon
+                      </span>
                     </span>
                   </motion.a>
                 ))}
@@ -151,18 +176,6 @@ export default function HubMenu({ isOpen, onClose }: HubMenuProps) {
                   className="text-white/50"
                 />
               </div>
-            </div>
-
-            {/* Close Button */}
-            <div className="absolute bottom-12 left-1/2 -translate-x-1/2">
-              <motion.button
-                onClick={onClose}
-                className="w-14 h-14 rounded-full bg-[#7B61FF] flex items-center justify-center"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <IoClose size={24} className="text-white" />
-              </motion.button>
             </div>
           </motion.div>
         </>

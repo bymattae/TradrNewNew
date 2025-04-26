@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
+import { RiArrowRightLine } from 'react-icons/ri';
 
 interface SocialLink {
   platform: 'twitter' | 'instagram' | 'youtube' | 'tiktok' | 'telegram';
@@ -77,28 +78,25 @@ export default function ProfilePreview({
   onThemeClick
 }: ProfilePreviewProps) {
   return (
-    <div className="relative">
-      {/* Background Glow Effect */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] 
-        bg-[radial-gradient(circle_at_center,rgba(123,97,255,0.15)_0%,transparent_60%)]" 
-      />
+    <div className="relative group">
+      {/* Glow effect */}
+      <div className="absolute inset-0 -z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+        <div className="absolute inset-0 bg-[var(--brand-purple)]/20 blur-[100px] rounded-[100px]" />
+      </div>
 
-      {/* Main Card */}
-      <div className="relative card">
-        <div className="space-y-6">
-          {/* Profile Header */}
-          <div className="flex items-start gap-4">
-            <div className="relative">
-              <div className="w-16 h-16 rounded-full overflow-hidden bg-[#7B61FF]/20 
-                shadow-[inset_0_0_0.5px_rgba(255,255,255,0.1)]
-                border border-white/5">
+      <div className="card card-hover">
+        {/* Profile header */}
+        <div className="flex items-center gap-4">
+          <div className="relative">
+            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[var(--brand-purple)] to-[var(--brand-purple-hover)] p-[1px]">
+              <div className="w-full h-full rounded-full bg-[var(--card-background)] p-[2px]">
                 {avatarUrl ? (
                   <Image
                     src={avatarUrl}
                     alt={username}
-                    width={64}
-                    height={64}
-                    className="object-cover"
+                    width={48}
+                    height={48}
+                    className="rounded-full"
                   />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center text-xl font-bold text-[#7B61FF]">
@@ -107,109 +105,93 @@ export default function ProfilePreview({
                 )}
               </div>
             </div>
-            <div className="flex-1 min-w-0">
-              <h2 className="text-title text-xl">
-                @{username}
-              </h2>
-              {bio && (
-                <p className="text-description mt-1 text-sm leading-relaxed line-clamp-2">
-                  {bio}
-                </p>
-              )}
+          </div>
+          <div className="flex-1">
+            <h3 className="text-title text-lg">
+              @{username}
+            </h3>
+            {bio && (
+              <p className="text-description text-sm">
+                {bio}
+              </p>
+            )}
+          </div>
+          <button className="btn-action">
+            <RiArrowRightLine className="w-5 h-5" />
+          </button>
+        </div>
+
+        {/* Tags */}
+        {tags.length > 0 && (
+          <div className="flex flex-wrap gap-2 mt-2">
+            {tags.map((tag, index) => (
+              <span
+                key={index}
+                className="px-2.5 py-1 bg-white/5 rounded-lg text-xs text-white/70 font-medium 
+                  border border-white/5 backdrop-blur-sm"
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
+        )}
+
+        {/* Strategies */}
+        {strategies && strategies.length > 0 && (
+          <div className="mt-6">
+            <div className="flex items-center justify-between">
+              <h4 className="strategy-title">Current Strategy</h4>
+              <span className="text-description text-sm">Last 30 days</span>
+            </div>
+            <div className="mt-3 flex items-center gap-3">
+              <div className="flex-1 h-2 rounded-full bg-white/5 overflow-hidden">
+                <div className="h-full w-3/4 rounded-full bg-gradient-to-r from-[var(--brand-purple)] to-[var(--brand-purple-hover)]" />
+              </div>
+              <span className="text-white font-medium">
+                {strategies[0].stats.winRate}%
+              </span>
             </div>
           </div>
+        )}
 
-          {/* Tags */}
-          {tags.length > 0 && (
-            <div className="flex flex-wrap gap-2">
-              {tags.map((tag, index) => (
-                <span
-                  key={index}
-                  className="px-2.5 py-1 bg-white/5 rounded-lg text-xs text-white/70 font-medium 
-                    border border-white/5 backdrop-blur-sm"
-                >
-                  {tag}
+        {/* Links */}
+        {links && links.length > 0 && (
+          <div className="space-y-3 mt-6">
+            {links.map((link, index) => (
+              <a
+                key={index}
+                href={link.cta.url}
+                className="block bg-white/5 rounded-xl p-4 border border-white/5
+                  backdrop-blur-sm hover:bg-white/10 transition-all duration-200"
+              >
+                <h3 className="text-title text-sm">
+                  {link.title}
+                </h3>
+                <p className="text-description text-xs mt-1 line-clamp-2">
+                  {link.description}
+                </p>
+                <span className="inline-block mt-2 text-[#7B61FF] text-xs font-medium">
+                  {link.cta.text} →
                 </span>
-              ))}
-            </div>
-          )}
+              </a>
+            ))}
+          </div>
+        )}
 
-          {/* Strategies */}
-          {strategies && strategies.length > 0 && (
-            <div className="space-y-3">
-              {strategies.map((strategy, index) => (
-                <div
-                  key={index}
-                  className="bg-white/5 rounded-xl p-4 border border-white/5
-                    backdrop-blur-sm"
-                >
-                  <h3 className="strategy-title mb-3">
-                    {strategy.title}
-                  </h3>
-                  <div className="grid grid-cols-3 gap-4">
-                    <div>
-                      <p className="text-label text-xs mb-1">Gain</p>
-                      <p className="font-mono text-[#7B61FF] font-medium text-sm">
-                        +{strategy.stats.gain}%
-                      </p>
-                    </div>
-                    <div>
-                      <p className="text-label text-xs mb-1">Win Rate</p>
-                      <p className="font-mono text-white font-medium text-sm">
-                        {strategy.stats.winRate}%
-                      </p>
-                    </div>
-                    <div>
-                      <p className="text-label text-xs mb-1">Risk Ratio</p>
-                      <p className="font-mono text-white font-medium text-sm">
-                        {strategy.stats.riskRatio}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              ))}
+        {/* Powered by Tradr */}
+        <div className="pt-4 mt-2 border-t border-white/10">
+          <div className="flex items-center justify-center gap-1.5 text-white/60 text-[11px]">
+            <div className="relative w-3 h-3 flex-shrink-0">
+              <Image
+                src="https://rnfvzaelmwbbvfbsppir.supabase.co/storage/v1/object/public/assets/TradrIcon%20(1).png"
+                alt="Tradr"
+                fill
+                sizes="12px"
+                className="object-contain"
+              />
             </div>
-          )}
-
-          {/* Links */}
-          {links && links.length > 0 && (
-            <div className="space-y-3">
-              {links.map((link, index) => (
-                <a
-                  key={index}
-                  href={link.cta.url}
-                  className="block bg-white/5 rounded-xl p-4 border border-white/5
-                    backdrop-blur-sm hover:bg-white/10 transition-all duration-200"
-                >
-                  <h3 className="text-title text-sm">
-                    {link.title}
-                  </h3>
-                  <p className="text-description text-xs mt-1 line-clamp-2">
-                    {link.description}
-                  </p>
-                  <span className="inline-block mt-2 text-[#7B61FF] text-xs font-medium">
-                    {link.cta.text} →
-                  </span>
-                </a>
-              ))}
-            </div>
-          )}
-
-          {/* Powered by Tradr */}
-          <div className="pt-4 mt-2 border-t border-white/10">
-            <div className="flex items-center justify-center gap-1.5 text-white/60 text-[11px]">
-              <div className="relative w-3 h-3 flex-shrink-0">
-                <Image
-                  src="https://rnfvzaelmwbbvfbsppir.supabase.co/storage/v1/object/public/assets/TradrIcon%20(1).png"
-                  alt="Tradr"
-                  fill
-                  sizes="12px"
-                  className="object-contain"
-                />
-              </div>
-              <span>Powered by</span>
-              <span className="font-medium">Tradr</span>
-            </div>
+            <span>Powered by</span>
+            <span className="font-medium">Tradr</span>
           </div>
         </div>
       </div>

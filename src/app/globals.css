@@ -4,17 +4,26 @@
 
 @layer base {
   :root {
+    --background: #0A0A0A;
+    --card-background: #121212;
+    --card-hover: #151515;
     --brand-purple: #7B61FF;
     --brand-purple-hover: #8B74FF;
+  }
+
+  body {
+    @apply bg-[var(--background)];
   }
 }
 
 @layer components {
   .card {
-    @apply bg-[#1A1A1A] rounded-xl 
+    @apply bg-[var(--card-background)] rounded-2xl 
     border border-white/5
     shadow-[0px_12px_28px_rgba(0,0,0,0.6)]
     backdrop-blur-[2px]
+    hover:bg-[var(--card-hover)]
+    transition-colors duration-300
     p-6 md:p-8;
   }
   
@@ -27,14 +36,15 @@
   .btn-action {
     @apply flex flex-col items-center gap-1.5
     px-3 py-2 rounded-xl
-    bg-black/50 backdrop-blur-md
+    bg-[var(--card-background)] backdrop-blur-md
     border border-white/5
     text-[#E5E5E5] hover:text-white 
+    hover:bg-[var(--card-hover)]
     transition-all duration-200;
   }
 
   .btn-primary {
-    @apply bg-[#7B61FF] hover:bg-[#8B74FF] 
+    @apply bg-[var(--brand-purple)] hover:bg-[var(--brand-purple-hover)]
     text-white rounded-xl px-4 py-2.5
     font-medium transition-all duration-200
     shadow-[0px_4px_12px_rgba(123,97,255,0.3)];
@@ -65,16 +75,6 @@
   }
 }
 
-/* Floating animation for Hub button */
-@keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-3px); }
-}
-
-.animate-float {
-  animation: float 6s ease-in-out infinite;
-}
-
 /* Custom scrollbar styles */
 ::-webkit-scrollbar {
   width: 8px;
@@ -86,12 +86,17 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #CBD5E1;
-  border-radius: 4px;
+  @apply bg-white/20 hover:bg-white/30 rounded transition-colors;
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: #94A3B8;
+/* Remove float animation as we're using Framer Motion now */
+.animate-float {
+  animation: none;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-3px); }
 }
 
 /* Dark mode scrollbar */

@@ -39,7 +39,7 @@ export default function ProfilePage() {
           </div>
           <h2 className="text-xl font-bold mb-1">mattjames.eth</h2>
           <p className="text-gray-400 text-sm mb-4">
-            I'm a professional trader from Cardiff looking to level up my skills in trading.
+            I&apos;m a professional trader from Cardiff looking to level up my skills in trading.
           </p>
           <div className="flex gap-2 mb-6">
             <span className="bg-[#222222] px-3 py-1 rounded-full text-xs">#crypto</span>
@@ -67,7 +67,7 @@ export default function ProfilePage() {
       <div className="bg-[#111111] rounded-xl p-6 mb-6">
         <h3 className="text-lg font-bold mb-2">Premium Strategy Course</h3>
         <p className="text-gray-400 text-sm mb-4">
-          I'm a professional trader from Cardiff looking to level up my skills in trading.
+          I&apos;m a professional trader from Cardiff looking to level up my skills in trading.
         </p>
         <button className="w-full bg-purple-600 text-white py-3 rounded-lg font-medium hover:bg-purple-700 transition-colors">
           Get Access Now

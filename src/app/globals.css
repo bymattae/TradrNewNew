@@ -4,99 +4,59 @@
 
 @layer base {
   :root {
-    /* Core backgrounds */
-    --background: #0A0A0A;
-    --background-rgb: 10, 10, 10;
-    --card-background: #121212;
-    --card-background-rgb: 18, 18, 18;
-    --button-background: #1A1A1A;
-    --button-background-hover: #222222;
-    --divider: rgba(255, 255, 255, 0.1);
-    
-    /* Text colors */
-    --text-primary: rgba(255, 255, 255, 0.9);
-    --text-secondary: rgba(255, 255, 255, 0.6);
-    --text-tertiary: rgba(255, 255, 255, 0.4);
-    
-    /* Brand colors */
+    --background: #000000;
+    --card-background: #111111;
+    --card-hover: #1A1A1A;
+    --text-primary: #FFFFFF;
+    --text-secondary: #A0A0A0;
     --brand-purple: #7048E8;
-    --brand-purple-rgb: 112, 72, 232;
-    --brand-purple-hover: #8160EA;
-    
-    --success: #22C55E;
-    --warning: #F59E0B;
-    --error: #EF4444;
+    --brand-purple-hover: #5F3DD3;
+    --brand-green: #22C55E;
   }
 
+  html,
   body {
-    @apply bg-[var(--background)] min-h-screen text-[var(--text-primary)];
+    @apply h-full overflow-hidden bg-[var(--background)] text-[var(--text-primary)];
+    font-feature-settings: "ss01", "ss02", "cv01", "cv02";
+  }
+
+  main {
+    @apply h-full overflow-y-auto;
+    -webkit-overflow-scrolling: touch;
   }
 }
 
 @layer components {
-  .app-container {
-    @apply relative w-full max-w-lg mx-auto px-4;
+  .card {
+    @apply bg-[var(--card-background)] rounded-xl transition-all;
   }
 
-  .profile-card {
-    @apply relative rounded-3xl bg-gradient-to-b from-[#141414] to-[#0A0A0A] shadow-lg border border-[rgba(255,255,255,0.03)];
-  }
-
-  .profile-section {
-    @apply p-6;
-  }
-
-  .avatar-container {
-    @apply relative w-16 h-16 rounded-full p-[2px] bg-gradient-to-br from-[var(--brand-purple)] to-[rgba(255,255,255,0.1)];
-  }
-
-  .stats-card {
-    @apply relative rounded-2xl bg-[rgba(255,255,255,0.02)] shadow-inner border border-[rgba(255,255,255,0.03)] p-4;
-  }
-
-  .bottom-actions {
-    @apply fixed bottom-0 left-0 right-0 bg-gradient-to-t from-[var(--background)] via-[var(--background)] to-transparent pt-8 pb-6;
-  }
-
-  .actions-container {
-    @apply max-w-lg mx-auto px-4 flex justify-between items-center gap-4;
-  }
-
-  .btn-action {
-    @apply flex items-center justify-center px-4 py-2 rounded-xl bg-[var(--button-background)] text-[var(--text-primary)] 
-    hover:bg-[var(--button-background-hover)] transition-all duration-200 hover:scale-105;
+  .card-hover {
+    @apply hover:bg-[var(--card-hover)];
   }
 
   .btn-primary {
-    @apply flex items-center justify-center px-6 py-3 rounded-xl bg-[var(--brand-purple)] text-white font-medium
-    hover:bg-[var(--brand-purple-hover)] transition-all duration-200 hover:scale-105 shadow-lg;
-    box-shadow: 0 4px 14px rgba(112, 72, 232, 0.2);
+    @apply bg-[var(--brand-purple)] hover:bg-[var(--brand-purple-hover)] text-white font-medium px-6 py-3 rounded-lg transition-colors;
   }
 
-  .btn-secondary {
-    @apply flex items-center justify-center px-6 py-3 rounded-xl border border-[rgba(255,255,255,0.1)] 
-    hover:bg-[rgba(255,255,255,0.05)] transition-all duration-200;
+  .btn-action {
+    @apply bg-[var(--card-background)] hover:bg-[var(--card-hover)] p-4 rounded-xl transition-colors;
   }
 
-  .card {
-    @apply rounded-2xl bg-[var(--card-background)] p-6 border border-[rgba(255,255,255,0.03)] 
-    hover:bg-[rgba(255,255,255,0.02)] transition-all duration-200;
+  .tag {
+    @apply bg-[#222222] px-3 py-1 rounded-full text-xs text-[var(--text-secondary)];
   }
 
-  .title {
-    @apply text-2xl font-semibold text-[var(--text-primary)];
+  .stats-card {
+    @apply bg-[var(--background)] rounded-xl p-4;
   }
 
-  .subtitle {
-    @apply text-base text-[var(--text-secondary)];
+  .stats-value {
+    @apply text-xl font-bold;
   }
 
-  .label {
-    @apply text-sm font-medium text-[var(--text-secondary)];
-  }
-
-  .value {
-    @apply text-lg font-semibold text-[var(--text-primary)];
+  .stats-label {
+    @apply text-xs text-[var(--text-secondary)];
   }
 }
 

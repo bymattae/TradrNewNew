@@ -21,8 +21,14 @@ const ibmPlexMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Tradr Dashboard',
+  title: 'Tradr',
   description: 'Professional trading insights and portfolio management',
+  viewport: {
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 1,
+    userScalable: false,
+  },
 };
 
 export default function RootLayout({
@@ -31,10 +37,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${spaceGrotesk.variable} ${inter.variable} ${ibmPlexMono.variable} h-full min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-950`}>
-      <body className="h-full">
+    <html lang="en" className={`${spaceGrotesk.variable} ${inter.variable} ${ibmPlexMono.variable}`}>
+      <body className="bg-black antialiased">
         <AuthProvider>
-          <div className="mx-auto max-w-7xl">
+          <div className="mx-auto max-w-md min-h-screen">
             {children}
           </div>
           <Toaster richColors position="top-center" />

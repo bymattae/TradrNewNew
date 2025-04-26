@@ -81,65 +81,76 @@ export default function ProfilePreview({
   onThemeClick
 }: ProfilePreviewProps) {
   return (
-    <div className="app-container relative">
+    <div className="app-container pb-24">
       {/* Profile Card */}
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="profile-card"
+        className="profile-card overflow-hidden"
       >
         {/* Profile Header */}
-        <div className="profile-section">
-          <div className="flex items-center gap-4">
-            <div className="avatar-container">
-              <img
+        <div className="px-6 pt-8 pb-6">
+          <div className="flex flex-col items-center text-center">
+            <div className="avatar-container w-24 h-24 mb-4">
+              <Image
                 src="/avatar.png"
                 alt="Profile"
-                className="w-full h-full rounded-full object-cover"
+                width={96}
+                height={96}
+                className="rounded-full object-cover"
               />
             </div>
-            <div>
-              <h2 className="text-2xl font-bold tracking-tight">mattjames.eth</h2>
-              <p className="text-[var(--text-secondary)]">Professional Trader</p>
+            <div className="space-y-2">
+              <h2 className="text-xl font-bold tracking-tight">mattjames.eth</h2>
+              <p className="text-[var(--text-secondary)] text-sm">Professional Trader</p>
+              <div className="flex flex-wrap justify-center gap-2 mt-3">
+                {['#crypto', '#defi', '#trading'].map((tag) => (
+                  <span key={tag} className="px-3 py-1 text-xs rounded-full bg-[rgba(255,255,255,0.05)] text-[var(--text-secondary)]">
+                    {tag}
+                  </span>
+                ))}
+              </div>
             </div>
           </div>
         </div>
 
         {/* Stats Section */}
-        <div className="profile-section">
+        <div className="px-6 py-6 border-t border-b border-[rgba(255,255,255,0.03)]">
           <div className="stats-card">
-            <div className="grid grid-cols-3 gap-8">
+            <div className="grid grid-cols-3 gap-4">
               <div className="text-center">
-                <p className="text-2xl font-bold">47%</p>
-                <p className="text-sm text-[var(--text-secondary)]">Win Rate</p>
+                <p className="text-xl font-bold mb-1">47%</p>
+                <p className="text-xs text-[var(--text-secondary)]">Win Rate</p>
               </div>
               <div className="text-center">
-                <p className="text-2xl font-bold">$14.2K</p>
-                <p className="text-sm text-[var(--text-secondary)]">Profit</p>
+                <p className="text-xl font-bold mb-1">$14.2K</p>
+                <p className="text-xs text-[var(--text-secondary)]">Profit</p>
               </div>
               <div className="text-center">
-                <p className="text-2xl font-bold">89</p>
-                <p className="text-sm text-[var(--text-secondary)]">Trades</p>
+                <p className="text-xl font-bold mb-1">89</p>
+                <p className="text-xs text-[var(--text-secondary)]">Trades</p>
               </div>
             </div>
           </div>
         </div>
 
         {/* CTA Section */}
-        <div className="profile-section text-center">
-          <h3 className="text-xl font-semibold mb-2">Get Premium Access</h3>
-          <p className="text-[var(--text-secondary)] mb-6">
-            Follow my trades and strategies in real-time
-          </p>
-          <button className="btn-primary w-full">
-            Get Access Now
-          </button>
+        <div className="px-6 pt-8 pb-10">
+          <div className="text-center space-y-4">
+            <h3 className="text-lg font-semibold">Get Premium Access</h3>
+            <p className="text-sm text-[var(--text-secondary)]">
+              Follow my trades and strategies in real-time
+            </p>
+            <button className="btn-primary w-full mt-2">
+              Get Access Now
+            </button>
+          </div>
         </div>
 
         {/* Footer */}
-        <div className="profile-section border-t border-[var(--divider)] text-center">
-          <p className="text-sm text-[var(--text-secondary)]">
+        <div className="px-6 py-4 border-t border-[rgba(255,255,255,0.03)] bg-[rgba(255,255,255,0.02)]">
+          <p className="text-xs text-center text-[var(--text-secondary)]">
             Powered by Tradr
           </p>
         </div>
@@ -148,23 +159,23 @@ export default function ProfilePreview({
       {/* Bottom Action Bar */}
       <div className="bottom-actions">
         <div className="actions-container">
-          <button className="btn-action">
-            <FiEdit3 className="w-6 h-6" />
-            <span className="text-sm">Edit</span>
+          <button className="btn-action w-[72px] h-[72px] flex-col gap-2">
+            <FiEdit3 className="w-5 h-5" />
+            <span className="text-xs">Edit</span>
           </button>
-          <button className="btn-action">
-            <FiShare2 className="w-6 h-6" />
-            <span className="text-sm">Share</span>
+          <button className="btn-action w-[72px] h-[72px] flex-col gap-2">
+            <FiShare2 className="w-5 h-5" />
+            <span className="text-xs">Share</span>
           </button>
-          <button className="btn-action">
-            <IoColorPaletteOutline className="w-6 h-6" />
-            <span className="text-sm">Theme</span>
+          <button className="btn-action w-[72px] h-[72px] flex-col gap-2">
+            <IoColorPaletteOutline className="w-5 h-5" />
+            <span className="text-xs">Theme</span>
           </button>
         </div>
       </div>
 
       {/* Hub Button */}
-      <div className="fixed left-6 bottom-24 z-50">
+      <div className="fixed left-6 bottom-32 z-50">
         <HubButton onClick={() => {}} />
       </div>
     </div>

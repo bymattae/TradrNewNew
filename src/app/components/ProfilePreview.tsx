@@ -88,18 +88,18 @@ export default function ProfilePreview({
         {/* Profile header */}
         <div className="flex items-center gap-4">
           <div className="relative">
-            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[var(--brand-primary)] to-[var(--brand-secondary)] p-[1px]">
+            <div className="w-14 h-14 rounded-full bg-gradient-to-br from-[#7048E8] to-[#5c3cd6] p-[1px]">
               <div className="w-full h-full rounded-full bg-[var(--button-background)] p-[2px]">
                 {avatarUrl ? (
                   <Image
                     src={avatarUrl}
                     alt={username}
-                    width={48}
-                    height={48}
+                    width={56}
+                    height={56}
                     className="rounded-full"
                   />
                 ) : (
-                  <div className="w-full h-full flex items-center justify-center text-xl font-bold text-[var(--brand-primary)]">
+                  <div className="w-full h-full flex items-center justify-center text-xl font-bold text-[#7048E8]">
                     {username[0].toUpperCase()}
                   </div>
                 )}
@@ -107,7 +107,7 @@ export default function ProfilePreview({
             </div>
           </div>
           <div className="flex-1">
-            <h3 className="text-title text-lg">
+            <h3 className="text-title text-lg font-semibold">
               @{username}
             </h3>
             {bio && (
@@ -136,14 +136,14 @@ export default function ProfilePreview({
           </div>
         )}
 
-        {/* Strategies */}
+        {/* Stats */}
         {strategies && strategies.length > 0 && (
           <div className="mt-4">
-            <div className="bg-[var(--button-background)] rounded-xl p-4">
-              <div className="grid grid-cols-3 gap-6">
+            <div className="bg-[var(--button-background)] rounded-2xl p-4 shadow-[0_4px_16px_rgba(0,0,0,0.1)]">
+              <div className="grid grid-cols-3 gap-8">
                 <div>
                   <p className="text-[13px] text-[var(--text-secondary)] font-medium">Gain</p>
-                  <p className="text-[15px] font-semibold text-[var(--text-primary)] mt-1.5">
+                  <p className="text-[15px] font-semibold text-[#7048E8] mt-1.5">
                     +{strategies[0].stats.gain}%
                   </p>
                 </div>
@@ -171,9 +171,10 @@ export default function ProfilePreview({
               <a
                 key={index}
                 href={link.cta.url}
-                className="block bg-[var(--button-background)] rounded-xl p-4 border border-[var(--divider)]
-                  backdrop-blur-sm hover:bg-[var(--button-background)] hover:border-[rgba(123,79,255,0.2)]
-                  hover:shadow-[0px_4px_12px_rgba(123,79,255,0.15)] transition-all duration-200"
+                className="block bg-[#141414] rounded-2xl px-5 py-4 border border-[var(--divider)]
+                  backdrop-blur-sm hover:bg-[var(--button-background)] 
+                  shadow-[0_4px_16px_rgba(0,0,0,0.1)]
+                  transition-all duration-200"
               >
                 <h3 className="text-title text-sm">
                   {link.title}
@@ -181,9 +182,11 @@ export default function ProfilePreview({
                 <p className="text-description text-xs mt-1 line-clamp-2">
                   {link.description}
                 </p>
-                <span className="inline-block mt-2 text-[var(--brand-secondary)] text-xs font-medium">
+                <button className="mt-3 px-5 py-2 bg-[#7048E8] hover:bg-[#5c3cd6] 
+                  rounded-full text-white text-xs font-medium
+                  transition-colors duration-200">
                   {link.cta.text} →
-                </span>
+                </button>
               </a>
             ))}
           </div>
@@ -209,11 +212,11 @@ export default function ProfilePreview({
 
       {/* Action Buttons */}
       <div className="relative mt-4">
-        <div className="flex items-center justify-center gap-4">
+        <div className="flex items-center justify-center gap-6">
           <motion.button
             onClick={onEditClick}
-            className="btn-action"
-            whileTap={{ scale: 1.05 }}
+            className="btn-action scale-95"
+            whileTap={{ scale: 0.9 }}
             transition={{ type: "spring", stiffness: 400, damping: 15 }}
           >
             <svg className="w-[22px] h-[22px]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -224,8 +227,8 @@ export default function ProfilePreview({
 
           <motion.button
             onClick={onShareClick}
-            className="btn-action"
-            whileTap={{ scale: 1.05 }}
+            className="btn-action scale-95"
+            whileTap={{ scale: 0.9 }}
             transition={{ type: "spring", stiffness: 400, damping: 15 }}
           >
             <svg className="w-[22px] h-[22px]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -236,8 +239,8 @@ export default function ProfilePreview({
 
           <motion.button
             onClick={onThemeClick}
-            className="btn-action"
-            whileTap={{ scale: 1.05 }}
+            className="btn-action scale-95"
+            whileTap={{ scale: 0.9 }}
             transition={{ type: "spring", stiffness: 400, damping: 15 }}
           >
             <svg className="w-[22px] h-[22px]" fill="none" viewBox="0 0 24 24" stroke="currentColor">

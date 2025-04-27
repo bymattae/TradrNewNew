@@ -4,8 +4,8 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
 import { RiArrowRightLine } from 'react-icons/ri';
-import { FiEdit3, FiShare2 } from 'react-icons/fi';
-import { IoColorPaletteOutline } from 'react-icons/io5';
+import { FiEdit, FiEdit3, FiShare2 } from 'react-icons/fi';
+import { IoColorPaletteOutline, IoGridOutline } from 'react-icons/io5';
 import HubButton from './HubButton';
 
 interface SocialLink {
@@ -80,115 +80,129 @@ export default function ProfilePreview({
   onShareClick,
   onThemeClick
 }: ProfilePreviewProps) {
+  const tagColors: Record<string, string> = {
+    '#NFTTrader': 'bg-[#6048B8]/25 text-[#9B7BFF]',
+    '#DeFiWhale': 'bg-[#3047B8]/25 text-[#7B9BFF]',
+    '#Web3': 'bg-[#0D9373]/25 text-[#4DFFC7]'
+  };
+
+  const getTagColor = (tag: string) => {
+    return tagColors[tag] || 'bg-[#333]/50 text-white/70';
+  };
+
   return (
     <div className="w-full flex flex-col items-center">
-      {/* Profile Preview Phone Frame */}
-      <div className="w-full max-w-[320px] h-[580px] bg-[#151515] rounded-[32px] shadow-[0_0_35px_rgba(0,0,0,0.3),0_0_10px_rgba(123,97,255,0.1)] border-4 border-[#242424] overflow-hidden mb-6 relative">
-        {/* Phone Screen Content - Scrollable */}
-        <div className="w-full h-full overflow-y-auto bg-black px-3 py-3 scrollbar-hide">
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="w-full bg-[#151515] rounded-2xl shadow-lg border border-[rgba(255,255,255,0.03)] overflow-hidden scale-[0.9]"
-          >
-            {/* Profile Header */}
-            <div className="p-3">
-              <div className="bg-[#181818] rounded-2xl p-4 shadow-sm flex flex-col items-center text-center space-y-1.5">
-                <div className="relative w-14 h-14">
-                  <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[var(--brand-purple)] to-[rgba(255,255,255,0.1)] p-[2px]">
-                    <Image
-                      src="/avatar.png"
-                      alt="Profile"
-                      width={56}
-                      height={56}
-                      className="rounded-full object-cover w-full h-full"
-                    />
-                  </div>
-                </div>
-                <div className="space-y-0.5">
-                  <h2 className="text-lg font-bold tracking-tight">{username}</h2>
-                  <p className="text-xs font-normal text-[#A0A0A0]">Professional Trader</p>
-                </div>
-                <div className="flex flex-wrap justify-center gap-1">
-                  {(tags || ['#crypto', '#defi', '#trading']).map((tag) => (
-                    <span key={tag} className="px-1.5 py-0.5 text-[10px] rounded-full bg-[rgba(255,255,255,0.05)] text-[#A0A0A0]">
-                      {tag}
-                    </span>
-                  ))}
+      {/* Main Profile Card */}
+      <div className="relative w-full flex flex-col items-center">
+        <div className="w-full bg-[#151515] rounded-2xl shadow-lg overflow-hidden">
+          {/* Profile Info Section */}
+          <div className="relative w-full bg-gradient-to-b from-[#1A1A1A] to-[#0D0D0D] p-6 flex flex-col items-center">
+            {/* Edit button */}
+            <button 
+              onClick={onEditClick}
+              className="absolute top-4 right-4 p-2 rounded-full bg-black/30 hover:bg-black/50 transition-colors"
+            >
+              <FiEdit className="w-4 h-4 text-white/80" />
+            </button>
+            
+            {/* Avatar */}
+            <div className="relative mb-4">
+              <div className="w-[90px] h-[90px] rounded-full bg-gradient-to-br from-[#7048E8] to-[#9C48E8] p-[2px] shadow-[0_0_15px_rgba(123,97,255,0.5)]">
+                <div className="w-full h-full rounded-full overflow-hidden">
+                  <Image
+                    src={avatarUrl || "/avatar.png"}
+                    alt={username}
+                    width={90}
+                    height={90}
+                    className="w-full h-full object-cover"
+                  />
                 </div>
               </div>
+              {/* Status dot */}
+              <div className="absolute -right-1 bottom-2 w-4 h-4 rounded-full bg-[#10B981] border-2 border-[#0D0D0D]"></div>
             </div>
-
-            {/* Stats Section */}
-            <div className="px-3 mb-3">
-              <div className="bg-[#181818] rounded-2xl p-4 shadow-sm">
-                <div className="grid grid-cols-3 gap-2">
-                  <div className="text-center">
-                    <p className="text-base font-bold text-[var(--brand-purple)]">+47%</p>
-                    <p className="text-[10px] font-normal text-[#A0A0A0]">Gain</p>
-                  </div>
-                  <div className="text-center">
-                    <p className="text-base font-bold text-[var(--brand-purple)]">89%</p>
-                    <p className="text-[10px] font-normal text-[#A0A0A0]">Win Rate</p>
-                  </div>
-                  <div className="text-center">
-                    <p className="text-base font-bold text-[var(--brand-purple)]">2.5</p>
-                    <p className="text-[10px] font-normal text-[#A0A0A0]">Risk Ratio</p>
-                  </div>
-                </div>
+            
+            {/* Username */}
+            <h2 className="text-2xl font-bold text-white mb-1">@{username}</h2>
+            
+            {/* Bio */}
+            <p className="text-base text-white/70 text-center mb-3">{bio || 'Trader'}</p>
+            
+            {/* Tags */}
+            <div className="flex flex-wrap justify-center gap-2 mb-2">
+              {(tags || ['#NFTTrader', '#DeFiWhale', '#Web3']).map((tag) => (
+                <span 
+                  key={tag} 
+                  className={`px-3 py-1 rounded-full text-xs font-medium ${getTagColor(tag)}`}
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </div>
+          
+          {/* Stats Section */}
+          <div className="px-4 py-4">
+            <div className="grid grid-cols-3 gap-3">
+              <div className="bg-[#161616] rounded-xl py-3 px-2 text-center">
+                <p className="text-[#4DFFC7] text-xl font-bold">+{strategies?.[0]?.stats.gain || 12.5}%</p>
+                <p className="text-xs text-[#A0A0A0]">Gain</p>
+              </div>
+              <div className="bg-[#161616] rounded-xl py-3 px-2 text-center">
+                <p className="text-white text-xl font-bold">{strategies?.[0]?.stats.winRate || 89}%</p>
+                <p className="text-xs text-[#A0A0A0]">Win Rate</p>
+              </div>
+              <div className="bg-[#161616] rounded-xl py-3 px-2 text-center">
+                <p className="text-[#9B7BFF] text-xl font-bold">{strategies?.[0]?.stats.riskRatio || '1:3'}</p>
+                <p className="text-xs text-[#A0A0A0]">Avg R/R</p>
               </div>
             </div>
-
-            {/* CTA Section */}
-            <div className="px-3 mb-3">
-              <div className="bg-[#181818] rounded-2xl p-4 shadow-sm text-center space-y-2">
-                <h3 className="text-sm font-semibold">Premium Strategy Course</h3>
-                <p className="text-xs font-normal text-[#A0A0A0]">Follow my trades in real-time</p>
-                <button className="btn-primary w-4/5 mx-auto py-2 px-3 text-sm rounded-xl">
-                  Get Access Now
-                </button>
-              </div>
-            </div>
-
-            {/* Footer */}
-            <div className="px-4 py-3">
-              <p className="text-xs text-center font-normal text-[#A0A0A0]">
-                powered by tradr
+          </div>
+          
+          {/* CTA Section */}
+          <div className="px-4 pb-5">
+            <div className="bg-[#161616] rounded-xl p-4 text-center">
+              <h3 className="text-lg font-semibold text-white mb-1">
+                {links?.[0]?.title || 'Join my free telegram channel!'}
+              </h3>
+              <p className="text-sm text-[#A0A0A0] mb-3">
+                {links?.[0]?.description || 'Get involved with other alphas and start scaling. This is your time right now.'}
               </p>
+              <button className="bg-[#7048E8] hover:bg-[#6040D0] text-white py-2 px-6 rounded-full transition-colors text-sm font-medium">
+                {links?.[0]?.cta.text || 'Check it out'}
+              </button>
             </div>
-          </motion.div>
+          </div>
+          
+          {/* Footer with Tradr Logo */}
+          <div className="px-4 py-3 flex justify-center">
+            <div className="flex items-center gap-1.5 text-white/50 text-xs">
+              <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+              </svg>
+              <span>Powered by Tradr</span>
+            </div>
+          </div>
         </div>
-        
-        {/* Phone Home Indicator */}
-        <div className="absolute bottom-1 left-1/2 transform -translate-x-1/2 w-1/3 h-1 bg-[#333] rounded-full"></div>
       </div>
-
-      {/* Action Buttons Section - Static, outside phone frame */}
-      <div className="w-full max-w-[320px]">
-        <div className="flex justify-center gap-4">
-          <button 
-            onClick={onEditClick} 
-            className="flex flex-col items-center justify-center bg-[#1A1A1A] w-[80px] h-[85px] rounded-xl shadow-sm border border-[rgba(255,255,255,0.03)]"
-          >
-            <FiEdit3 className="w-6 h-6 mb-1.5" />
-            <span className="text-sm font-medium">Edit</span>
-          </button>
-          <button 
-            onClick={onShareClick} 
-            className="flex flex-col items-center justify-center bg-[#1A1A1A] w-[80px] h-[85px] rounded-xl shadow-sm border border-[rgba(255,255,255,0.03)]"
-          >
-            <FiShare2 className="w-6 h-6 mb-1.5" />
-            <span className="text-sm font-medium">Share</span>
-          </button>
-          <button 
-            onClick={onThemeClick} 
-            className="flex flex-col items-center justify-center bg-[#1A1A1A] w-[80px] h-[85px] rounded-xl shadow-sm border border-[rgba(255,255,255,0.03)]"
-          >
-            <IoColorPaletteOutline className="w-6 h-6 mb-1.5" />
-            <span className="text-sm font-medium">Theme</span>
-          </button>
-        </div>
+      
+      {/* Hub Button (Fixed Position) */}
+      <div className="fixed left-6 bottom-6 z-50">
+        <motion.button
+          className="relative p-3.5 rounded-full bg-[#7B61FF] hover:bg-[#8B74FF] transition-colors shadow-[0_4px_20px_rgba(123,97,255,0.5)]"
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          animate={{ y: [0, -5, 0] }}
+          transition={{
+            y: {
+              duration: 3,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }
+          }}
+        >
+          <IoGridOutline className="w-6 h-6 text-white" />
+        </motion.button>
       </div>
     </div>
   );

@@ -7,6 +7,7 @@ import { toast } from 'sonner';
 import ProfilePreview from '@/app/components/ProfilePreview';
 import CopyableUrl from '@/app/components/CopyableUrl';
 import { User } from '@supabase/supabase-js';
+import { Settings } from 'lucide-react';
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -67,8 +68,8 @@ export default function DashboardPage() {
     {
       title: "Volume-based breakout strategy",
       stats: {
-        gain: 31.2,
-        winRate: 72,
+        gain: 12.5,
+        winRate: 89,
         riskRatio: "1:3"
       }
     }
@@ -76,50 +77,55 @@ export default function DashboardPage() {
 
   const mockLinks = [
     {
-      title: "Premium Strategy Course",
-      description: "Learn the complete strategy with detailed explanations and live examples",
+      title: "Join my free telegram channel!",
+      description: "Get involved with other alphas and start scaling. This is your time right now.",
       cta: {
-        text: "Get Access Now",
+        text: "Check it out",
         url: "#"
       }
     }
   ];
 
   return (
-    <div className="h-[100dvh] w-full flex flex-col items-center justify-between bg-black overflow-hidden">
-      {/* Fixed Content Container */}
-      <div className="w-full max-w-md h-full flex flex-col px-4 py-4">
-        {/* Top Section */}
-        <div className="flex flex-col items-center space-y-3 mb-3">
-          {/* Header */}
-          <h1 className="text-2xl font-bold text-white text-center">Your Trading Identity</h1>
-          
+    <div className="h-[844px] w-[390px] mx-auto flex flex-col items-center bg-black overflow-hidden">
+      {/* App Frame */}
+      <div className="w-full h-full flex flex-col">
+        {/* Header */}
+        <div className="flex items-center justify-between px-5 pt-6 pb-4">
+          <h1 className="text-2xl font-bold text-white">My Tradr</h1>
+          <button 
+            onClick={() => router.push('/settings')} 
+            className="p-1.5 rounded-full hover:bg-white/10 transition-colors"
+          >
+            <Settings className="w-5 h-5 text-white" />
+          </button>
+        </div>
+        
+        {/* Main Content */}
+        <div className="flex-1 flex flex-col px-4">
           {/* URL Display */}
           {profile && (
-            <CopyableUrl username={profile.username} />
+            <div className="mb-4">
+              <CopyableUrl username={profile.username} />
+            </div>
           )}
-        </div>
 
-        {/* Centered Content Area with Profile Preview */}
-        <div className="flex-1 flex flex-col items-center justify-center">
-          {profile && (
-            <ProfilePreview
-              username={profile.username || currentUser?.email?.split('@')[0] || 'trader'}
-              avatarUrl={profile.avatar_url}
-              bio={profile.bio}
-              tags={profile.tags || []}
-              strategies={mockStrategies}
-              links={mockLinks}
-              onThemeClick={() => {}}
-              onEditClick={() => router.push('/onboarding')}
-              onShareClick={() => {}}
-            />
-          )}
-        </div>
-
-        {/* Footer */}
-        <div className="text-center mt-auto py-2">
-          <p className="text-[10px] text-gray-500">© 2024 Tradr App</p>
+          {/* Profile Content */}
+          <div className="flex-1">
+            {profile && (
+              <ProfilePreview
+                username={profile.username || currentUser?.email?.split('@')[0] || 'cryptowhale'}
+                avatarUrl={profile.avatar_url}
+                bio={profile.bio || 'NFT Collector | DeFi Explorer | Web3 Native 🌊'}
+                tags={profile.tags || ['#NFTTrader', '#DeFiWhale', '#Web3']}
+                strategies={mockStrategies}
+                links={mockLinks}
+                onThemeClick={() => {}}
+                onEditClick={() => router.push('/onboarding')}
+                onShareClick={() => {}}
+              />
+            )}
+          </div>
         </div>
       </div>
     </div>

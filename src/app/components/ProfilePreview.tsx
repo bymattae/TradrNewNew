@@ -93,9 +93,9 @@ export default function ProfilePreview({
   return (
     <div className="w-full flex flex-col items-center mb-16">
       {/* Main Profile Card Container */}
-      <div className="w-full bg-[#111111] rounded-[20px] overflow-hidden">
+      <div className="w-full bg-[#111111] rounded-[20px] overflow-hidden" style={{ transform: 'scale(0.9)' }}>
         {/* Profile Info Section */}
-        <div className="relative w-full bg-gradient-to-b from-[#1A1A1A] to-[#0D0D0D] p-5 flex flex-col items-center">
+        <div className="relative w-full bg-gradient-to-b from-[#1A1A1A] to-[#0D0D0D] p-4 flex flex-col items-center">
           {/* Edit button */}
           <button 
             onClick={onEditClick}
@@ -106,13 +106,13 @@ export default function ProfilePreview({
           
           {/* Avatar */}
           <div className="relative mb-2">
-            <div className="w-[80px] h-[80px] rounded-full bg-gradient-to-br from-[#7048E8] to-[#9C48E8] p-[2px] shadow-[0_0_15px_rgba(123,97,255,0.5)]">
+            <div className="w-[75px] h-[75px] rounded-full bg-gradient-to-br from-[#7048E8] to-[#9C48E8] p-[2px] shadow-[0_0_15px_rgba(123,97,255,0.5)]">
               <div className="w-full h-full rounded-full overflow-hidden">
                 <Image
                   src={avatarUrl || "/avatar.png"}
                   alt={username}
-                  width={80}
-                  height={80}
+                  width={75}
+                  height={75}
                   className="w-full h-full object-cover"
                 />
               </div>
@@ -132,7 +132,7 @@ export default function ProfilePreview({
             {(tags || ['#NFTTrader', '#DeFiWhale', '#Web3']).map((tag) => (
               <span 
                 key={tag} 
-                className={`px-3 py-1 rounded-full text-xs font-medium ${getTagColor(tag)}`}
+                className={`px-3 py-0.5 rounded-full text-xs font-medium ${getTagColor(tag)}`}
               >
                 {tag}
               </span>
@@ -141,17 +141,17 @@ export default function ProfilePreview({
         </div>
         
         {/* Stats Section */}
-        <div className="w-full bg-[#0D0D0D] p-4">
+        <div className="w-full bg-[#0D0D0D] p-3.5">
           <div className="grid grid-cols-3 gap-3">
-            <div className="bg-[#161616] rounded-xl py-3 px-2 text-center">
+            <div className="bg-[#161616] rounded-xl py-2.5 px-2 text-center">
               <p className="text-[#4DFFC7] text-xl font-bold">+{strategies?.[0]?.stats.gain || 12.5}%</p>
               <p className="text-xs text-[#A0A0A0]">Gain</p>
             </div>
-            <div className="bg-[#161616] rounded-xl py-3 px-2 text-center">
+            <div className="bg-[#161616] rounded-xl py-2.5 px-2 text-center">
               <p className="text-white text-xl font-bold">{strategies?.[0]?.stats.winRate || 89}%</p>
               <p className="text-xs text-[#A0A0A0]">Win Rate</p>
             </div>
-            <div className="bg-[#161616] rounded-xl py-3 px-2 text-center">
+            <div className="bg-[#161616] rounded-xl py-2.5 px-2 text-center">
               <p className="text-[#9B7BFF] text-xl font-bold">{strategies?.[0]?.stats.riskRatio || '1:3'}</p>
               <p className="text-xs text-[#A0A0A0]">Avg R/R</p>
             </div>
@@ -159,8 +159,8 @@ export default function ProfilePreview({
         </div>
         
         {/* CTA Section */}
-        <div className="w-full bg-[#0A0A0A] p-4">
-          <div className="bg-[#161616] rounded-xl p-4 text-center">
+        <div className="w-full bg-[#0A0A0A] p-3.5">
+          <div className="bg-[#161616] rounded-xl p-3.5 text-center">
             <h3 className="text-lg font-semibold text-white mb-1">
               {links?.[0]?.title || 'Join my free telegram channel!'}
             </h3>
@@ -172,15 +172,15 @@ export default function ProfilePreview({
             </button>
           </div>
         </div>
-      </div>
-      
-      {/* Footer with Tradr Logo */}
-      <div className="w-full flex justify-center py-3 mt-2">
-        <div className="flex items-center gap-1.5 text-white/50 text-xs">
-          <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-          </svg>
-          <span>Powered by Tradr</span>
+        
+        {/* Footer with Tradr Logo - Now inside the card */}
+        <div className="w-full flex justify-center py-3 bg-[#090909]">
+          <div className="flex items-center gap-1.5 text-white/50 text-xs">
+            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+            </svg>
+            <span>Powered by Tradr</span>
+          </div>
         </div>
       </div>
     </div>

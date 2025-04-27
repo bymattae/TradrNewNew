@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Copy, X } from 'lucide-react';
+import { Copy } from 'lucide-react';
 
 interface CopyableUrlProps {
   username: string;
@@ -14,16 +14,6 @@ export default function CopyableUrl({ username }: CopyableUrlProps) {
     await navigator.clipboard.writeText(`https://${url}`);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
-  };
-
-  const handleShare = () => {
-    if (navigator.share) {
-      navigator.share({
-        title: `${username}'s Tradr Profile`,
-        text: `Check out ${username}'s trading profile on Tradr!`,
-        url: `https://${url}`,
-      });
-    }
   };
 
   return (
@@ -54,7 +44,6 @@ export default function CopyableUrl({ username }: CopyableUrlProps) {
           className="p-1.5 rounded-full hover:bg-white/10 transition-colors"
         >
           <svg className="w-5 h-5 text-white/80" viewBox="0 0 24 24" fill="currentColor">
-            <path fillRule="evenodd" clipRule="evenodd" d="M17.415 14.382c-.298-.149-1.759-.867-2.031-.967-.272-.099-.47-.148-.669.15-.198.296-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.019-.458.13-.606.134-.133.297-.347.446-.52.149-.174.198-.298.297-.497.1-.199.05-.371-.025-.52-.074-.149-.668-1.612-.916-2.207-.241-.58-.486-.5-.668-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.064 2.875 1.213 3.074.148.198 2.095 3.2 5.076 4.487.71.306 1.263.489 1.694.625.712.227 1.36.195 1.871.118.57-.085 1.758-.719 2.006-1.413.247-.694.247-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
             <path d="M12 22.5C17.8223 22.5 22.5 17.8223 22.5 12C22.5 6.17766 17.8223 1.5 12 1.5C6.17766 1.5 1.5 6.17766 1.5 12C1.5 13.778 1.95 15.4473 2.74996 16.9022L1.73682 21.484C1.68083 21.7252 1.87582 21.9613 2.12373 21.9414L6.60956 21.4652C8.05656 22.1411 9.6818 22.5 12 22.5Z" strokeWidth="1.5" stroke="currentColor" fill="transparent"/>
           </svg>
         </a>

@@ -83,7 +83,8 @@ export default function ProfilePreview({
   const tagColors: Record<string, string> = {
     '#NFTTrader': 'bg-[#6048B8]/25 text-[#9B7BFF]',
     '#DeFiWhale': 'bg-[#3047B8]/25 text-[#7B9BFF]',
-    '#Web3': 'bg-[#0D9373]/25 text-[#4DFFC7]'
+    '#Web3': 'bg-[#0D9373]/25 text-[#4DFFC7]',
+    '#Coolman': 'bg-[#333]/50 text-white/70'
   };
 
   const getTagColor = (tag: string) => {
@@ -91,118 +92,97 @@ export default function ProfilePreview({
   };
 
   return (
-    <div className="w-full flex flex-col items-center">
-      {/* Main Profile Card */}
-      <div className="relative w-full flex flex-col items-center">
-        <div className="w-full bg-[#151515] rounded-2xl shadow-lg overflow-hidden">
-          {/* Profile Info Section */}
-          <div className="relative w-full bg-gradient-to-b from-[#1A1A1A] to-[#0D0D0D] p-6 flex flex-col items-center">
-            {/* Edit button */}
-            <button 
-              onClick={onEditClick}
-              className="absolute top-4 right-4 p-2 rounded-full bg-black/30 hover:bg-black/50 transition-colors"
-            >
-              <FiEdit className="w-4 h-4 text-white/80" />
-            </button>
-            
-            {/* Avatar */}
-            <div className="relative mb-4">
-              <div className="w-[90px] h-[90px] rounded-full bg-gradient-to-br from-[#7048E8] to-[#9C48E8] p-[2px] shadow-[0_0_15px_rgba(123,97,255,0.5)]">
-                <div className="w-full h-full rounded-full overflow-hidden">
-                  <Image
-                    src={avatarUrl || "/avatar.png"}
-                    alt={username}
-                    width={90}
-                    height={90}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
+    <div className="w-full flex flex-col items-center mb-12">
+      {/* Profile Card Container */}
+      <div className="w-full flex flex-col gap-4">
+        {/* Profile Info Section */}
+        <div className="w-full bg-gradient-to-b from-[#1A1A1A] to-[#0D0D0D] rounded-[20px] p-5 flex flex-col items-center">
+          {/* Edit button */}
+          <button 
+            onClick={onEditClick}
+            className="absolute top-4 right-4 p-2 rounded-full bg-black/30 hover:bg-black/50 transition-colors"
+          >
+            <FiEdit className="w-4 h-4 text-white/80" />
+          </button>
+          
+          {/* Avatar */}
+          <div className="relative mb-3">
+            <div className="w-[80px] h-[80px] rounded-full bg-gradient-to-br from-[#7048E8] to-[#9C48E8] p-[2px] shadow-[0_0_15px_rgba(123,97,255,0.5)]">
+              <div className="w-full h-full rounded-full overflow-hidden">
+                <Image
+                  src={avatarUrl || "/avatar.png"}
+                  alt={username}
+                  width={80}
+                  height={80}
+                  className="w-full h-full object-cover"
+                />
               </div>
-              {/* Status dot */}
-              <div className="absolute -right-1 bottom-2 w-4 h-4 rounded-full bg-[#10B981] border-2 border-[#0D0D0D]"></div>
             </div>
-            
-            {/* Username */}
-            <h2 className="text-2xl font-bold text-white mb-1">@{username}</h2>
-            
-            {/* Bio */}
-            <p className="text-base text-white/70 text-center mb-3">{bio || 'Trader'}</p>
-            
-            {/* Tags */}
-            <div className="flex flex-wrap justify-center gap-2 mb-2">
-              {(tags || ['#NFTTrader', '#DeFiWhale', '#Web3']).map((tag) => (
-                <span 
-                  key={tag} 
-                  className={`px-3 py-1 rounded-full text-xs font-medium ${getTagColor(tag)}`}
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
+            {/* Status dot */}
+            <div className="absolute -right-1 bottom-2 w-3.5 h-3.5 rounded-full bg-[#10B981] border-2 border-[#0D0D0D]"></div>
           </div>
           
-          {/* Stats Section */}
-          <div className="px-4 py-4">
-            <div className="grid grid-cols-3 gap-3">
-              <div className="bg-[#161616] rounded-xl py-3 px-2 text-center">
-                <p className="text-[#4DFFC7] text-xl font-bold">+{strategies?.[0]?.stats.gain || 12.5}%</p>
-                <p className="text-xs text-[#A0A0A0]">Gain</p>
-              </div>
-              <div className="bg-[#161616] rounded-xl py-3 px-2 text-center">
-                <p className="text-white text-xl font-bold">{strategies?.[0]?.stats.winRate || 89}%</p>
-                <p className="text-xs text-[#A0A0A0]">Win Rate</p>
-              </div>
-              <div className="bg-[#161616] rounded-xl py-3 px-2 text-center">
-                <p className="text-[#9B7BFF] text-xl font-bold">{strategies?.[0]?.stats.riskRatio || '1:3'}</p>
-                <p className="text-xs text-[#A0A0A0]">Avg R/R</p>
-              </div>
-            </div>
-          </div>
+          {/* Username */}
+          <h2 className="text-2xl font-bold text-white mb-0.5">@{username}</h2>
           
-          {/* CTA Section */}
-          <div className="px-4 pb-5">
-            <div className="bg-[#161616] rounded-xl p-4 text-center">
-              <h3 className="text-lg font-semibold text-white mb-1">
-                {links?.[0]?.title || 'Join my free telegram channel!'}
-              </h3>
-              <p className="text-sm text-[#A0A0A0] mb-3">
-                {links?.[0]?.description || 'Get involved with other alphas and start scaling. This is your time right now.'}
-              </p>
-              <button className="bg-[#7048E8] hover:bg-[#6040D0] text-white py-2 px-6 rounded-full transition-colors text-sm font-medium">
-                {links?.[0]?.cta.text || 'Check it out'}
-              </button>
-            </div>
-          </div>
+          {/* Bio */}
+          <p className="text-base text-white/70 text-center mb-2">{bio || 'Trader'}</p>
           
-          {/* Footer with Tradr Logo */}
-          <div className="px-4 py-3 flex justify-center">
-            <div className="flex items-center gap-1.5 text-white/50 text-xs">
-              <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-              </svg>
-              <span>Powered by Tradr</span>
+          {/* Tags */}
+          <div className="flex flex-wrap justify-center gap-2">
+            {(tags || ['#NFTTrader', '#DeFiWhale', '#Web3']).map((tag) => (
+              <span 
+                key={tag} 
+                className={`px-3 py-1 rounded-full text-xs font-medium ${getTagColor(tag)}`}
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
+        </div>
+        
+        {/* Stats Section */}
+        <div className="w-full bg-[#151515] rounded-[20px] p-4">
+          <div className="grid grid-cols-3 gap-3">
+            <div className="bg-[#121212] rounded-xl py-3 px-2 text-center">
+              <p className="text-[#4DFFC7] text-xl font-bold">+{strategies?.[0]?.stats.gain || 12.5}%</p>
+              <p className="text-xs text-[#A0A0A0]">Gain</p>
+            </div>
+            <div className="bg-[#121212] rounded-xl py-3 px-2 text-center">
+              <p className="text-white text-xl font-bold">{strategies?.[0]?.stats.winRate || 89}%</p>
+              <p className="text-xs text-[#A0A0A0]">Win Rate</p>
+            </div>
+            <div className="bg-[#121212] rounded-xl py-3 px-2 text-center">
+              <p className="text-[#9B7BFF] text-xl font-bold">{strategies?.[0]?.stats.riskRatio || '1:3'}</p>
+              <p className="text-xs text-[#A0A0A0]">Avg R/R</p>
             </div>
           </div>
         </div>
-      </div>
-      
-      {/* Hub Button (Fixed Position) */}
-      <div className="fixed left-6 bottom-6 z-50">
-        <motion.button
-          className="relative p-3.5 rounded-full bg-[#7B61FF] hover:bg-[#8B74FF] transition-colors shadow-[0_4px_20px_rgba(123,97,255,0.5)]"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          animate={{ y: [0, -5, 0] }}
-          transition={{
-            y: {
-              duration: 3,
-              repeat: Infinity,
-              ease: "easeInOut"
-            }
-          }}
-        >
-          <IoGridOutline className="w-6 h-6 text-white" />
-        </motion.button>
+        
+        {/* CTA Section */}
+        <div className="w-full bg-[#151515] rounded-[20px] p-4">
+          <div className="bg-[#121212] rounded-xl p-4 text-center">
+            <h3 className="text-lg font-semibold text-white mb-1">
+              {links?.[0]?.title || 'Join my free telegram channel!'}
+            </h3>
+            <p className="text-sm text-[#A0A0A0] mb-3">
+              {links?.[0]?.description || 'Get involved with other alphas and start scaling. This is your time right now.'}
+            </p>
+            <button className="bg-[#7048E8] hover:bg-[#6040D0] text-white py-2 px-6 rounded-full transition-colors text-sm font-medium">
+              {links?.[0]?.cta.text || 'Check it out'}
+            </button>
+          </div>
+        </div>
+        
+        {/* Footer with Tradr Logo */}
+        <div className="w-full flex justify-center py-2">
+          <div className="flex items-center gap-1.5 text-white/50 text-xs">
+            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+            </svg>
+            <span>Powered by Tradr</span>
+          </div>
+        </div>
       </div>
     </div>
   );

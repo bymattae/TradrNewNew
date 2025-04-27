@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import getSupabaseBrowserClient from '@/lib/supabase/client';
 import { toast } from 'sonner';
 import { User } from '@supabase/supabase-js';
-import { Settings, Share2, Link, Home } from 'lucide-react';
+import { Settings, Share2, Link, Grid } from 'lucide-react';
 import Image from 'next/image';
 
 export default function DashboardPage() {
@@ -70,20 +70,22 @@ export default function DashboardPage() {
 
       {/* Main Content Container */}
       <div className="flex-1 flex flex-col px-6 py-6 space-y-6">
-        {/* Your Tradr is Live Box */}
+        {/* Link Card */}
         <div className="w-full bg-[#111] rounded-2xl p-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
               <Link className="w-5 h-5 text-[#7C3AED]" />
-              <span className="text-white text-sm font-medium">Your Tradr is Live</span>
+              <span className="text-white text-sm font-medium">tradr.io/{profile?.username || 'username'}</span>
             </div>
-            <button className="p-2 rounded-full bg-[#111] border border-[#222] hover:bg-[#222] transition-colors">
-              <Share2 className="w-5 h-5 text-[#7C3AED]" />
-            </button>
+            <div className="flex items-center space-x-2">
+              <button className="p-2 rounded-full bg-[#111] border border-[#222] hover:bg-[#222] transition-colors">
+                <Share2 className="w-5 h-5 text-[#7C3AED]" />
+              </button>
+            </div>
           </div>
         </div>
 
-        {/* Profile Preview Card */}
+        {/* Profile Card */}
         <div className="w-full bg-[#111] rounded-2xl p-6 space-y-6">
           {/* Avatar and Username */}
           <div className="flex items-center space-x-4">
@@ -99,12 +101,12 @@ export default function DashboardPage() {
               <h2 className="text-white font-semibold text-lg font-inter">
                 {profile?.username || currentUser?.email?.split('@')[0] || 'cryptowhale'}
               </h2>
-              <p className="text-gray-400 text-sm">@tradr</p>
+              <p className="text-gray-400 text-sm">@{profile?.username || 'username'}</p>
             </div>
           </div>
 
           {/* Bio */}
-          <p className="text-gray-300 text-sm leading-relaxed">
+          <p className="text-gray-300 text-sm leading-relaxed line-clamp-2">
             {profile?.bio || 'I\'m a trader from germany'}
           </p>
 
@@ -136,10 +138,14 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          {/* CTA */}
-          <button className="w-full bg-[#7C3AED] text-white py-3 rounded-xl font-medium hover:bg-[#6D28D9] transition-colors shadow-lg shadow-[#7C3AED]/20">
-            Join my free telegram channel!
-          </button>
+          {/* CTA Section */}
+          <div className="space-y-3">
+            <h3 className="text-white font-semibold text-lg">Join my free telegram channel!</h3>
+            <p className="text-gray-400 text-sm">Get involved with other alphas and start scaling. This is your time right now.</p>
+            <button className="w-full bg-[#7C3AED] text-white py-3 rounded-xl font-medium hover:bg-[#6D28D9] transition-colors shadow-lg shadow-[#7C3AED]/20">
+              Check it out
+            </button>
+          </div>
 
           {/* Powered by Tradr */}
           <div className="flex items-center justify-center space-x-1 pt-2">
@@ -154,7 +160,7 @@ export default function DashboardPage() {
         className="absolute bottom-6 left-6 w-14 h-14 bg-[#7C3AED] rounded-full flex items-center justify-center shadow-lg shadow-[#7C3AED]/20 hover:bg-[#6D28D9] transition-colors"
         onClick={() => router.push('/hub')}
       >
-        <Home className="w-6 h-6 text-white" />
+        <Grid className="w-6 h-6 text-white" />
       </button>
     </div>
   );

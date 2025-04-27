@@ -45,13 +45,13 @@ export default function CopyableUrl({ username }: CopyableUrlProps) {
       animate={{ opacity: 1, y: 0 }}
       className="w-full max-w-[390px] mx-auto"
     >
-      <div className="bg-gradient-to-b from-[#111111] to-[#0A0A0A] p-3 rounded-[20px] border border-[#222] mb-3">
+      <div className="bg-gradient-to-b from-[#111111] to-[#0A0A0A] p-3 rounded-[22px] border border-[#222] mb-2">
         <h3 className="font-semibold text-base text-white mb-2">Your Tradr is live!</h3>
         
         {/* Combined URL and share section in one row */}
-        <div className="flex items-center">
+        <div className="flex items-center justify-between">
           {/* URL display and copy button */}
-          <div className="flex flex-1 items-center">
+          <div className="flex flex-1 items-center mr-3">
             <a 
               href={fullUrl} 
               target="_blank" 
@@ -75,36 +75,35 @@ export default function CopyableUrl({ username }: CopyableUrlProps) {
             </motion.button>
           </div>
           
-          {/* Divider */}
-          <div className="mx-3 text-white/20 text-xs">|</div>
-          
-          {/* Share buttons */}
-          <div className="flex items-center gap-2">
-            <p className="text-white/60 text-xs mr-1">Share:</p>
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={shareOnTwitter}
-              className="p-1.5 bg-[#161616] rounded-lg text-white/70 hover:text-white transition-colors"
-            >
-              <FaXTwitter className="w-3.5 h-3.5" />
-            </motion.button>
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={shareOnWhatsapp}
-              className="p-1.5 bg-[#161616] rounded-lg text-white/70 hover:text-white transition-colors"
-            >
-              <FaWhatsapp className="w-3.5 h-3.5" />
-            </motion.button>
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={shareOnTelegram}
-              className="p-1.5 bg-[#161616] rounded-lg text-white/70 hover:text-white transition-colors"
-            >
-              <FaTelegram className="w-3.5 h-3.5" />
-            </motion.button>
+          {/* Share section */}
+          <div className="flex items-center">
+            <p className="text-white/60 text-xs mr-2">Share:</p>
+            <div className="flex items-center gap-2">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={shareOnTwitter}
+                className="p-1.5 bg-[#161616] rounded-lg text-white/70 hover:text-white transition-colors"
+              >
+                <FaXTwitter className="w-3.5 h-3.5" />
+              </motion.button>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={shareOnWhatsapp}
+                className="p-1.5 bg-[#161616] rounded-lg text-white/70 hover:text-white transition-colors"
+              >
+                <FaWhatsapp className="w-3.5 h-3.5" />
+              </motion.button>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={shareOnTelegram}
+                className="p-1.5 bg-[#161616] rounded-lg text-white/70 hover:text-white transition-colors"
+              >
+                <FaTelegram className="w-3.5 h-3.5" />
+              </motion.button>
+            </div>
           </div>
         </div>
       </div>

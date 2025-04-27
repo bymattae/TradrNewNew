@@ -91,9 +91,9 @@ export default function ProfilePreview({
   };
 
   return (
-    <div className="w-full flex flex-col items-center mb-12 pt-5">
+    <div className="w-full flex flex-col items-center mb-12">
       {/* Main Profile Card Container */}
-      <div className="w-full max-w-[390px] mx-auto bg-[#0D0D0D] rounded-[22px] overflow-hidden shadow-md" style={{ transform: 'scale(0.95)' }}>
+      <div className="w-full max-w-[390px] mx-auto bg-[#0D0D0D] rounded-[22px] overflow-hidden shadow-md">
         {/* Profile Info Section */}
         <div className="relative w-full bg-gradient-to-b from-[#1A1A1A] to-[#0D0D0D] p-4 flex flex-col items-center">
           {/* Edit button */}

@@ -33,35 +33,37 @@ export default function ProfilePage() {
       </div>
 
       {/* Content container with top padding for the fixed header */}
-      <div className="w-full pt-16 max-w-[390px] mx-auto px-4">
-        {/* Live URL Card - Using the CopyableUrl component */}
-        <CopyableUrl username="mattjames" />
+      <div className="w-full pt-[72px] pb-24">
+        <div className="max-w-[390px] mx-auto px-4 space-y-2">
+          {/* Live URL Card - Using the CopyableUrl component */}
+          <CopyableUrl username="mattjames" />
 
-        {/* Profile Preview */}
-        <ProfilePreview 
-          username="mattjames"
-          bio="I'm a professional trader from Cardiff looking to level up my skills in trading."
-          tags={['#crypto', '#defi', '#trading']}
-          strategies={[{
-            title: 'Main Strategy',
-            stats: {
-              gain: 47,
-              winRate: 89,
-              riskRatio: '1:2.5'
-            }
-          }]}
-          links={[{
-            title: 'Join my Premium Strategy Course',
-            description: 'Get access to my proven strategy for consistent gains in any market condition.',
-            cta: {
-              text: 'Get Access Now',
-              url: '#'
-            }
-          }]}
-          onEditClick={handleEditClick}
-          onShareClick={handleShareClick}
-          onThemeClick={handleThemeClick}
-        />
+          {/* Profile Preview */}
+          <ProfilePreview 
+            username="mattjames"
+            bio="I'm a professional trader from Cardiff looking to level up my skills in trading."
+            tags={['#crypto', '#defi', '#trading']}
+            strategies={[{
+              title: 'Main Strategy',
+              stats: {
+                gain: 47,
+                winRate: 89,
+                riskRatio: '1:2.5'
+              }
+            }]}
+            links={[{
+              title: 'Join my Premium Strategy Course',
+              description: 'Get access to my proven strategy for consistent gains in any market condition.',
+              cta: {
+                text: 'Get Access Now',
+                url: '#'
+              }
+            }]}
+            onEditClick={handleEditClick}
+            onShareClick={handleShareClick}
+            onThemeClick={handleThemeClick}
+          />
+        </div>
       </div>
 
       {/* Bottom Action Buttons */}

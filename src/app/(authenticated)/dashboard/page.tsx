@@ -86,22 +86,22 @@ export default function DashboardPage() {
   ];
 
   return (
-    <div className="h-[100dvh] flex flex-col items-center bg-black px-4 py-4 overflow-hidden">
-      <div className="w-full max-w-md flex flex-col h-full">
-        {/* Top Section - Header */}
-        <div className="flex flex-col items-center mb-2">
+    <div className="h-[100dvh] w-full flex flex-col items-center justify-between bg-black overflow-hidden">
+      {/* Fixed Content Container */}
+      <div className="w-full max-w-md h-full flex flex-col px-4 py-4">
+        {/* Top Section */}
+        <div className="flex flex-col items-center space-y-3 mb-3">
+          {/* Header */}
           <h1 className="text-2xl font-bold text-white text-center">Your Trading Identity</h1>
+          
+          {/* URL Display */}
+          {profile && (
+            <CopyableUrl username={profile.username} />
+          )}
         </div>
 
-        {/* URL Display */}
-        {profile && (
-          <div className="mb-4">
-            <CopyableUrl username={profile.username} />
-          </div>
-        )}
-
-        {/* Centered Content Area - Fills available space */}
-        <div className="flex-1 flex items-center justify-center overflow-hidden">
+        {/* Centered Content Area with Profile Preview */}
+        <div className="flex-1 flex flex-col items-center justify-center">
           {profile && (
             <ProfilePreview
               username={profile.username || currentUser?.email?.split('@')[0] || 'trader'}
@@ -118,8 +118,8 @@ export default function DashboardPage() {
         </div>
 
         {/* Footer */}
-        <div className="text-center mt-2 mb-2">
-          <p className="text-xs text-gray-500">© 2024 Tradr App</p>
+        <div className="text-center mt-auto py-2">
+          <p className="text-[10px] text-gray-500">© 2024 Tradr App</p>
         </div>
       </div>
     </div>

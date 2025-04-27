@@ -83,36 +83,36 @@ export default function ProfilePreview({
   return (
     <div className="w-full flex flex-col items-center">
       {/* Profile Preview Phone Frame */}
-      <div className="w-full max-w-[360px] h-[600px] bg-[#151515] rounded-[32px] shadow-xl border-4 border-[#242424] overflow-hidden mb-6 relative">
+      <div className="w-full max-w-[320px] h-[580px] bg-[#151515] rounded-[32px] shadow-[0_0_35px_rgba(0,0,0,0.3),0_0_10px_rgba(123,97,255,0.1)] border-4 border-[#242424] overflow-hidden mb-6 relative">
         {/* Phone Screen Content - Scrollable */}
-        <div className="w-full h-full overflow-y-auto bg-black px-4 py-3 scrollbar-hide">
+        <div className="w-full h-full overflow-y-auto bg-black px-3 py-3 scrollbar-hide">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="w-full bg-[#151515] rounded-2xl shadow-lg border border-[rgba(255,255,255,0.03)] overflow-hidden"
+            className="w-full bg-[#151515] rounded-2xl shadow-lg border border-[rgba(255,255,255,0.03)] overflow-hidden scale-[0.9]"
           >
             {/* Profile Header */}
-            <div className="p-4">
-              <div className="bg-[#181818] rounded-2xl p-5 shadow-sm flex flex-col items-center text-center space-y-2">
-                <div className="relative w-16 h-16">
+            <div className="p-3">
+              <div className="bg-[#181818] rounded-2xl p-4 shadow-sm flex flex-col items-center text-center space-y-1.5">
+                <div className="relative w-14 h-14">
                   <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[var(--brand-purple)] to-[rgba(255,255,255,0.1)] p-[2px]">
                     <Image
                       src="/avatar.png"
                       alt="Profile"
-                      width={64}
-                      height={64}
+                      width={56}
+                      height={56}
                       className="rounded-full object-cover w-full h-full"
                     />
                   </div>
                 </div>
-                <div className="space-y-1">
-                  <h2 className="text-xl font-bold tracking-tight">mattjames.eth</h2>
-                  <p className="text-sm font-normal text-[#A0A0A0]">Professional Trader</p>
+                <div className="space-y-0.5">
+                  <h2 className="text-lg font-bold tracking-tight">{username}</h2>
+                  <p className="text-xs font-normal text-[#A0A0A0]">Professional Trader</p>
                 </div>
-                <div className="flex flex-wrap justify-center gap-1.5">
-                  {['#crypto', '#defi', '#trading'].map((tag) => (
-                    <span key={tag} className="px-2 py-0.5 text-xs rounded-full bg-[rgba(255,255,255,0.05)] text-[#A0A0A0]">
+                <div className="flex flex-wrap justify-center gap-1">
+                  {(tags || ['#crypto', '#defi', '#trading']).map((tag) => (
+                    <span key={tag} className="px-1.5 py-0.5 text-[10px] rounded-full bg-[rgba(255,255,255,0.05)] text-[#A0A0A0]">
                       {tag}
                     </span>
                   ))}
@@ -121,68 +121,71 @@ export default function ProfilePreview({
             </div>
 
             {/* Stats Section */}
-            <div className="px-4 mb-4">
-              <div className="bg-[#181818] rounded-2xl p-5 shadow-sm">
-                <div className="grid grid-cols-3 gap-3">
+            <div className="px-3 mb-3">
+              <div className="bg-[#181818] rounded-2xl p-4 shadow-sm">
+                <div className="grid grid-cols-3 gap-2">
                   <div className="text-center">
-                    <p className="text-lg font-bold text-[var(--brand-purple)]">+47%</p>
-                    <p className="text-xs font-normal text-[#A0A0A0]">Gain</p>
+                    <p className="text-base font-bold text-[var(--brand-purple)]">+47%</p>
+                    <p className="text-[10px] font-normal text-[#A0A0A0]">Gain</p>
                   </div>
                   <div className="text-center">
-                    <p className="text-lg font-bold text-[var(--brand-purple)]">89%</p>
-                    <p className="text-xs font-normal text-[#A0A0A0]">Win Rate</p>
+                    <p className="text-base font-bold text-[var(--brand-purple)]">89%</p>
+                    <p className="text-[10px] font-normal text-[#A0A0A0]">Win Rate</p>
                   </div>
                   <div className="text-center">
-                    <p className="text-lg font-bold text-[var(--brand-purple)]">2.5</p>
-                    <p className="text-xs font-normal text-[#A0A0A0]">Risk Ratio</p>
+                    <p className="text-base font-bold text-[var(--brand-purple)]">2.5</p>
+                    <p className="text-[10px] font-normal text-[#A0A0A0]">Risk Ratio</p>
                   </div>
                 </div>
               </div>
             </div>
 
             {/* CTA Section */}
-            <div className="px-4 mb-4">
-              <div className="bg-[#181818] rounded-2xl p-5 shadow-sm text-center space-y-3">
-                <h3 className="text-base font-semibold">Premium Strategy Course</h3>
-                <p className="text-sm font-normal text-[#A0A0A0]">Follow my trades in real-time</p>
-                <button className="btn-primary w-4/5 mx-auto py-3 px-4">
+            <div className="px-3 mb-3">
+              <div className="bg-[#181818] rounded-2xl p-4 shadow-sm text-center space-y-2">
+                <h3 className="text-sm font-semibold">Premium Strategy Course</h3>
+                <p className="text-xs font-normal text-[#A0A0A0]">Follow my trades in real-time</p>
+                <button className="btn-primary w-4/5 mx-auto py-2 px-3 text-sm rounded-xl">
                   Get Access Now
                 </button>
               </div>
             </div>
 
             {/* Footer */}
-            <div className="px-6 py-4">
-              <p className="text-sm text-center font-normal text-[#A0A0A0]">
+            <div className="px-4 py-3">
+              <p className="text-xs text-center font-normal text-[#A0A0A0]">
                 powered by tradr
               </p>
             </div>
           </motion.div>
         </div>
+        
+        {/* Phone Home Indicator */}
+        <div className="absolute bottom-1 left-1/2 transform -translate-x-1/2 w-1/3 h-1 bg-[#333] rounded-full"></div>
       </div>
 
       {/* Action Buttons Section - Static, outside phone frame */}
-      <div className="w-full max-w-[360px] mb-4">
+      <div className="w-full max-w-[320px]">
         <div className="flex justify-center gap-4">
           <button 
             onClick={onEditClick} 
-            className="flex flex-col items-center justify-center bg-[#1A1A1A] w-[85px] h-[90px] rounded-xl shadow-sm border border-[rgba(255,255,255,0.03)]"
+            className="flex flex-col items-center justify-center bg-[#1A1A1A] w-[80px] h-[85px] rounded-xl shadow-sm border border-[rgba(255,255,255,0.03)]"
           >
-            <FiEdit3 className="w-7 h-7 mb-2" />
+            <FiEdit3 className="w-6 h-6 mb-1.5" />
             <span className="text-sm font-medium">Edit</span>
           </button>
           <button 
             onClick={onShareClick} 
-            className="flex flex-col items-center justify-center bg-[#1A1A1A] w-[85px] h-[90px] rounded-xl shadow-sm border border-[rgba(255,255,255,0.03)]"
+            className="flex flex-col items-center justify-center bg-[#1A1A1A] w-[80px] h-[85px] rounded-xl shadow-sm border border-[rgba(255,255,255,0.03)]"
           >
-            <FiShare2 className="w-7 h-7 mb-2" />
+            <FiShare2 className="w-6 h-6 mb-1.5" />
             <span className="text-sm font-medium">Share</span>
           </button>
           <button 
             onClick={onThemeClick} 
-            className="flex flex-col items-center justify-center bg-[#1A1A1A] w-[85px] h-[90px] rounded-xl shadow-sm border border-[rgba(255,255,255,0.03)]"
+            className="flex flex-col items-center justify-center bg-[#1A1A1A] w-[80px] h-[85px] rounded-xl shadow-sm border border-[rgba(255,255,255,0.03)]"
           >
-            <IoColorPaletteOutline className="w-7 h-7 mb-2" />
+            <IoColorPaletteOutline className="w-6 h-6 mb-1.5" />
             <span className="text-sm font-medium">Theme</span>
           </button>
         </div>

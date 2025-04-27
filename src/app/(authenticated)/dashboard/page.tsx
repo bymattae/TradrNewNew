@@ -8,7 +8,6 @@ import ProfilePreview from '@/app/components/ProfilePreview';
 import CopyableUrl from '@/app/components/CopyableUrl';
 import { User } from '@supabase/supabase-js';
 import { Settings } from 'lucide-react';
-import { IoGridOutline } from 'react-icons/io5';
 import { motion } from 'framer-motion';
 
 export default function DashboardPage() {
@@ -89,7 +88,7 @@ export default function DashboardPage() {
   ];
 
   return (
-    <div className="h-[844px] w-[390px] mx-auto flex flex-col items-center bg-black overflow-hidden">
+    <div className="h-[844px] w-full mx-auto flex flex-col items-center bg-black overflow-hidden">
       {/* App Frame */}
       <div className="w-full h-full flex flex-col relative">
         {/* Top Navigation Bar */}
@@ -129,25 +128,6 @@ export default function DashboardPage() {
               />
             )}
           </div>
-        </div>
-        
-        {/* Hub Button (Only one, fixed position) */}
-        <div className="fixed left-6 bottom-6 z-50">
-          <motion.button
-            className="relative p-3.5 rounded-full bg-[#7B61FF] hover:bg-[#8B74FF] transition-colors shadow-[0_4px_20px_rgba(123,97,255,0.5)]"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            animate={{ y: [0, -5, 0] }}
-            transition={{
-              y: {
-                duration: 3,
-                repeat: Infinity,
-                ease: "easeInOut"
-              }
-            }}
-          >
-            <IoGridOutline className="w-6 h-6 text-white" />
-          </motion.button>
         </div>
       </div>
     </div>

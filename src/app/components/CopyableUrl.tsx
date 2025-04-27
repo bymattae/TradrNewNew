@@ -43,7 +43,7 @@ export default function CopyableUrl({ username }: CopyableUrlProps) {
     <motion.div 
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="w-full max-w-[390px] mx-auto"
+      className="w-full max-w-[100%] mx-auto"
     >
       <div className="bg-gradient-to-b from-[#111111] to-[#0A0A0A] p-3 rounded-[22px] border border-[#222] mb-2">
         <h3 className="font-semibold text-base text-white mb-2">Your Tradr is live!</h3>

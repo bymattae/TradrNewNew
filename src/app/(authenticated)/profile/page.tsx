@@ -20,10 +20,10 @@ export default function ProfilePage() {
   };
 
   return (
-    <main className="min-h-screen bg-black text-white flex flex-col items-center">
+    <main className="min-h-screen bg-black text-white flex flex-col items-center overflow-hidden">
       {/* Header - Updated with shadow and proper positioning */}
       <div className="w-full bg-[#080808] fixed top-0 left-0 right-0 z-10 shadow-sm">
-        <div className="max-w-[390px] mx-auto px-4 py-3 flex justify-between items-center">
+        <div className="w-full mx-auto px-4 py-3 flex justify-between items-center">
           <div className="w-6"></div> {/* Spacer for centering */}
           <h1 className="text-lg font-bold text-white">My Tradr</h1>
           <button className="w-6 h-6 flex items-center justify-center text-white/80 hover:text-white">
@@ -34,7 +34,7 @@ export default function ProfilePage() {
 
       {/* Content container with top padding for the fixed header */}
       <div className="w-full pt-[72px] pb-24">
-        <div className="max-w-[390px] mx-auto px-4 space-y-5 mt-5">
+        <div className="w-full px-4 space-y-3 mt-5">
           {/* Live URL Card - Using the CopyableUrl component */}
           <CopyableUrl username="mattjames" />
 
@@ -65,8 +65,6 @@ export default function ProfilePage() {
           />
         </div>
       </div>
-
-      {/* Bottom Action Buttons - Removed as they're no longer needed in the authenticated layout */}
     </main>
   );
 } 

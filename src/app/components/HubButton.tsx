@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { RiApps2Line } from 'react-icons/ri';
+import { IoGridOutline } from 'react-icons/io5';
 
 interface HubButtonProps {
   onClick: () => void;
@@ -7,31 +7,22 @@ interface HubButtonProps {
 
 export default function HubButton({ onClick }: HubButtonProps) {
   return (
-    <div className="fixed bottom-8 left-8 z-50">
+    <div className="fixed bottom-6 left-6 z-50">
       <motion.button
         onClick={onClick}
-        className="relative group"
+        className="relative p-3.5 rounded-full bg-[#7B61FF] hover:bg-[#8B74FF] transition-colors shadow-[0_4px_20px_rgba(123,97,255,0.5)]"
+        whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
-        animate={{ y: [0, -8, 0] }}
+        animate={{ y: [0, -5, 0] }}
         transition={{
           y: {
-            duration: 6,
+            duration: 3,
             repeat: Infinity,
             ease: "easeInOut"
           }
         }}
       >
-        {/* Glow Effect */}
-        <div className="absolute inset-0 rounded-full bg-[#7B61FF]/20 blur-xl 
-          group-hover:bg-[#7B61FF]/30 transition-all duration-300" />
-        
-        {/* Button */}
-        <div className="relative p-3.5 rounded-full
-          bg-[#7B61FF] hover:bg-[#8B74FF]
-          shadow-[0_8px_16px_rgba(123,97,255,0.3)]
-          transition-all duration-300">
-          <RiApps2Line className="w-6 h-6 text-white" />
-        </div>
+        <IoGridOutline className="w-6 h-6 text-white" />
       </motion.button>
     </div>
   );

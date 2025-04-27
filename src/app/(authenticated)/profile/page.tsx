@@ -20,9 +20,9 @@ export default function ProfilePage() {
   };
 
   return (
-    <main className="min-h-screen bg-black text-white flex flex-col items-center overflow-hidden">
-      {/* Header - Updated with shadow and proper positioning */}
-      <div className="w-full bg-[#080808] fixed top-0 left-0 right-0 z-10 shadow-sm">
+    <main className="h-[844px] w-full bg-black text-white flex flex-col items-center overflow-hidden">
+      {/* Header */}
+      <div className="w-full bg-[#080808] shadow-sm">
         <div className="w-full mx-auto px-4 py-3 flex justify-between items-center">
           <div className="w-6"></div> {/* Spacer for centering */}
           <h1 className="text-lg font-bold text-white">My Tradr</h1>
@@ -32,13 +32,13 @@ export default function ProfilePage() {
         </div>
       </div>
 
-      {/* Content container with top padding for the fixed header */}
-      <div className="w-full pt-[72px] pb-24">
-        <div className="w-full px-4 space-y-4 mt-6">
-          {/* Live URL Card - Using the CopyableUrl component */}
-          <CopyableUrl username="mattjames" />
+      {/* Content container with consistent spacing */}
+      <div className="w-full px-4 flex-1 flex flex-col gap-6 pt-6">
+        {/* Live URL Card - Using the CopyableUrl component */}
+        <CopyableUrl username="mattjames" />
 
-          {/* Profile Preview */}
+        {/* Profile Preview - Scaled down slightly */}
+        <div className="transform scale-[0.98]">
           <ProfilePreview 
             username="mattjames"
             bio="I'm a professional trader from Cardiff looking to level up my skills in trading."

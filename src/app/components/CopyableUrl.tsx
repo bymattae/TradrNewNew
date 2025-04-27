@@ -45,25 +45,25 @@ export default function CopyableUrl({ username }: CopyableUrlProps) {
       animate={{ opacity: 1, y: 0 }}
       className="w-full max-w-[100%] mx-auto"
     >
-      <div className="bg-gradient-to-b from-[#111111] to-[#0A0A0A] p-5 rounded-[22px] border border-[#222] mb-4">
-        <h3 className="font-semibold text-base text-white mb-3">Your Tradr is live!</h3>
+      <div className="bg-gradient-to-b from-[#111111] to-[#0A0A0A] p-6 rounded-[22px] border border-[#222]">
+        <h3 className="font-semibold text-base text-white mb-4">Your Tradr is live!</h3>
         
         {/* Combined URL and share section in one row */}
-        <div className="flex items-center justify-between mb-1">
+        <div className="flex items-center justify-between gap-4">
           {/* URL display and copy button */}
-          <div className="flex flex-1 items-center mr-4">
+          <div className="flex flex-1 items-center">
             <a 
               href={fullUrl} 
               target="_blank" 
               rel="noopener noreferrer"
-              className="bg-[#0A0A0A] flex-1 px-3 py-2 rounded-l-lg text-sm text-white/80 truncate hover:text-white transition-colors"
+              className="bg-[#0A0A0A] flex-1 px-4 py-2.5 rounded-l-lg text-sm text-white/80 truncate hover:text-white transition-colors"
             >
               {url}
             </a>
             <motion.button
               whileTap={{ scale: 0.95 }}
               onClick={handleCopy}
-              className={`px-3 py-2 rounded-r-lg flex items-center justify-center ${
+              className={`px-4 py-2.5 rounded-r-lg flex items-center justify-center ${
                 copied ? 'bg-green-500/20 text-green-400' : 'bg-[#161616] text-white/80 hover:text-white'
               }`}
             >
@@ -76,14 +76,14 @@ export default function CopyableUrl({ username }: CopyableUrlProps) {
           </div>
           
           {/* Share section */}
-          <div className="flex items-center">
-            <p className="text-white/60 text-sm mr-3">Share:</p>
-            <div className="flex items-center gap-2.5">
+          <div className="flex items-center gap-3">
+            <p className="text-white/60 text-sm">Share:</p>
+            <div className="flex items-center gap-2">
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={shareOnTwitter}
-                className="p-2 bg-[#161616] rounded-lg text-white/70 hover:text-white transition-colors"
+                className="p-2.5 bg-[#161616] rounded-lg text-white/70 hover:text-white transition-colors"
               >
                 <FaXTwitter className="w-4 h-4" />
               </motion.button>
@@ -91,7 +91,7 @@ export default function CopyableUrl({ username }: CopyableUrlProps) {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={shareOnWhatsapp}
-                className="p-2 bg-[#161616] rounded-lg text-white/70 hover:text-white transition-colors"
+                className="p-2.5 bg-[#161616] rounded-lg text-white/70 hover:text-white transition-colors"
               >
                 <FaWhatsapp className="w-4 h-4" />
               </motion.button>
@@ -99,7 +99,7 @@ export default function CopyableUrl({ username }: CopyableUrlProps) {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={shareOnTelegram}
-                className="p-2 bg-[#161616] rounded-lg text-white/70 hover:text-white transition-colors"
+                className="p-2.5 bg-[#161616] rounded-lg text-white/70 hover:text-white transition-colors"
               >
                 <FaTelegram className="w-4 h-4" />
               </motion.button>

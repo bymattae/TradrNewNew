@@ -91,9 +91,9 @@ export default function ProfilePreview({
   };
 
   return (
-    <div className="w-full flex flex-col items-center mb-16">
+    <div className="w-full flex flex-col items-center mb-12 pt-5">
       {/* Main Profile Card Container */}
-      <div className="w-full bg-[#111111] rounded-[20px] overflow-hidden" style={{ transform: 'scale(0.9)' }}>
+      <div className="w-full max-w-[390px] mx-auto bg-[#0D0D0D] rounded-[22px] overflow-hidden shadow-md" style={{ transform: 'scale(0.95)' }}>
         {/* Profile Info Section */}
         <div className="relative w-full bg-gradient-to-b from-[#1A1A1A] to-[#0D0D0D] p-4 flex flex-col items-center">
           {/* Edit button */}
@@ -105,14 +105,14 @@ export default function ProfilePreview({
           </button>
           
           {/* Avatar */}
-          <div className="relative mb-2">
-            <div className="w-[75px] h-[75px] rounded-full bg-gradient-to-br from-[#7048E8] to-[#9C48E8] p-[2px] shadow-[0_0_15px_rgba(123,97,255,0.5)]">
+          <div className="relative mb-3">
+            <div className="w-[76px] h-[76px] rounded-full bg-gradient-to-br from-[#7048E8] to-[#9C48E8] p-[2px] shadow-[0_0_15px_rgba(123,97,255,0.5)]">
               <div className="w-full h-full rounded-full overflow-hidden">
                 <Image
                   src={avatarUrl || "/avatar.png"}
                   alt={username}
-                  width={75}
-                  height={75}
+                  width={76}
+                  height={76}
                   className="w-full h-full object-cover"
                 />
               </div>
@@ -122,13 +122,13 @@ export default function ProfilePreview({
           </div>
           
           {/* Username */}
-          <h2 className="text-2xl font-bold text-white mb-0.5">@{username}</h2>
+          <h2 className="text-2xl font-bold text-white mb-1">@{username}</h2>
           
           {/* Bio */}
-          <p className="text-base text-white/70 text-center mb-2">{bio || 'Trader'}</p>
+          <p className="text-base text-white/70 text-center mb-2.5">{bio || 'Trader'}</p>
           
           {/* Tags */}
-          <div className="flex flex-wrap justify-center gap-2">
+          <div className="flex flex-wrap justify-center gap-2 mb-1">
             {(tags || ['#NFTTrader', '#DeFiWhale', '#Web3']).map((tag) => (
               <span 
                 key={tag} 
@@ -140,31 +140,31 @@ export default function ProfilePreview({
           </div>
         </div>
         
-        {/* Stats Section */}
-        <div className="w-full bg-[#0D0D0D] p-3.5">
-          <div className="grid grid-cols-3 gap-3">
-            <div className="bg-[#161616] rounded-xl py-2.5 px-2 text-center">
-              <p className="text-[#4DFFC7] text-xl font-bold">+{strategies?.[0]?.stats.gain || 12.5}%</p>
+        {/* Stats Section - Reduced spacing */}
+        <div className="w-full bg-[#0D0D0D] p-3">
+          <div className="grid grid-cols-3 gap-2.5">
+            <div className="bg-[#161616] rounded-xl py-2 px-2 text-center">
+              <p className="text-[#4DFFC7] text-lg font-bold">+{strategies?.[0]?.stats.gain || 12.5}%</p>
               <p className="text-xs text-[#A0A0A0]">Gain</p>
             </div>
-            <div className="bg-[#161616] rounded-xl py-2.5 px-2 text-center">
-              <p className="text-white text-xl font-bold">{strategies?.[0]?.stats.winRate || 89}%</p>
+            <div className="bg-[#161616] rounded-xl py-2 px-2 text-center">
+              <p className="text-white text-lg font-bold">{strategies?.[0]?.stats.winRate || 89}%</p>
               <p className="text-xs text-[#A0A0A0]">Win Rate</p>
             </div>
-            <div className="bg-[#161616] rounded-xl py-2.5 px-2 text-center">
-              <p className="text-[#9B7BFF] text-xl font-bold">{strategies?.[0]?.stats.riskRatio || '1:3'}</p>
+            <div className="bg-[#161616] rounded-xl py-2 px-2 text-center">
+              <p className="text-[#9B7BFF] text-lg font-bold">{strategies?.[0]?.stats.riskRatio || '1:3'}</p>
               <p className="text-xs text-[#A0A0A0]">Avg R/R</p>
             </div>
           </div>
         </div>
         
-        {/* CTA Section */}
-        <div className="w-full bg-[#0A0A0A] p-3.5">
-          <div className="bg-[#161616] rounded-xl p-3.5 text-center">
+        {/* CTA Section - Tighter spacing */}
+        <div className="w-full bg-[#0A0A0A] p-3">
+          <div className="bg-[#161616] rounded-xl p-3 text-center">
             <h3 className="text-lg font-semibold text-white mb-1">
               {links?.[0]?.title || 'Join my free telegram channel!'}
             </h3>
-            <p className="text-sm text-[#A0A0A0] mb-3">
+            <p className="text-sm text-[#A0A0A0] mb-2.5">
               {links?.[0]?.description || 'Get involved with other alphas and start scaling. This is your time right now.'}
             </p>
             <button className="bg-[#7048E8] hover:bg-[#6040D0] text-white py-2 px-6 rounded-full transition-colors text-sm font-medium">
@@ -173,10 +173,10 @@ export default function ProfilePreview({
           </div>
         </div>
         
-        {/* Footer with Tradr Logo - Now inside the card */}
-        <div className="w-full flex justify-center py-3 bg-[#090909]">
+        {/* Footer with Tradr Logo - Darker background, tighter padding */}
+        <div className="w-full flex justify-center py-2.5 bg-[#080808]">
           <div className="flex items-center gap-1.5 text-white/50 text-xs">
-            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+            <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor">
               <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
             </svg>
             <span>Powered by Tradr</span>

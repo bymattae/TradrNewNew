@@ -79,3 +79,12 @@
 .hub-pulse {
   animation: softPulse 10s ease-in-out infinite;
 }
+
+/* Hide scrollbars across browsers */
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* Internet Explorer and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;  /* Chrome, Safari and Opera */
+}

@@ -81,11 +81,11 @@ export default function ProfilePreview({
   onThemeClick
 }: ProfilePreviewProps) {
   return (
-    <div className="min-h-screen flex flex-col items-center bg-black px-4 py-3">
-      {/* Main Content Area */}
-      <div className="w-full max-w-md flex flex-col">
-        {/* Scrollable Profile Preview */}
-        <div className="w-full max-h-[70vh] overflow-y-auto mb-6 rounded-2xl">
+    <div className="w-full flex flex-col items-center">
+      {/* Profile Preview Phone Frame */}
+      <div className="w-full max-w-[360px] h-[600px] bg-[#151515] rounded-[32px] shadow-xl border-4 border-[#242424] overflow-hidden mb-6 relative">
+        {/* Phone Screen Content - Scrollable */}
+        <div className="w-full h-full overflow-y-auto bg-black px-4 py-3 scrollbar-hide">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -159,38 +159,33 @@ export default function ProfilePreview({
             </div>
           </motion.div>
         </div>
-
-        {/* Action Buttons Section - Outside scrollable container */}
-        <div className="w-full mb-6">
-          <div className="flex justify-center gap-4">
-            <button 
-              onClick={onEditClick} 
-              className="flex flex-col items-center justify-center bg-[#1A1A1A] w-[85px] h-[90px] rounded-xl shadow-sm border border-[rgba(255,255,255,0.03)]"
-            >
-              <FiEdit3 className="w-7 h-7 mb-2" />
-              <span className="text-sm font-medium">Edit</span>
-            </button>
-            <button 
-              onClick={onShareClick} 
-              className="flex flex-col items-center justify-center bg-[#1A1A1A] w-[85px] h-[90px] rounded-xl shadow-sm border border-[rgba(255,255,255,0.03)]"
-            >
-              <FiShare2 className="w-7 h-7 mb-2" />
-              <span className="text-sm font-medium">Share</span>
-            </button>
-            <button 
-              onClick={onThemeClick} 
-              className="flex flex-col items-center justify-center bg-[#1A1A1A] w-[85px] h-[90px] rounded-xl shadow-sm border border-[rgba(255,255,255,0.03)]"
-            >
-              <IoColorPaletteOutline className="w-7 h-7 mb-2" />
-              <span className="text-sm font-medium">Theme</span>
-            </button>
-          </div>
-        </div>
       </div>
 
-      {/* Hub Button */}
-      <div className="absolute left-6 bottom-6">
-        <HubButton onClick={() => {}} />
+      {/* Action Buttons Section - Static, outside phone frame */}
+      <div className="w-full max-w-[360px] mb-4">
+        <div className="flex justify-center gap-4">
+          <button 
+            onClick={onEditClick} 
+            className="flex flex-col items-center justify-center bg-[#1A1A1A] w-[85px] h-[90px] rounded-xl shadow-sm border border-[rgba(255,255,255,0.03)]"
+          >
+            <FiEdit3 className="w-7 h-7 mb-2" />
+            <span className="text-sm font-medium">Edit</span>
+          </button>
+          <button 
+            onClick={onShareClick} 
+            className="flex flex-col items-center justify-center bg-[#1A1A1A] w-[85px] h-[90px] rounded-xl shadow-sm border border-[rgba(255,255,255,0.03)]"
+          >
+            <FiShare2 className="w-7 h-7 mb-2" />
+            <span className="text-sm font-medium">Share</span>
+          </button>
+          <button 
+            onClick={onThemeClick} 
+            className="flex flex-col items-center justify-center bg-[#1A1A1A] w-[85px] h-[90px] rounded-xl shadow-sm border border-[rgba(255,255,255,0.03)]"
+          >
+            <IoColorPaletteOutline className="w-7 h-7 mb-2" />
+            <span className="text-sm font-medium">Theme</span>
+          </button>
+        </div>
       </div>
     </div>
   );

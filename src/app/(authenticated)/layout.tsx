@@ -14,8 +14,8 @@ export default function AuthenticatedLayout({
   const [isHubMenuOpen, setIsHubMenuOpen] = useState(false);
 
   return (
-    <div className="h-[100dvh] overflow-hidden bg-black flex flex-col">
-      <div className="flex-1 overflow-y-auto">
+    <div className="h-[100dvh] w-full overflow-hidden bg-black flex flex-col">
+      <div className="flex-1 overflow-hidden">
         {children}
       </div>
       <HubButton onClick={() => setIsHubMenuOpen(true)} />

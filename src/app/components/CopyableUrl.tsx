@@ -17,7 +17,7 @@ export default function CopyableUrl({ username }: CopyableUrlProps) {
 
   return (
     <motion.div 
-      className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-3 flex items-center justify-between gap-3"
+      className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-3 flex items-center justify-between gap-3 w-full max-w-[360px] mx-auto"
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
@@ -29,7 +29,7 @@ export default function CopyableUrl({ username }: CopyableUrlProps) {
             href={`https://${url}`} 
             target="_blank" 
             rel="noopener noreferrer" 
-            className="text-violet-400 hover:text-violet-300 transition-colors font-mono text-base"
+            className="text-violet-400 hover:text-violet-300 transition-colors font-mono text-sm"
           >
             {url}
           </a>

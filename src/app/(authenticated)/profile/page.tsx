@@ -1,8 +1,8 @@
 'use client';
 
 import { Settings, Edit2, Share2, Palette } from 'lucide-react';
-import CopyableUrl from '../components/CopyableUrl';
-import ProfilePreview from '../components/ProfilePreview';
+import CopyableUrl from '@/app/components/CopyableUrl';
+import ProfilePreview from '@/app/components/ProfilePreview';
 import { useState } from 'react';
 
 export default function ProfilePage() {
@@ -34,7 +34,7 @@ export default function ProfilePage() {
 
       {/* Content container with top padding for the fixed header */}
       <div className="w-full pt-[72px] pb-24">
-        <div className="max-w-[390px] mx-auto px-4 space-y-2">
+        <div className="max-w-[390px] mx-auto px-4 space-y-5 mt-5">
           {/* Live URL Card - Using the CopyableUrl component */}
           <CopyableUrl username="mattjames" />
 
@@ -66,34 +66,7 @@ export default function ProfilePage() {
         </div>
       </div>
 
-      {/* Bottom Action Buttons */}
-      <div className="fixed bottom-6 left-0 right-0">
-        <div className="max-w-[390px] mx-auto px-4">
-          <div className="flex justify-center gap-4">
-            <button 
-              onClick={handleEditClick}
-              className="p-3 rounded-xl bg-[#1A1A1A] text-white/80 hover:text-white flex flex-col items-center"
-            >
-              <Edit2 className="w-5 h-5 mb-1" />
-              <span className="text-xs">Edit</span>
-            </button>
-            <button 
-              onClick={handleShareClick}
-              className="p-3 rounded-xl bg-[#1A1A1A] text-white/80 hover:text-white flex flex-col items-center"
-            >
-              <Share2 className="w-5 h-5 mb-1" />
-              <span className="text-xs">Share</span>
-            </button>
-            <button 
-              onClick={handleThemeClick}
-              className="p-3 rounded-xl bg-[#1A1A1A] text-white/80 hover:text-white flex flex-col items-center"
-            >
-              <Palette className="w-5 h-5 mb-1" />
-              <span className="text-xs">Theme</span>
-            </button>
-          </div>
-        </div>
-      </div>
+      {/* Bottom Action Buttons - Removed as they're no longer needed in the authenticated layout */}
     </main>
   );
 } 

@@ -10,9 +10,14 @@ export async function middleware(request: NextRequest) {
   const pathname = new URL(request.url).pathname;
 
   // Protect authenticated routes
-  if (pathname.startsWith('/dashboard') || pathname.startsWith('/onboarding')) {
+  if (pathname.startsWith('/dashboard') || pathname.startsWith('/onboarding') || pathname === '/profile') {
     if (!session) {
       return NextResponse.redirect(new URL('/auth/join', request.url));
+    }
+
+    // Redirect from old profile path to authenticated route
+    if (pathname === '/profile') {
+      return NextResponse.redirect(new URL('/dashboard', request.url));
     }
   }
 

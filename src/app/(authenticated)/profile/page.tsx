@@ -34,7 +34,7 @@ export default function ProfilePage() {
 
       {/* Content container with top padding for the fixed header */}
       <div className="w-full pt-[72px] pb-24">
-        <div className="w-full px-4 space-y-3 mt-5">
+        <div className="w-full px-4 space-y-4 mt-6">
           {/* Live URL Card - Using the CopyableUrl component */}
           <CopyableUrl username="mattjames" />
 

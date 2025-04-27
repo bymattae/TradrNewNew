@@ -104,10 +104,10 @@ export default function DashboardPage() {
         </div>
         
         {/* Main Content */}
-        <div className="flex-1 flex flex-col px-4 py-2 overflow-y-auto scrollbar-hide">
+        <div className="flex-1 flex flex-col px-4 py-6 overflow-y-auto scrollbar-hide">
           {/* URL Display */}
           {profile && (
-            <div className="mb-3">
+            <div className="mb-4">
               <CopyableUrl username={profile.username} />
             </div>
           )}

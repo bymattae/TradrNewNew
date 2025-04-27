@@ -23,19 +23,42 @@ export default function CopyableUrl({ username }: CopyableUrlProps) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
     >
-      <div className="flex flex-col">
-        <p className="text-white/80 text-xs mb-0.5">Your Tradr is live:</p>
-        <a 
-          href={`https://${url}`} 
-          target="_blank" 
-          rel="noopener noreferrer" 
-          className="text-violet-400 hover:text-violet-300 transition-colors font-mono text-sm"
-        >
-          {url}
-        </a>
+      <div className="flex items-center gap-2">
+        <div>
+          <p className="text-white/80 text-xs mb-0.5">Your Tradr is live:</p>
+          <div className="flex items-center">
+            <a 
+              href={`https://${url}`} 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="text-violet-400 hover:text-violet-300 transition-colors font-mono text-sm"
+            >
+              {url}
+            </a>
+            <button
+              onClick={handleCopy}
+              className="ml-1.5 p-1 rounded-full hover:bg-white/10 transition-colors relative"
+            >
+              {copied ? (
+                <svg className="w-4 h-4 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+              ) : (
+                <Copy className="w-4 h-4 text-white/60" />
+              )}
+              <motion.span
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: copied ? 1 : 0, y: copied ? 0 : 10 }}
+                className="absolute -bottom-6 left-1/2 -translate-x-1/2 text-xs text-white/60 whitespace-nowrap bg-black/70 px-2 py-1 rounded"
+              >
+                Copied!
+              </motion.span>
+            </button>
+          </div>
+        </div>
       </div>
       
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-3">
         {/* WhatsApp */}
         <a 
           href={`https://wa.me/?text=Check%20out%20my%20trading%20profile%20at%20${encodeURIComponent(`https://${url}`)}`} 
@@ -60,26 +83,17 @@ export default function CopyableUrl({ username }: CopyableUrlProps) {
           </svg>
         </a>
         
-        {/* Copy */}
-        <button
-          onClick={handleCopy}
-          className="p-1.5 rounded-full hover:bg-white/10 transition-colors relative"
+        {/* Telegram */}
+        <a 
+          href={`https://t.me/share/url?url=${encodeURIComponent(`https://${url}`)}&text=Check%20out%20my%20trading%20profile!`} 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="p-1.5 rounded-full hover:bg-white/10 transition-colors"
         >
-          {copied ? (
-            <svg className="w-5 h-5 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-            </svg>
-          ) : (
-            <Copy className="w-5 h-5 text-white/80" />
-          )}
-          <motion.span
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: copied ? 1 : 0, y: copied ? 0 : 10 }}
-            className="absolute -bottom-6 left-1/2 -translate-x-1/2 text-xs text-white/60 whitespace-nowrap bg-black/70 px-2 py-1 rounded"
-          >
-            Copied!
-          </motion.span>
-        </button>
+          <svg className="w-5 h-5 text-white/80" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.321.072.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+          </svg>
+        </a>
       </div>
     </motion.div>
   );

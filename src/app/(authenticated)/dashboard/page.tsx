@@ -91,7 +91,7 @@ export default function DashboardPage() {
   return (
     <div className="h-[844px] w-[390px] mx-auto flex flex-col items-center bg-black overflow-hidden">
       {/* App Frame */}
-      <div className="w-full h-full flex flex-col">
+      <div className="w-full h-full flex flex-col relative">
         {/* Top Navigation Bar */}
         <div className="w-full bg-black border-b border-[#111] px-4 py-4 flex items-center justify-between">
           <div className="w-6" />
@@ -105,10 +105,10 @@ export default function DashboardPage() {
         </div>
         
         {/* Main Content */}
-        <div className="flex-1 flex flex-col px-4 py-4 overflow-y-auto scrollbar-hide">
+        <div className="flex-1 flex flex-col px-4 py-2 overflow-y-auto scrollbar-hide">
           {/* URL Display */}
           {profile && (
-            <div className="mb-4">
+            <div className="mb-3">
               <CopyableUrl username={profile.username} />
             </div>
           )}
@@ -131,7 +131,7 @@ export default function DashboardPage() {
           </div>
         </div>
         
-        {/* Hub Button (Fixed Position) */}
+        {/* Hub Button (Only one, fixed position) */}
         <div className="fixed left-6 bottom-6 z-50">
           <motion.button
             className="relative p-3.5 rounded-full bg-[#7B61FF] hover:bg-[#8B74FF] transition-colors shadow-[0_4px_20px_rgba(123,97,255,0.5)]"

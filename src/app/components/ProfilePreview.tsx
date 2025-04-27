@@ -6,7 +6,6 @@ import Link from 'next/link';
 import { RiArrowRightLine } from 'react-icons/ri';
 import { FiEdit, FiEdit3, FiShare2 } from 'react-icons/fi';
 import { IoColorPaletteOutline, IoGridOutline } from 'react-icons/io5';
-import HubButton from './HubButton';
 
 interface SocialLink {
   platform: 'twitter' | 'instagram' | 'youtube' | 'tiktok' | 'telegram';
@@ -92,21 +91,21 @@ export default function ProfilePreview({
   };
 
   return (
-    <div className="w-full flex flex-col items-center mb-12">
-      {/* Profile Card Container */}
-      <div className="w-full flex flex-col gap-4">
+    <div className="w-full flex flex-col items-center mb-16">
+      {/* Main Profile Card Container */}
+      <div className="w-full bg-[#111111] rounded-[20px] overflow-hidden">
         {/* Profile Info Section */}
-        <div className="w-full bg-gradient-to-b from-[#1A1A1A] to-[#0D0D0D] rounded-[20px] p-5 flex flex-col items-center">
+        <div className="relative w-full bg-gradient-to-b from-[#1A1A1A] to-[#0D0D0D] p-5 flex flex-col items-center">
           {/* Edit button */}
           <button 
             onClick={onEditClick}
-            className="absolute top-4 right-4 p-2 rounded-full bg-black/30 hover:bg-black/50 transition-colors"
+            className="absolute top-3 right-3 p-2 rounded-full bg-black/30 hover:bg-black/50 transition-colors"
           >
             <FiEdit className="w-4 h-4 text-white/80" />
           </button>
           
           {/* Avatar */}
-          <div className="relative mb-3">
+          <div className="relative mb-2">
             <div className="w-[80px] h-[80px] rounded-full bg-gradient-to-br from-[#7048E8] to-[#9C48E8] p-[2px] shadow-[0_0_15px_rgba(123,97,255,0.5)]">
               <div className="w-full h-full rounded-full overflow-hidden">
                 <Image
@@ -119,7 +118,7 @@ export default function ProfilePreview({
               </div>
             </div>
             {/* Status dot */}
-            <div className="absolute -right-1 bottom-2 w-3.5 h-3.5 rounded-full bg-[#10B981] border-2 border-[#0D0D0D]"></div>
+            <div className="absolute -right-1 bottom-2 w-3 h-3 rounded-full bg-[#10B981] border-2 border-[#0D0D0D]"></div>
           </div>
           
           {/* Username */}
@@ -142,17 +141,17 @@ export default function ProfilePreview({
         </div>
         
         {/* Stats Section */}
-        <div className="w-full bg-[#151515] rounded-[20px] p-4">
+        <div className="w-full bg-[#0D0D0D] p-4">
           <div className="grid grid-cols-3 gap-3">
-            <div className="bg-[#121212] rounded-xl py-3 px-2 text-center">
+            <div className="bg-[#161616] rounded-xl py-3 px-2 text-center">
               <p className="text-[#4DFFC7] text-xl font-bold">+{strategies?.[0]?.stats.gain || 12.5}%</p>
               <p className="text-xs text-[#A0A0A0]">Gain</p>
             </div>
-            <div className="bg-[#121212] rounded-xl py-3 px-2 text-center">
+            <div className="bg-[#161616] rounded-xl py-3 px-2 text-center">
               <p className="text-white text-xl font-bold">{strategies?.[0]?.stats.winRate || 89}%</p>
               <p className="text-xs text-[#A0A0A0]">Win Rate</p>
             </div>
-            <div className="bg-[#121212] rounded-xl py-3 px-2 text-center">
+            <div className="bg-[#161616] rounded-xl py-3 px-2 text-center">
               <p className="text-[#9B7BFF] text-xl font-bold">{strategies?.[0]?.stats.riskRatio || '1:3'}</p>
               <p className="text-xs text-[#A0A0A0]">Avg R/R</p>
             </div>
@@ -160,8 +159,8 @@ export default function ProfilePreview({
         </div>
         
         {/* CTA Section */}
-        <div className="w-full bg-[#151515] rounded-[20px] p-4">
-          <div className="bg-[#121212] rounded-xl p-4 text-center">
+        <div className="w-full bg-[#0A0A0A] p-4">
+          <div className="bg-[#161616] rounded-xl p-4 text-center">
             <h3 className="text-lg font-semibold text-white mb-1">
               {links?.[0]?.title || 'Join my free telegram channel!'}
             </h3>
@@ -173,15 +172,15 @@ export default function ProfilePreview({
             </button>
           </div>
         </div>
-        
-        {/* Footer with Tradr Logo */}
-        <div className="w-full flex justify-center py-2">
-          <div className="flex items-center gap-1.5 text-white/50 text-xs">
-            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-            </svg>
-            <span>Powered by Tradr</span>
-          </div>
+      </div>
+      
+      {/* Footer with Tradr Logo */}
+      <div className="w-full flex justify-center py-3 mt-2">
+        <div className="flex items-center gap-1.5 text-white/50 text-xs">
+          <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+          </svg>
+          <span>Powered by Tradr</span>
         </div>
       </div>
     </div>

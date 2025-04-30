@@ -69,10 +69,17 @@ export default function Dashboard3Page() {
         </button>
       </div>
 
-      {/* Main Preview Container */}
+      {/* Main Container */}
       <div className="flex-1 p-4 flex flex-col">
-        {/* Profile Preview Frame */}
-        <div className="w-full h-full flex flex-col rounded-2xl overflow-hidden bg-white/5">
+        {/* "Try Pro" Button */}
+        <div className="flex justify-end mb-3">
+          <button className="px-4 py-1.5 rounded-full bg-purple-500/20 text-purple-400 text-sm font-medium hover:bg-purple-500/30 transition-all">
+            Try Pro for free
+          </button>
+        </div>
+
+        {/* Profile Preview Container - Now with fixed height */}
+        <div className="h-[75vh] flex flex-col rounded-2xl overflow-hidden bg-white/5 shadow-lg shadow-black/5">
           {/* URL Bar */}
           <div className="w-full bg-black/20 px-4 py-3 flex items-center justify-between">
             <div className="flex items-center space-x-3">
@@ -84,7 +91,7 @@ export default function Dashboard3Page() {
             </button>
           </div>
 
-          {/* Profile Content */}
+          {/* Profile Content - Scrollable */}
           <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
             <div className="px-6 py-8 space-y-6">
               {/* Avatar and Username Section */}

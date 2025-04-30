@@ -55,9 +55,9 @@ export default function DashboardPage() {
   }, [router, supabase]);
 
   return (
-    <div className="h-[844px] w-full max-w-md mx-auto flex flex-col bg-black overflow-hidden">
+    <div className="min-h-screen w-full max-w-md mx-auto flex flex-col bg-black">
       {/* Top Navbar */}
-      <div className="w-full bg-black border-b border-[#111] px-6 py-5 flex items-center justify-between">
+      <div className="w-full bg-black border-b border-[#111] px-6 py-4 flex items-center justify-between">
         <div className="w-6" />
         <h1 className="text-2xl font-bold text-white text-center font-inter">My Tradr</h1>
         <button 
@@ -69,9 +69,9 @@ export default function DashboardPage() {
       </div>
 
       {/* Main Content Container */}
-      <div className="flex-1 flex flex-col px-6 py-6 space-y-6">
+      <div className="flex-1 flex flex-col px-6 py-4 space-y-4">
         {/* Link Card */}
-        <div className="w-full bg-[#111] rounded-2xl p-6">
+        <div className="w-full bg-[#111] rounded-2xl p-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
               <Link className="w-5 h-5 text-[#7C3AED]" />
@@ -86,10 +86,10 @@ export default function DashboardPage() {
         </div>
 
         {/* Profile Card */}
-        <div className="w-full bg-[#111] rounded-2xl p-6 space-y-6">
+        <div className="w-full bg-[#111] rounded-2xl p-4 space-y-4">
           {/* Avatar and Username */}
           <div className="flex items-center space-x-4">
-            <div className="relative w-16 h-16 rounded-full overflow-hidden ring-2 ring-[#7C3AED] ring-offset-2 ring-offset-black">
+            <div className="relative w-14 h-14 rounded-full overflow-hidden ring-2 ring-[#7C3AED] ring-offset-2 ring-offset-black">
               <Image
                 src={profile?.avatar_url || '/default-avatar.png'}
                 alt="Profile"
@@ -98,10 +98,10 @@ export default function DashboardPage() {
               />
             </div>
             <div>
-              <h2 className="text-white font-semibold text-lg font-inter">
+              <h2 className="text-white font-semibold text-base font-inter">
                 {profile?.username || currentUser?.email?.split('@')[0] || 'cryptowhale'}
               </h2>
-              <p className="text-gray-400 text-sm">@{profile?.username || 'username'}</p>
+              <p className="text-gray-400 text-xs">@{profile?.username || 'username'}</p>
             </div>
           </div>
 
@@ -115,7 +115,7 @@ export default function DashboardPage() {
             {(profile?.tags || ['#Coolman']).map((tag: string, index: number) => (
               <span 
                 key={index} 
-                className="px-3 py-1.5 bg-[#222] text-[#7C3AED] text-sm rounded-full font-medium"
+                className="px-2.5 py-1 bg-[#222] text-[#7C3AED] text-xs rounded-full font-medium"
               >
                 #{tag}
               </span>
@@ -125,24 +125,24 @@ export default function DashboardPage() {
           {/* Stats */}
           <div className="grid grid-cols-3 gap-4 pt-2">
             <div className="text-center">
-              <p className="text-white font-semibold text-lg">12.5%</p>
+              <p className="text-white font-semibold text-base">12.5%</p>
               <p className="text-gray-400 text-xs">Gain</p>
             </div>
             <div className="text-center">
-              <p className="text-white font-semibold text-lg">89%</p>
+              <p className="text-white font-semibold text-base">89%</p>
               <p className="text-gray-400 text-xs">Win Rate</p>
             </div>
             <div className="text-center">
-              <p className="text-white font-semibold text-lg">1:3</p>
+              <p className="text-white font-semibold text-base">1:3</p>
               <p className="text-gray-400 text-xs">Risk Ratio</p>
             </div>
           </div>
 
           {/* CTA Section */}
-          <div className="space-y-3">
-            <h3 className="text-white font-semibold text-lg">Join my free telegram channel!</h3>
-            <p className="text-gray-400 text-sm">Get involved with other alphas and start scaling. This is your time right now.</p>
-            <button className="w-full bg-[#7C3AED] text-white py-3 rounded-xl font-medium hover:bg-[#6D28D9] transition-colors shadow-lg shadow-[#7C3AED]/20">
+          <div className="space-y-2">
+            <h3 className="text-white font-semibold text-base">Join my free telegram channel!</h3>
+            <p className="text-gray-400 text-xs">Get involved with other alphas and start scaling. This is your time right now.</p>
+            <button className="w-full bg-[#7C3AED] text-white py-2.5 rounded-xl font-medium hover:bg-[#6D28D9] transition-colors shadow-lg shadow-[#7C3AED]/20">
               Check it out
             </button>
           </div>
@@ -156,12 +156,14 @@ export default function DashboardPage() {
       </div>
 
       {/* Floating Hub Button */}
-      <button 
-        className="absolute bottom-6 left-6 w-14 h-14 bg-[#7C3AED] rounded-full flex items-center justify-center shadow-lg shadow-[#7C3AED]/20 hover:bg-[#6D28D9] transition-colors"
-        onClick={() => router.push('/hub')}
-      >
-        <Grid className="w-6 h-6 text-white" />
-      </button>
+      <div className="p-6">
+        <button 
+          className="w-14 h-14 bg-[#7C3AED] rounded-full flex items-center justify-center shadow-lg shadow-[#7C3AED]/20 hover:bg-[#6D28D9] transition-colors"
+          onClick={() => router.push('/hub')}
+        >
+          <Grid className="w-6 h-6 text-white" />
+        </button>
+      </div>
     </div>
   );
 } 

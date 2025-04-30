@@ -147,10 +147,10 @@ export default function DashboardPage() {
           </div>
 
           {/* CTA Section */}
-          <div className="bg-[#0A0A0A] rounded-xl p-3 space-y-2">
+          <div className="bg-[#0A0A0A] rounded-xl p-4 space-y-3">
             <h3 className="text-white font-semibold text-sm">Join my free telegram channel!</h3>
-            <p className="text-gray-400 text-xs">Get involved with other alphas and start scaling. This is your time right now.</p>
-            <button className="w-full bg-[#7C3AED] text-white py-2 rounded-xl font-medium hover:bg-[#6D28D9] transition-colors shadow-lg shadow-[#7C3AED]/20">
+            <p className="text-gray-400 text-xs leading-relaxed">Get involved with other alphas and start scaling. This is your time right now.</p>
+            <button className="w-full bg-[#7C3AED] text-white py-2.5 rounded-xl font-medium hover:bg-[#6D28D9] transition-colors shadow-lg shadow-[#7C3AED]/20">
               Check it out
             </button>
           </div>

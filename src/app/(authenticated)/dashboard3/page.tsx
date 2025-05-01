@@ -163,7 +163,15 @@ export default function Dashboard3Page() {
               </div>
 
               {/* Powered by Tradr */}
-              <div className="flex items-center justify-center space-x-1 pb-1">
+              <div className="flex items-center justify-center space-x-1.5 pb-1">
+                <div className="relative w-3 h-3">
+                  <Image
+                    src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/assets/TradrIcon%20(1).png`}
+                    alt="Tradr"
+                    fill
+                    className="object-contain"
+                  />
+                </div>
                 <span className="text-gray-400/60 text-xs">Powered by</span>
                 <span className="text-gray-400/60 text-xs font-medium">Tradr</span>
               </div>

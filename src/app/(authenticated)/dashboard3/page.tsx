@@ -79,13 +79,13 @@ export default function Dashboard3Page() {
       </motion.div>
 
       {/* Main Container */}
-      <div className="flex-1 px-4 flex flex-col space-y-3">
+      <div className="flex-1 px-4 pb-4">
         {/* Profile Preview Container */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="h-[75vh] flex flex-col rounded-3xl overflow-hidden bg-[#1C1C24]/80 backdrop-blur-xl border border-white/5 shadow-[0_0_25px_rgba(168,85,247,0.1)]"
+          className="h-full flex flex-col rounded-3xl overflow-hidden bg-[#1C1C24]/80 backdrop-blur-xl border border-white/5 shadow-[0_0_25px_rgba(168,85,247,0.1)]"
         >
           {/* URL Bar */}
           <div className="w-full bg-black/20 px-4 py-3 flex items-center justify-between border-b border-white/5">
@@ -106,8 +106,8 @@ export default function Dashboard3Page() {
             </div>
           </div>
 
-          {/* Profile Content - Static */}
-          <div className="flex-1">
+          {/* Profile Content - Scrollable */}
+          <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
             <div className="px-6 py-6 space-y-5">
               {/* Avatar and Username Section */}
               <motion.div 
@@ -203,7 +203,7 @@ export default function Dashboard3Page() {
               </motion.div>
 
               {/* Powered by Tradr */}
-              <div className="flex items-center justify-center space-x-2 mt-auto">
+              <div className="flex items-center justify-center space-x-2 pt-4">
                 <div className="relative w-4 h-4">
                   <Image
                     src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/assets/TradrIcon%20(1).png`}

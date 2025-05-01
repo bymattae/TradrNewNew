@@ -5,7 +5,8 @@ import { useRouter } from 'next/navigation';
 import getSupabaseBrowserClient from '@/lib/supabase/client';
 import { toast } from 'sonner';
 import { User } from '@supabase/supabase-js';
-import { Settings, Share2, Link, Grid } from 'lucide-react';
+import { Settings, Share2, Link, Grid, Twitter, Send } from 'lucide-react';
+import { BsWhatsapp } from 'react-icons/bs';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 
@@ -62,19 +63,23 @@ export default function Dashboard3Page() {
       <motion.div 
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="w-full bg-[#1C1C24]/80 backdrop-blur-xl border-b border-white/5 px-5 py-4 flex items-center justify-between"
+        className="w-full px-4 py-3 flex items-center justify-between"
       >
-        <div className="w-6" />
-        <h1 className="text-xl font-bold text-white text-center tracking-tight">My Tradr</h1>
         <button 
-          className="p-2 rounded-full hover:bg-white/10 active:scale-95 transition-all duration-200"
+          className="p-2.5 rounded-full bg-white/10 backdrop-blur-xl border border-white/10 hover:bg-white/15 active:scale-95 transition-all duration-200"
+          onClick={() => router.push('/hub')}
         >
-          <Settings className="w-5 h-5 text-white/80" />
+          <Grid className="w-5 h-5 text-white/90" />
+        </button>
+        <button 
+          className="p-2.5 rounded-full bg-white/10 backdrop-blur-xl border border-white/10 hover:bg-white/15 active:scale-95 transition-all duration-200"
+        >
+          <Settings className="w-5 h-5 text-white/90" />
         </button>
       </motion.div>
 
       {/* Main Container */}
-      <div className="flex-1 p-4 flex flex-col space-y-4">
+      <div className="flex-1 px-4 flex flex-col space-y-3">
         {/* "Try Pro" Button */}
         <motion.div 
           initial={{ opacity: 0, y: -10 }}
@@ -100,14 +105,22 @@ export default function Dashboard3Page() {
               <Link className="w-4 h-4 text-purple-400" />
               <span className="text-white/90 text-sm font-medium">tradr.io/{profile?.username || 'username'}</span>
             </div>
-            <button className="p-1.5 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 active:scale-95 transition-all duration-200">
-              <Share2 className="w-4 h-4 text-purple-400" />
-            </button>
+            <div className="flex items-center space-x-2">
+              <button className="p-1.5 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 active:scale-95 transition-all duration-200">
+                <BsWhatsapp className="w-3.5 h-3.5 text-purple-400" />
+              </button>
+              <button className="p-1.5 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 active:scale-95 transition-all duration-200">
+                <Send className="w-3.5 h-3.5 text-purple-400" />
+              </button>
+              <button className="p-1.5 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 active:scale-95 transition-all duration-200">
+                <Twitter className="w-3.5 h-3.5 text-purple-400" />
+              </button>
+            </div>
           </div>
 
-          {/* Profile Content - Scrollable */}
-          <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
-            <div className="px-6 py-8 space-y-8">
+          {/* Profile Content - Static */}
+          <div className="flex-1">
+            <div className="px-6 py-6 space-y-5">
               {/* Avatar and Username Section */}
               <motion.div 
                 initial={{ opacity: 0, scale: 0.95 }}
@@ -202,37 +215,23 @@ export default function Dashboard3Page() {
               </motion.div>
 
               {/* Powered by Tradr */}
-              <div className="flex items-center justify-center space-x-1.5 pb-1">
-                <div className="relative w-3 h-3">
+              <div className="flex items-center justify-center space-x-2 mt-auto">
+                <div className="relative w-4 h-4">
                   <Image
                     src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/assets/TradrIcon%20(1).png`}
                     alt="Tradr"
                     fill
-                    className="object-contain opacity-60"
+                    className="object-contain opacity-80"
                   />
                 </div>
-                <span className="text-gray-400/60 text-xs">Powered by</span>
-                <span className="text-gray-400/60 text-xs font-medium">Tradr</span>
+                <div className="text-white/50 text-sm font-medium tracking-wide backdrop-blur-sm">
+                  Powered by <span className="text-white/70">Tradr</span>
+                </div>
               </div>
             </div>
           </div>
         </motion.div>
       </div>
-
-      {/* Floating Hub Button */}
-      <motion.div 
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ delay: 0.8 }}
-        className="p-4"
-      >
-        <button 
-          className="w-12 h-12 bg-gradient-to-r from-[#A855F7] to-[#6366F1] rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(168,85,247,0.3)] hover:opacity-90 active:scale-95 transition-all duration-200"
-          onClick={() => router.push('/hub')}
-        >
-          <Grid className="w-5 h-5 text-white" />
-        </button>
-      </motion.div>
     </div>
   );
 } 

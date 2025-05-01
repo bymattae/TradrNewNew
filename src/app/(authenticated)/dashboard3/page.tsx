@@ -58,7 +58,7 @@ export default function Dashboard3Page() {
   }, [router, supabase]);
 
   return (
-    <div className="min-h-screen w-full max-w-md mx-auto flex flex-col bg-gradient-radial from-[#320D66] via-[#1C1C24] to-[#15161B]">
+    <div className="min-h-[100dvh] w-full max-w-md mx-auto flex flex-col bg-gradient-radial from-[#320D66] via-[#1C1C24] to-[#15161B] relative">
       {/* Top Bar */}
       <motion.div 
         initial={{ opacity: 0, y: -10 }}
@@ -79,13 +79,13 @@ export default function Dashboard3Page() {
       </motion.div>
 
       {/* Main Container */}
-      <div className="flex-1 px-4 pb-6 pt-2">
+      <div className="flex-1 px-4 pb-safe pt-2 flex flex-col">
         {/* Profile Preview Container */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="w-full flex flex-col rounded-3xl overflow-hidden bg-[#1C1C24]/80 backdrop-blur-xl border border-white/5 shadow-[0_0_25px_rgba(168,85,247,0.1)]"
+          className="flex-1 flex flex-col rounded-3xl bg-[#1C1C24]/80 backdrop-blur-xl border border-white/5 shadow-[0_0_25px_rgba(168,85,247,0.1)] mb-safe"
         >
           {/* URL Bar */}
           <div className="w-full bg-black/20 px-4 py-3 flex items-center justify-between border-b border-white/5">
@@ -107,8 +107,8 @@ export default function Dashboard3Page() {
           </div>
 
           {/* Profile Content */}
-          <div className="flex-1">
-            <div className="px-6 py-5 space-y-4">
+          <div className="flex-1 flex flex-col">
+            <div className="px-6 py-5 space-y-4 flex-1 flex flex-col">
               {/* Avatar and Username Section */}
               <motion.div 
                 initial={{ opacity: 0, scale: 0.95 }}
@@ -202,8 +202,11 @@ export default function Dashboard3Page() {
                 </div>
               </motion.div>
 
+              {/* Spacer to push watermark to bottom */}
+              <div className="flex-1 min-h-[8px]" />
+
               {/* Powered by Tradr */}
-              <div className="flex items-center justify-center space-x-2 pt-2">
+              <div className="flex items-center justify-center space-x-2">
                 <div className="relative w-4 h-4">
                   <Image
                     src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/assets/TradrIcon%20(1).png`}

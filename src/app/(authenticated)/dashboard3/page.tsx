@@ -78,36 +78,36 @@ export default function Dashboard3Page() {
         </button>
       </motion.div>
 
-      {/* Main Container with Scroll */}
-      <div className="flex-1 overflow-y-auto">
-        <div className="px-4 py-2 min-h-full">
-          {/* Profile Preview Container */}
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="w-full rounded-3xl bg-[#1C1C24]/80 backdrop-blur-xl border border-white/5 shadow-[0_0_25px_rgba(168,85,247,0.1)] mb-6"
-          >
-            {/* URL Bar */}
-            <div className="w-full bg-black/20 px-4 py-3 flex items-center justify-between border-b border-white/5">
-              <div className="flex items-center space-x-3">
-                <Link className="w-4 h-4 text-purple-400" />
-                <span className="text-white/90 text-sm font-medium">tradr.io/{profile?.username || 'username'}</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <button className="p-1.5 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 active:scale-95 transition-all duration-200">
-                  <BsWhatsapp className="w-3.5 h-3.5 text-purple-400" />
-                </button>
-                <button className="p-1.5 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 active:scale-95 transition-all duration-200">
-                  <Send className="w-3.5 h-3.5 text-purple-400" />
-                </button>
-                <button className="p-1.5 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 active:scale-95 transition-all duration-200">
-                  <Twitter className="w-3.5 h-3.5 text-purple-400" />
-                </button>
-              </div>
+      {/* Main Container - Fixed, Not Scrollable */}
+      <div className="flex-1 px-4 pb-6 pt-2 flex">
+        {/* Profile Preview Container - Scrollable */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="w-full rounded-3xl bg-[#1C1C24]/80 backdrop-blur-xl border border-white/5 shadow-[0_0_25px_rgba(168,85,247,0.1)] flex flex-col"
+        >
+          {/* URL Bar - Fixed */}
+          <div className="w-full bg-black/20 px-4 py-3 flex items-center justify-between border-b border-white/5">
+            <div className="flex items-center space-x-3">
+              <Link className="w-4 h-4 text-purple-400" />
+              <span className="text-white/90 text-sm font-medium">tradr.io/{profile?.username || 'username'}</span>
             </div>
+            <div className="flex items-center space-x-2">
+              <button className="p-1.5 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 active:scale-95 transition-all duration-200">
+                <BsWhatsapp className="w-3.5 h-3.5 text-purple-400" />
+              </button>
+              <button className="p-1.5 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 active:scale-95 transition-all duration-200">
+                <Send className="w-3.5 h-3.5 text-purple-400" />
+              </button>
+              <button className="p-1.5 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 active:scale-95 transition-all duration-200">
+                <Twitter className="w-3.5 h-3.5 text-purple-400" />
+              </button>
+            </div>
+          </div>
 
-            {/* Profile Content */}
+          {/* Profile Content - Scrollable */}
+          <div className="flex-1 overflow-y-auto">
             <div className="px-6 py-5 space-y-4">
               {/* Avatar and Username Section */}
               <motion.div 
@@ -203,7 +203,7 @@ export default function Dashboard3Page() {
               </motion.div>
 
               {/* Powered by Tradr */}
-              <div className="flex items-center justify-center space-x-2">
+              <div className="flex items-center justify-center space-x-2 pb-2">
                 <div className="relative w-4 h-4">
                   <Image
                     src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/assets/TradrIcon%20(1).png`}
@@ -217,8 +217,8 @@ export default function Dashboard3Page() {
                 </div>
               </div>
             </div>
-          </motion.div>
-        </div>
+          </div>
+        </motion.div>
       </div>
     </div>
   );

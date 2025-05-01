@@ -80,13 +80,13 @@ export default function Dashboard3Page() {
         </div>
 
         {/* Card Container */}
-        <div className="flex-1 px-4 pb-4 flex">
+        <div className="flex-1 px-4 pb-20 flex">
           {/* Profile Preview Card */}
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="w-full h-full rounded-3xl bg-[#1C1C24]/80 backdrop-blur-xl border border-white/5 shadow-[0_0_25px_rgba(168,85,247,0.1)] flex flex-col"
+            className="w-full h-[calc(100vh-7rem)] rounded-3xl bg-[#1C1C24]/80 backdrop-blur-xl border border-white/5 shadow-[0_0_25px_rgba(168,85,247,0.1)] flex flex-col"
           >
             {/* URL Bar - Fixed */}
             <div className="w-full bg-black/20 px-4 py-3 flex items-center justify-between border-b border-white/5">
@@ -109,7 +109,7 @@ export default function Dashboard3Page() {
 
             {/* Scrollable Content */}
             <div className="flex-1 overflow-y-auto">
-              <div className="px-6 py-5 space-y-4 pb-8">
+              <div className="px-6 py-5 space-y-4">
                 {/* Avatar and Username Section */}
                 <motion.div 
                   initial={{ opacity: 0, scale: 0.95 }}

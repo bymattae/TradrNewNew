@@ -79,7 +79,7 @@ export default function Dashboard3Page() {
         </div>
 
         {/* Profile Preview Container */}
-        <div className="h-[75vh] flex flex-col rounded-2xl overflow-hidden bg-white/5 shadow-lg shadow-black/5">
+        <div className="h-[75vh] flex flex-col rounded-2xl overflow-hidden bg-[#1a1825]">
           {/* URL Bar */}
           <div className="w-full bg-black/20 px-4 py-3 flex items-center justify-between">
             <div className="flex items-center space-x-3">
@@ -92,11 +92,11 @@ export default function Dashboard3Page() {
           </div>
 
           {/* Profile Content - Scrollable */}
-          <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
+          <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent relative">
             <div className="px-6 py-8 space-y-6">
               {/* Avatar and Username Section */}
               <div className="text-center space-y-3">
-                <div className="relative w-20 h-20 mx-auto rounded-full overflow-hidden ring-2 ring-purple-500/30 ring-offset-4 ring-offset-[#13111C]">
+                <div className="relative w-20 h-20 mx-auto rounded-full overflow-hidden ring-2 ring-purple-500/30 ring-offset-4 ring-offset-[#1a1825]">
                   <Image
                     src={profile?.avatar_url || '/default-avatar.png'}
                     alt="Profile"
@@ -180,8 +180,8 @@ export default function Dashboard3Page() {
                 <span className="text-gray-400 text-sm font-medium">Tradr</span>
               </div>
 
-              {/* Extra space for gradient fade */}
-              <div className="h-24 bg-gradient-to-t from-[#13111C] to-transparent" />
+              {/* Spacer for gradient fade */}
+              <div className="h-32 bg-gradient-to-b from-transparent via-[#1a1825] to-[#1a1825]" />
             </div>
           </div>
         </div>

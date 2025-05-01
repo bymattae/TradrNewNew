@@ -58,12 +58,12 @@ export default function Dashboard3Page() {
   }, [router, supabase]);
 
   return (
-    <div className="h-screen w-full max-w-md mx-auto flex flex-col bg-gradient-radial from-[#320D66] via-[#1C1C24] to-[#15161B] overflow-hidden">
+    <div className="min-h-screen w-full max-w-md mx-auto flex flex-col bg-gradient-radial from-[#320D66] via-[#1C1C24] to-[#15161B]">
       {/* Top Bar */}
       <motion.div 
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="w-full px-4 py-3 flex items-center justify-between"
+        className="w-full px-4 py-3 flex items-center justify-between sticky top-0 z-10 bg-gradient-to-b from-[#15161B] to-transparent"
       >
         <button 
           className="p-2.5 rounded-full bg-white/10 backdrop-blur-xl border border-white/10 hover:bg-white/15 active:scale-95 transition-all duration-200"
@@ -79,13 +79,13 @@ export default function Dashboard3Page() {
       </motion.div>
 
       {/* Main Container */}
-      <div className="flex-1 px-4 pb-4">
+      <div className="flex-1 px-4 pb-6 pt-2">
         {/* Profile Preview Container */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="h-full flex flex-col rounded-3xl overflow-hidden bg-[#1C1C24]/80 backdrop-blur-xl border border-white/5 shadow-[0_0_25px_rgba(168,85,247,0.1)]"
+          className="w-full flex flex-col rounded-3xl overflow-hidden bg-[#1C1C24]/80 backdrop-blur-xl border border-white/5 shadow-[0_0_25px_rgba(168,85,247,0.1)]"
         >
           {/* URL Bar */}
           <div className="w-full bg-black/20 px-4 py-3 flex items-center justify-between border-b border-white/5">
@@ -106,15 +106,15 @@ export default function Dashboard3Page() {
             </div>
           </div>
 
-          {/* Profile Content - Scrollable */}
-          <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
-            <div className="px-6 py-6 space-y-5">
+          {/* Profile Content */}
+          <div className="flex-1">
+            <div className="px-6 py-5 space-y-4">
               {/* Avatar and Username Section */}
               <motion.div 
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.3 }}
-                className="text-center space-y-4"
+                className="text-center space-y-3"
               >
                 <div className="relative w-20 h-20 mx-auto rounded-full overflow-hidden ring-2 ring-purple-500/30 ring-offset-4 ring-offset-[#1C1C24] shadow-[0_0_20px_rgba(168,85,247,0.2)]">
                   <Image
@@ -134,7 +134,7 @@ export default function Dashboard3Page() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.4 }}
-                className="text-center max-w-sm mx-auto"
+                className="text-center"
               >
                 <p className="text-white/80 text-sm leading-relaxed">
                   {profile?.bio || 'I\'m a trader from germany'}
@@ -163,9 +163,9 @@ export default function Dashboard3Page() {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.6 }}
-                className="bg-black/20 rounded-2xl p-6 max-w-sm mx-auto w-full border border-white/5 shadow-[0_0_25px_rgba(168,85,247,0.1)]"
+                className="bg-black/20 rounded-2xl p-5 max-w-sm mx-auto w-full border border-white/5 shadow-[0_0_25px_rgba(168,85,247,0.1)]"
               >
-                <div className="grid grid-cols-3 gap-6">
+                <div className="grid grid-cols-3 gap-4">
                   <div className="text-center">
                     <p className="text-white font-semibold text-xl tracking-tight">12.5%</p>
                     <p className="text-gray-400 text-sm mt-1">Gain</p>
@@ -186,9 +186,9 @@ export default function Dashboard3Page() {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.7 }}
-                className="bg-gradient-to-br from-purple-500/10 to-blue-500/10 rounded-2xl p-6 max-w-sm mx-auto w-full border border-purple-500/20 shadow-[0_0_30px_rgba(168,85,247,0.15)]"
+                className="bg-gradient-to-br from-purple-500/10 to-blue-500/10 rounded-2xl p-5 max-w-sm mx-auto w-full border border-purple-500/20 shadow-[0_0_30px_rgba(168,85,247,0.15)]"
               >
-                <div className="space-y-4">
+                <div className="space-y-3">
                   <div className="flex items-center justify-center space-x-3">
                     <span className="text-2xl">🔥</span>
                     <h3 className="text-white font-bold text-xl tracking-tight">Join our alpha community</h3>
@@ -196,14 +196,14 @@ export default function Dashboard3Page() {
                   <p className="text-white/80 text-sm leading-relaxed text-center">
                     Connect with 500+ traders, share insights, and grow together.
                   </p>
-                  <button className="w-full bg-gradient-to-r from-[#A855F7] to-[#6366F1] text-white py-4 rounded-xl font-medium hover:opacity-90 active:scale-95 transition-all duration-200 shadow-[0_0_20px_rgba(168,85,247,0.3)]">
+                  <button className="w-full bg-gradient-to-r from-[#A855F7] to-[#6366F1] text-white py-3.5 rounded-xl font-medium hover:opacity-90 active:scale-95 transition-all duration-200 shadow-[0_0_20px_rgba(168,85,247,0.3)]">
                     Join Community
                   </button>
                 </div>
               </motion.div>
 
               {/* Powered by Tradr */}
-              <div className="flex items-center justify-center space-x-2 pt-4">
+              <div className="flex items-center justify-center space-x-2 pt-2">
                 <div className="relative w-4 h-4">
                   <Image
                     src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/assets/TradrIcon%20(1).png`}

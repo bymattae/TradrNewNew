@@ -58,8 +58,8 @@ export default function Dashboard3Page() {
   }, [router, supabase]);
 
   return (
-    <div className="fixed inset-0 flex flex-col bg-gradient-radial from-[#320D66] via-[#1C1C24] to-[#15161B]">
-      <div className="w-full max-w-md mx-auto h-full flex flex-col">
+    <div className="fixed inset-0 flex flex-col bg-gradient-radial from-[#320D66] via-[#1C1C24] to-[#15161B] overflow-hidden">
+      <div className="w-full max-w-md mx-auto h-full flex flex-col relative">
         {/* Top Bar */}
         <div className="px-4 py-3 flex items-center justify-between">
           <motion.button 
@@ -80,13 +80,13 @@ export default function Dashboard3Page() {
         </div>
 
         {/* Card Container */}
-        <div className="flex-1 px-4 pb-20 flex">
+        <div className="flex-1 px-4 flex relative">
           {/* Profile Preview Card */}
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="w-full h-[calc(100vh-7rem)] rounded-3xl bg-[#1C1C24]/80 backdrop-blur-xl border border-white/5 shadow-[0_0_25px_rgba(168,85,247,0.1)] flex flex-col"
+            className="w-full h-[calc(100vh-8rem)] rounded-3xl bg-[#1C1C24]/80 backdrop-blur-xl border border-white/5 shadow-[0_0_25px_rgba(168,85,247,0.1)] flex flex-col"
           >
             {/* URL Bar - Fixed */}
             <div className="w-full bg-black/20 px-4 py-3 flex items-center justify-between border-b border-white/5">
@@ -204,7 +204,7 @@ export default function Dashboard3Page() {
                 </motion.div>
 
                 {/* Powered by Tradr */}
-                <div className="flex items-center justify-center space-x-2 pt-1 pb-4">
+                <div className="flex items-center justify-center space-x-2">
                   <div className="relative w-4 h-4">
                     <Image
                       src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/assets/TradrIcon%20(1).png`}
@@ -220,6 +220,13 @@ export default function Dashboard3Page() {
               </div>
             </div>
           </motion.div>
+        </div>
+
+        {/* Fixed Bottom Icon */}
+        <div className="fixed bottom-6 left-6">
+          <button className="p-4 rounded-full bg-purple-500 hover:bg-purple-600 active:scale-95 transition-all duration-200">
+            <Grid className="w-5 h-5 text-white" />
+          </button>
         </div>
       </div>
     </div>

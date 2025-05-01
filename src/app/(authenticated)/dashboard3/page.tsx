@@ -175,7 +175,7 @@ export default function Dashboard3Page() {
               </div>
 
               {/* Powered by Tradr */}
-              <div className="flex items-center justify-center space-x-1 pb-4">
+              <div className="flex items-center justify-center space-x-1 pb-2">
                 <span className="text-gray-500 text-sm">Powered by</span>
                 <span className="text-gray-400 text-sm font-medium">Tradr</span>
               </div>

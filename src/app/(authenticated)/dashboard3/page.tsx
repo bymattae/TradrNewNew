@@ -5,8 +5,9 @@ import { useRouter } from 'next/navigation';
 import getSupabaseBrowserClient from '@/lib/supabase/client';
 import { toast } from 'sonner';
 import { User } from '@supabase/supabase-js';
-import { Settings, Share2, Link, Grid, TrendingUp, Users, BarChart2, Sparkles } from 'lucide-react';
+import { Settings, Share2, Link, Grid } from 'lucide-react';
 import Image from 'next/image';
+import { motion } from 'framer-motion';
 
 export default function Dashboard3Page() {
   const router = useRouter();
@@ -56,47 +57,65 @@ export default function Dashboard3Page() {
   }, [router, supabase]);
 
   return (
-    <div className="h-screen w-full max-w-md mx-auto flex flex-col bg-gradient-to-b from-[#13111C] to-[#17132B] overflow-hidden">
+    <div className="h-screen w-full max-w-md mx-auto flex flex-col bg-gradient-radial from-[#320D66] via-[#1C1C24] to-[#15161B] overflow-hidden">
       {/* Top Bar */}
-      <div className="w-full bg-white/5 backdrop-blur-lg border-b border-white/5 px-5 py-3 flex items-center justify-between">
+      <motion.div 
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="w-full bg-[#1C1C24]/80 backdrop-blur-xl border-b border-white/5 px-5 py-4 flex items-center justify-between"
+      >
         <div className="w-6" />
-        <h1 className="text-lg font-bold text-white text-center font-inter">My Tradr</h1>
+        <h1 className="text-xl font-bold text-white text-center tracking-tight">My Tradr</h1>
         <button 
-          onClick={() => router.push('/settings')} 
-          className="p-2 rounded-full hover:bg-white/10 transition-colors"
+          className="p-2 rounded-full hover:bg-white/10 active:scale-95 transition-all duration-200"
         >
-          <Settings className="w-5 h-5 text-white" />
+          <Settings className="w-5 h-5 text-white/80" />
         </button>
-      </div>
+      </motion.div>
 
       {/* Main Container */}
-      <div className="flex-1 p-4 flex flex-col">
+      <div className="flex-1 p-4 flex flex-col space-y-4">
         {/* "Try Pro" Button */}
-        <div className="flex justify-end mb-3">
-          <button className="px-4 py-1.5 rounded-full bg-purple-500/20 text-purple-400 text-sm font-medium hover:bg-purple-500/30 transition-all">
+        <motion.div 
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="flex justify-end"
+        >
+          <button className="px-5 py-2 rounded-full bg-[#1C1C24]/80 text-purple-300 text-sm font-medium border border-purple-500/20 shadow-[0_0_15px_rgba(168,85,247,0.15)] hover:bg-purple-500/10 active:scale-95 transition-all duration-200">
             Try Pro for free
           </button>
-        </div>
+        </motion.div>
 
         {/* Profile Preview Container */}
-        <div className="h-[75vh] flex flex-col rounded-2xl overflow-hidden bg-[#1a1825]">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="h-[75vh] flex flex-col rounded-3xl overflow-hidden bg-[#1C1C24]/80 backdrop-blur-xl border border-white/5 shadow-[0_0_25px_rgba(168,85,247,0.1)]"
+        >
           {/* URL Bar */}
-          <div className="w-full bg-black/20 px-4 py-3 flex items-center justify-between">
+          <div className="w-full bg-black/20 px-4 py-3 flex items-center justify-between border-b border-white/5">
             <div className="flex items-center space-x-3">
               <Link className="w-4 h-4 text-purple-400" />
-              <span className="text-white text-sm font-medium">tradr.io/{profile?.username || 'username'}</span>
+              <span className="text-white/90 text-sm font-medium">tradr.io/{profile?.username || 'username'}</span>
             </div>
-            <button className="p-1.5 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 transition-colors">
+            <button className="p-1.5 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 active:scale-95 transition-all duration-200">
               <Share2 className="w-4 h-4 text-purple-400" />
             </button>
           </div>
 
           {/* Profile Content - Scrollable */}
           <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
-            <div className="px-6 py-8 space-y-6">
+            <div className="px-6 py-8 space-y-8">
               {/* Avatar and Username Section */}
-              <div className="text-center space-y-3">
-                <div className="relative w-20 h-20 mx-auto rounded-full overflow-hidden ring-2 ring-purple-500/30 ring-offset-4 ring-offset-[#1a1825]">
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.3 }}
+                className="text-center space-y-4"
+              >
+                <div className="relative w-20 h-20 mx-auto rounded-full overflow-hidden ring-2 ring-purple-500/30 ring-offset-4 ring-offset-[#1C1C24] shadow-[0_0_20px_rgba(168,85,247,0.2)]">
                   <Image
                     src={profile?.avatar_url || '/default-avatar.png'}
                     alt="Profile"
@@ -104,63 +123,83 @@ export default function Dashboard3Page() {
                     className="object-cover"
                   />
                 </div>
-                <h2 className="text-white font-bold text-xl font-inter">
+                <h2 className="text-white font-bold text-2xl tracking-tight">
                   {profile?.username || currentUser?.email?.split('@')[0] || 'cryptowhale'}
                 </h2>
-              </div>
+              </motion.div>
 
               {/* Bio Section */}
-              <div className="text-center max-w-sm mx-auto">
-                <p className="text-gray-300 text-sm leading-relaxed">
+              <motion.div 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.4 }}
+                className="text-center max-w-sm mx-auto"
+              >
+                <p className="text-white/80 text-sm leading-relaxed">
                   {profile?.bio || 'I\'m a trader from germany'}
                 </p>
-              </div>
+              </motion.div>
 
               {/* Tags Section */}
-              <div className="flex flex-wrap justify-center gap-2">
+              <motion.div 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.5 }}
+                className="flex flex-wrap justify-center gap-2"
+              >
                 {(profile?.tags || ['#Coolman']).map((tag: string, index: number) => (
                   <span 
                     key={index} 
-                    className="px-3 py-1 bg-purple-500/20 text-purple-300 text-sm rounded-full font-medium"
+                    className="px-4 py-1.5 bg-purple-500/10 text-purple-300 text-sm rounded-full font-medium border border-purple-500/20"
                   >
                     #{tag}
                   </span>
                 ))}
-              </div>
+              </motion.div>
 
               {/* Stats Section */}
-              <div className="bg-black/20 rounded-xl p-4 max-w-sm mx-auto w-full">
-                <div className="grid grid-cols-3 gap-4">
+              <motion.div 
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.6 }}
+                className="bg-black/20 rounded-2xl p-6 max-w-sm mx-auto w-full border border-white/5 shadow-[0_0_25px_rgba(168,85,247,0.1)]"
+              >
+                <div className="grid grid-cols-3 gap-6">
                   <div className="text-center">
-                    <p className="text-white font-semibold text-lg">12.5%</p>
-                    <p className="text-gray-400 text-sm">Gain</p>
+                    <p className="text-white font-semibold text-xl tracking-tight">12.5%</p>
+                    <p className="text-gray-400 text-sm mt-1">Gain</p>
                   </div>
                   <div className="text-center">
-                    <p className="text-white font-semibold text-lg">89%</p>
-                    <p className="text-gray-400 text-sm">Win Rate</p>
+                    <p className="text-white font-semibold text-xl tracking-tight">89%</p>
+                    <p className="text-gray-400 text-sm mt-1">Win Rate</p>
                   </div>
                   <div className="text-center">
-                    <p className="text-white font-semibold text-lg">1:3</p>
-                    <p className="text-gray-400 text-sm">Risk Ratio</p>
+                    <p className="text-white font-semibold text-xl tracking-tight">1:3</p>
+                    <p className="text-gray-400 text-sm mt-1">Risk Ratio</p>
                   </div>
                 </div>
-              </div>
+              </motion.div>
 
               {/* CTA Section */}
-              <div className="bg-gradient-to-br from-purple-500/10 to-blue-500/10 rounded-xl p-5 max-w-sm mx-auto w-full">
+              <motion.div 
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.7 }}
+                className="bg-gradient-to-br from-purple-500/10 to-blue-500/10 rounded-2xl p-6 max-w-sm mx-auto w-full border border-purple-500/20 shadow-[0_0_30px_rgba(168,85,247,0.15)]"
+              >
                 <div className="space-y-4">
                   <div className="flex items-center justify-center space-x-3">
                     <span className="text-2xl">🔥</span>
-                    <h3 className="text-white font-bold text-lg">Join our alpha community</h3>
+                    <h3 className="text-white font-bold text-xl tracking-tight">Join our alpha community</h3>
                   </div>
-                  <p className="text-gray-300 text-sm leading-relaxed text-center">
+                  <p className="text-white/80 text-sm leading-relaxed text-center">
                     Connect with 500+ traders, share insights, and grow together.
                   </p>
-                  <button className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white py-3 rounded-xl font-medium hover:from-purple-500 hover:to-blue-500 transition-all duration-300 shadow-lg shadow-purple-500/20">
+                  <button className="w-full bg-gradient-to-r from-[#A855F7] to-[#6366F1] text-white py-4 rounded-xl font-medium hover:opacity-90 active:scale-95 transition-all duration-200 shadow-[0_0_20px_rgba(168,85,247,0.3)]">
                     Join Community
                   </button>
                 </div>
-              </div>
+              </motion.div>
 
               {/* Powered by Tradr */}
               <div className="flex items-center justify-center space-x-1.5 pb-1">
@@ -169,7 +208,7 @@ export default function Dashboard3Page() {
                     src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/assets/TradrIcon%20(1).png`}
                     alt="Tradr"
                     fill
-                    className="object-contain"
+                    className="object-contain opacity-60"
                   />
                 </div>
                 <span className="text-gray-400/60 text-xs">Powered by</span>
@@ -177,18 +216,23 @@ export default function Dashboard3Page() {
               </div>
             </div>
           </div>
-        </div>
+        </motion.div>
       </div>
 
       {/* Floating Hub Button */}
-      <div className="p-4">
+      <motion.div 
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ delay: 0.8 }}
+        className="p-4"
+      >
         <button 
-          className="w-12 h-12 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full flex items-center justify-center shadow-lg shadow-purple-500/20 hover:from-purple-500 hover:to-blue-500 transition-all duration-300"
+          className="w-12 h-12 bg-gradient-to-r from-[#A855F7] to-[#6366F1] rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(168,85,247,0.3)] hover:opacity-90 active:scale-95 transition-all duration-200"
           onClick={() => router.push('/hub')}
         >
           <Grid className="w-5 h-5 text-white" />
         </button>
-      </div>
+      </motion.div>
     </div>
   );
 } 

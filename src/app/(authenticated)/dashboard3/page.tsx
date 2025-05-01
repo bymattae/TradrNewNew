@@ -91,8 +91,8 @@ export default function Dashboard3Page() {
             </button>
           </div>
 
-          {/* Profile Content - Scrollable with Gradient Fade */}
-          <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent relative">
+          {/* Profile Content - Scrollable */}
+          <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
             <div className="px-6 py-8 space-y-6">
               {/* Avatar and Username Section */}
               <div className="text-center space-y-3">
@@ -175,14 +175,14 @@ export default function Dashboard3Page() {
               </div>
 
               {/* Powered by Tradr */}
-              <div className="flex items-center justify-center space-x-1 pt-4 pb-8">
+              <div className="flex items-center justify-center space-x-1 pt-4">
                 <span className="text-gray-500 text-sm">Powered by</span>
                 <span className="text-gray-400 text-sm font-medium">Tradr</span>
               </div>
-            </div>
 
-            {/* Gradient Fade Overlay */}
-            <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-[#13111C] to-transparent pointer-events-none" />
+              {/* Extra space for gradient fade */}
+              <div className="h-24 bg-gradient-to-t from-[#13111C] to-transparent" />
+            </div>
           </div>
         </div>
       </div>

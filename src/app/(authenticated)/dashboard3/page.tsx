@@ -80,18 +80,6 @@ export default function Dashboard3Page() {
 
       {/* Main Container */}
       <div className="flex-1 px-4 flex flex-col space-y-3">
-        {/* "Try Pro" Button */}
-        <motion.div 
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          className="flex justify-end"
-        >
-          <button className="px-5 py-2 rounded-full bg-[#1C1C24]/80 text-purple-300 text-sm font-medium border border-purple-500/20 shadow-[0_0_15px_rgba(168,85,247,0.15)] hover:bg-purple-500/10 active:scale-95 transition-all duration-200">
-            Try Pro for free
-          </button>
-        </motion.div>
-
         {/* Profile Preview Container */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}

@@ -104,12 +104,9 @@ export default function Dashboard3Page() {
                     className="object-cover"
                   />
                 </div>
-                <div>
-                  <h2 className="text-white font-bold text-xl font-inter">
-                    {profile?.username || currentUser?.email?.split('@')[0] || 'cryptowhale'}
-                  </h2>
-                  <p className="text-gray-400 text-sm">@{profile?.username || 'username'}</p>
-                </div>
+                <h2 className="text-white font-bold text-xl font-inter">
+                  {profile?.username || currentUser?.email?.split('@')[0] || 'cryptowhale'}
+                </h2>
               </div>
 
               {/* Bio Section */}
@@ -135,23 +132,14 @@ export default function Dashboard3Page() {
               <div className="bg-black/20 rounded-xl p-4 max-w-sm mx-auto w-full">
                 <div className="grid grid-cols-3 gap-4">
                   <div className="text-center">
-                    <div className="flex items-center justify-center mb-2">
-                      <TrendingUp className="w-5 h-5 text-purple-400" />
-                    </div>
                     <p className="text-white font-semibold text-lg">12.5%</p>
                     <p className="text-gray-400 text-sm">Gain</p>
                   </div>
                   <div className="text-center">
-                    <div className="flex items-center justify-center mb-2">
-                      <BarChart2 className="w-5 h-5 text-purple-400" />
-                    </div>
                     <p className="text-white font-semibold text-lg">89%</p>
                     <p className="text-gray-400 text-sm">Win Rate</p>
                   </div>
                   <div className="text-center">
-                    <div className="flex items-center justify-center mb-2">
-                      <Sparkles className="w-5 h-5 text-purple-400" />
-                    </div>
                     <p className="text-white font-semibold text-lg">1:3</p>
                     <p className="text-gray-400 text-sm">Risk Ratio</p>
                   </div>
@@ -162,7 +150,7 @@ export default function Dashboard3Page() {
               <div className="bg-gradient-to-br from-purple-500/10 to-blue-500/10 rounded-xl p-5 max-w-sm mx-auto w-full">
                 <div className="space-y-4">
                   <div className="flex items-center justify-center space-x-3">
-                    <Users className="w-6 h-6 text-purple-400" />
+                    <span className="text-2xl">🔥</span>
                     <h3 className="text-white font-bold text-lg">Join our alpha community</h3>
                   </div>
                   <p className="text-gray-300 text-sm leading-relaxed text-center">
@@ -175,9 +163,9 @@ export default function Dashboard3Page() {
               </div>
 
               {/* Powered by Tradr */}
-              <div className="flex items-center justify-center space-x-1 pb-2">
-                <span className="text-gray-500 text-sm">Powered by</span>
-                <span className="text-gray-400 text-sm font-medium">Tradr</span>
+              <div className="flex items-center justify-center space-x-1 pb-1">
+                <span className="text-gray-400/60 text-xs">Powered by</span>
+                <span className="text-gray-400/60 text-xs font-medium">Tradr</span>
               </div>
             </div>
           </div>

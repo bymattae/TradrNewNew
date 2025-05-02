@@ -12,7 +12,9 @@
     --brand-purple: #7048E8;
     --brand-purple-hover: #5F3DD3;
     --brand-green: #22C55E;
-    --bottom-nav-height: 4.5rem;
+    --bottom-nav-height: 5rem;
+    --top-nav-height: 3.5rem;
+    --content-padding: 1.25rem;
   }
 
   html,
@@ -24,6 +26,7 @@
     width: 100%;
     height: 100%;
     touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
   }
 
   main {
@@ -106,6 +109,7 @@
 
 .content-above-nav {
   margin-bottom: var(--bottom-nav-height);
+  padding-bottom: var(--content-padding);
 }
 
 /* Ensure proper scroll container behavior */
@@ -115,4 +119,19 @@
   -webkit-overflow-scrolling: touch;
   overscroll-behavior-y: contain;
   position: relative;
+}
+
+/* Safari-specific fixes */
+@supports (-webkit-touch-callout: none) {
+  .h-screen {
+    height: -webkit-fill-available;
+  }
+  
+  .fixed {
+    position: fixed;
+  }
+  
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom, 1.25rem);
+  }
 }

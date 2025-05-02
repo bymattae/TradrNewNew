@@ -35,15 +35,15 @@ export default function BottomNavBar() {
   
   return (
     <div 
-      className="fixed bottom-0 left-0 right-0 z-10 pointer-events-none"
+      className="fixed bottom-0 left-0 right-0 z-10 pointer-events-none h-20"
       style={{ 
         paddingBottom: 'env(safe-area-inset-bottom, 0)',
         paddingLeft: '1.5rem',
         paddingRight: '1.5rem',
       }}
     >
-      <div className="max-w-md mx-auto">
-        <div className="flex items-center justify-between bg-[#1C1C24]/95 backdrop-blur-md rounded-full px-8 py-3 mb-3 shadow-lg border border-[#2A2B30]/30 pointer-events-auto">
+      <div className="max-w-md mx-auto h-full flex items-end">
+        <div className="flex items-center justify-between bg-[#1C1C24]/95 backdrop-blur-md rounded-full px-8 py-3 w-full shadow-lg border border-[#2A2B30]/30 pointer-events-auto">
           <NavItem 
             icon={<Home className="w-6 h-6" strokeWidth={1.5} />} 
             isActive={pathname === '/dashboard'}

@@ -59,9 +59,9 @@ export default function Dashboard3Page() {
 
   return (
     <div className="fixed inset-0 flex flex-col bg-gradient-radial from-[#320D66] via-[#1C1C24] to-[#15161B] overflow-hidden">
-      <div className="w-full max-w-md mx-auto min-h-screen flex flex-col">
+      <div className="w-full max-w-md mx-auto min-h-screen flex flex-col pt-3">
         {/* Top Bar */}
-        <div className="px-4 py-3 flex items-center justify-between">
+        <div className="px-4 py-2 flex items-center justify-between">
           {/* Left side - Share Icon */}
           <motion.button 
             initial={{ opacity: 0, scale: 0.95 }}
@@ -110,7 +110,7 @@ export default function Dashboard3Page() {
         </div>
 
         {/* Main Content Area */}
-        <div className="flex-1 flex flex-col px-4 pb-24">
+        <div className="flex-1 flex flex-col px-4 pb-24 -mt-1">
           {/* Profile Preview Card */}
           <div className="my-auto">
             <motion.div 

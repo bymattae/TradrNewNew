@@ -66,14 +66,6 @@ export default function Dashboard3Page() {
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             className="p-2.5 rounded-full bg-white/10 backdrop-blur-xl border border-white/10 hover:bg-white/15 active:scale-95 transition-all duration-200"
-            onClick={() => router.push('/hub')}
-          >
-            <Grid className="w-5 h-5 text-white/90" />
-          </motion.button>
-          <motion.button 
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="p-2.5 rounded-full bg-white/10 backdrop-blur-xl border border-white/10 hover:bg-white/15 active:scale-95 transition-all duration-200"
           >
             <Settings className="w-5 h-5 text-white/90" />
           </motion.button>
@@ -87,10 +79,10 @@ export default function Dashboard3Page() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="w-full rounded-3xl bg-[#1C1C24]/80 backdrop-blur-xl border border-white/5 shadow-[0_0_25px_rgba(168,85,247,0.1)] flex flex-col max-h-[calc(100vh-12rem)]"
+              className="w-full rounded-3xl bg-[#1C1C24]/80 backdrop-blur-xl border border-white/5 shadow-[0_0_25px_rgba(168,85,247,0.1)] flex flex-col max-h-[calc(100vh-12rem)] relative overflow-hidden"
             >
               {/* URL Bar - Fixed */}
-              <div className="w-full bg-black/20 px-4 py-3 flex items-center justify-between border-b border-white/5">
+              <div className="w-full bg-black/20 px-4 py-3 flex items-center justify-between backdrop-blur-sm border-b border-white/5">
                 <div className="flex items-center space-x-3">
                   <Link className="w-4 h-4 text-purple-400" />
                   <span className="text-white/90 text-sm font-medium">tradr.io/{profile?.username || 'username'}</span>
@@ -165,7 +157,7 @@ export default function Dashboard3Page() {
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.6 }}
-                    className="bg-black/20 rounded-2xl p-4 max-w-sm mx-auto w-full border border-white/5 shadow-[0_0_25px_rgba(168,85,247,0.1)]"
+                    className="bg-black/20 rounded-2xl p-4 max-w-sm mx-auto w-full border border-white/5 shadow-[0_0_25px_rgba(168,85,247,0.1)] backdrop-blur-sm"
                   >
                     <div className="grid grid-cols-3 gap-4">
                       <div className="text-center">
@@ -188,7 +180,7 @@ export default function Dashboard3Page() {
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.7 }}
-                    className="bg-gradient-to-br from-purple-500/10 to-blue-500/10 rounded-2xl p-4 max-w-sm mx-auto w-full border border-purple-500/20 shadow-[0_0_30px_rgba(168,85,247,0.15)]"
+                    className="bg-gradient-to-br from-purple-500/10 to-blue-500/10 rounded-2xl p-4 max-w-sm mx-auto w-full border border-purple-500/20 shadow-[0_0_30px_rgba(168,85,247,0.15)] backdrop-blur-sm"
                   >
                     <div className="space-y-2">
                       <div className="flex items-center justify-center space-x-3">
@@ -225,10 +217,15 @@ export default function Dashboard3Page() {
         </div>
 
         {/* Fixed Bottom Icon */}
-        <div className="fixed bottom-6 left-6 z-50">
-          <button className="p-4 rounded-full bg-purple-500 hover:bg-purple-600 active:scale-95 transition-all duration-200">
-            <Grid className="w-5 h-5 text-white" />
-          </button>
+        <div className="fixed bottom-8 left-8 z-50">
+          <motion.button 
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="p-5 rounded-full bg-purple-500 hover:bg-purple-600 active:scale-95 transition-all duration-200 shadow-[0_0_30px_rgba(168,85,247,0.3)]"
+            onClick={() => router.push('/hub')}
+          >
+            <Grid className="w-6 h-6 text-white" />
+          </motion.button>
         </div>
       </div>
     </div>

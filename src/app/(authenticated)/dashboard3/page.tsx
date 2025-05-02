@@ -59,7 +59,7 @@ export default function Dashboard3Page() {
 
   return (
     <div className="fixed inset-0 flex flex-col bg-gradient-radial from-[#320D66] via-[#1C1C24] to-[#15161B] overflow-hidden">
-      <div className="w-full max-w-md mx-auto flex flex-col h-full pt-10">
+      <div className="w-full max-w-md mx-auto flex flex-col h-full pt-5">
         {/* Top Bar - Fixed Height */}
         <div className="px-4 py-2 flex items-center justify-between flex-shrink-0 h-14">
           {/* Left side - Share Icon */}

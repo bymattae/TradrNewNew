@@ -110,13 +110,13 @@ export default function Dashboard3Page() {
         </div>
 
         {/* Main Content Area with Padding Top and Bottom */}
-        <div className="flex-1 flex flex-col px-4 pt-2.5 pb-24 overflow-hidden">
+        <div className="flex-1 flex flex-col px-4 pt-2.5 pb-20 overflow-hidden">
           {/* Profile Preview Card */}
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="w-full h-[calc(100%-3rem)] rounded-3xl bg-[#1C1C24]/80 backdrop-blur-xl border border-white/5 shadow-[0_0_25px_rgba(168,85,247,0.1)] flex flex-col overflow-hidden z-20"
+            className="w-full h-[calc(100%-1.5rem)] rounded-3xl bg-[#1C1C24]/80 backdrop-blur-xl border border-white/5 shadow-[0_0_25px_rgba(168,85,247,0.1)] flex flex-col overflow-hidden z-20"
           >
             {/* Scrollable Content */}
             <div className="flex-1 overflow-y-auto scrollbar-hide">

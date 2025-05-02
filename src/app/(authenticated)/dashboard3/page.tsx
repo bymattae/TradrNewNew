@@ -61,7 +61,7 @@ export default function Dashboard3Page() {
     <div className="fixed inset-0 flex flex-col bg-gradient-radial from-[#320D66] via-[#1C1C24] to-[#15161B] overflow-hidden">
       <div className="w-full max-w-md mx-auto min-h-screen flex flex-col">
         {/* Top Bar */}
-        <div className="px-4 py-3 flex items-center justify-between">
+        <div className="px-4 py-3 flex items-center justify-end">
           <motion.button 
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}

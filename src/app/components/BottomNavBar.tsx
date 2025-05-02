@@ -36,7 +36,7 @@ export default function BottomNavBar() {
   return (
     <div className="fixed bottom-6 left-0 right-0 z-50 px-6">
       <div className="max-w-md mx-auto">
-        <div className="flex items-center justify-between bg-black rounded-full px-8 py-3 shadow-lg border border-zinc-800/30">
+        <div className="flex items-center justify-between bg-[#1C1C24]/90 backdrop-blur-sm rounded-full px-8 py-3 shadow-lg border border-[#2A2B30]/30">
           <NavItem 
             icon={<Home className="w-6 h-6" strokeWidth={1.5} />} 
             isActive={pathname === '/dashboard'}
@@ -89,7 +89,11 @@ function NavItem({ icon, isActive, onClick }: NavItemProps) {
   return (
     <button
       onClick={onClick}
-      className={`p-2 ${isActive ? 'bg-white text-black rounded-full' : 'text-zinc-500'}`}
+      className={`p-2 transition-colors duration-200 ${
+        isActive 
+          ? 'bg-purple-500 text-white rounded-full shadow-[0_0_10px_rgba(168,85,247,0.3)]' 
+          : 'text-zinc-500 hover:text-zinc-300'
+      }`}
     >
       {icon}
     </button>

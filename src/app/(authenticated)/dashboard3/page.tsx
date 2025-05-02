@@ -62,19 +62,14 @@ export default function Dashboard3Page() {
       <div className="w-full max-w-md mx-auto min-h-screen flex flex-col">
         {/* Top Bar */}
         <div className="px-4 py-3 flex items-center justify-between">
-          {/* Left side */}
-          <motion.div 
+          {/* Left side - Share Icon */}
+          <motion.button 
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="relative w-8 h-8"
+            className="p-2.5 rounded-full bg-[#1A1B1F]/80 backdrop-blur-sm border border-[#2A2B30] hover:bg-[#2A2B30] active:scale-95 transition-all duration-200"
           >
-            <Image
-              src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/assets/TradrIcon%20(1).png`}
-              alt="Tradr"
-              fill
-              className="object-contain"
-            />
-          </motion.div>
+            <Share2 className="w-5 h-5 text-white/90" />
+          </motion.button>
 
           {/* Center - URL */}
           <motion.div
@@ -82,13 +77,14 @@ export default function Dashboard3Page() {
             animate={{ opacity: 1, y: 0 }}
             className="flex items-center space-x-2 px-3 py-1.5 bg-[#1A1B1F]/80 rounded-full border border-[#2A2B30] backdrop-blur-sm"
           >
-            <Image
-              src="/bitcoin.svg"
-              alt="BTC"
-              width={18}
-              height={18}
-              className="mr-1"
-            />
+            <div className="relative w-5 h-5 mr-1 rounded-full overflow-hidden bg-blue-500">
+              <Image
+                src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/assets/TradrIcon%20(1).png`}
+                alt="Tradr"
+                fill
+                className="object-contain"
+              />
+            </div>
             <span className="text-white/90 text-sm font-medium">tradr.io/{profile?.username || 'username'}</span>
             <button 
               onClick={() => {

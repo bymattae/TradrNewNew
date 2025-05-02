@@ -62,7 +62,7 @@ export default function Dashboard3Page() {
       <div className="w-full max-w-md mx-auto min-h-screen flex flex-col">
         {/* Top Bar */}
         <div className="px-4 py-3 flex items-center justify-between">
-          {/* Tradr Icon */}
+          {/* Left side */}
           <motion.div 
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -75,10 +75,39 @@ export default function Dashboard3Page() {
               className="object-contain"
             />
           </motion.div>
+
+          {/* Center - URL */}
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="flex items-center space-x-2 px-3 py-1.5 bg-[#1A1B1F]/80 rounded-full border border-[#2A2B30] backdrop-blur-sm"
+          >
+            <Image
+              src="/bitcoin.svg"
+              alt="BTC"
+              width={18}
+              height={18}
+              className="mr-1"
+            />
+            <span className="text-white/90 text-sm font-medium">tradr.io/{profile?.username || 'username'}</span>
+            <button 
+              onClick={() => {
+                navigator.clipboard.writeText(`tradr.io/${profile?.username || 'username'}`);
+                toast.success('Copied to clipboard!');
+              }}
+              className="p-1 hover:bg-white/5 rounded-full transition-colors"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" className="w-4 h-4 text-white/60">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+              </svg>
+            </button>
+          </motion.div>
+
+          {/* Right side - Settings */}
           <motion.button 
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="p-2.5 rounded-full bg-white/10 backdrop-blur-xl border border-white/10 hover:bg-white/15 active:scale-95 transition-all duration-200"
+            className="p-2.5 rounded-full bg-[#1A1B1F]/80 backdrop-blur-sm border border-[#2A2B30] hover:bg-[#2A2B30] active:scale-95 transition-all duration-200"
           >
             <Settings className="w-5 h-5 text-white/90" />
           </motion.button>
@@ -94,25 +123,6 @@ export default function Dashboard3Page() {
               transition={{ delay: 0.2 }}
               className="w-full rounded-3xl bg-[#1C1C24]/80 backdrop-blur-xl border border-white/5 shadow-[0_0_25px_rgba(168,85,247,0.1)] flex flex-col max-h-[calc(100vh-12rem)] relative overflow-hidden"
             >
-              {/* URL Bar - Fixed */}
-              <div className="w-full bg-black/20 px-4 py-3 flex items-center justify-between backdrop-blur-sm border-b border-white/5">
-                <div className="flex items-center space-x-3">
-                  <Link className="w-4 h-4 text-purple-400" />
-                  <span className="text-white/90 text-sm font-medium">tradr.io/{profile?.username || 'username'}</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <button className="p-1.5 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 active:scale-95 transition-all duration-200">
-                    <BsWhatsapp className="w-3.5 h-3.5 text-purple-400" />
-                  </button>
-                  <button className="p-1.5 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 active:scale-95 transition-all duration-200">
-                    <Send className="w-3.5 h-3.5 text-purple-400" />
-                  </button>
-                  <button className="p-1.5 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 active:scale-95 transition-all duration-200">
-                    <Twitter className="w-3.5 h-3.5 text-purple-400" />
-                  </button>
-                </div>
-              </div>
-
               {/* Scrollable Content */}
               <div className="flex-1 overflow-y-auto">
                 <div className="px-6 py-4 space-y-4">

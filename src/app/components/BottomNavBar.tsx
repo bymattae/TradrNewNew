@@ -34,55 +34,64 @@ export default function BottomNavBar() {
   }, [supabase]);
   
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 bg-black border-t border-zinc-800/50">
-      <div className="max-w-md mx-auto flex justify-between">
-        <button
-          onClick={() => router.push('/dashboard')}
-          className={`flex-1 py-4 flex flex-col items-center justify-center ${
-            pathname === '/dashboard' ? 'text-white' : 'text-zinc-500'
-          }`}
-        >
-          <Home className="w-6 h-6" strokeWidth={1.5} />
-        </button>
-        
-        <button
-          onClick={() => router.push('/strategy')}
-          className={`flex-1 py-4 flex flex-col items-center justify-center ${
-            pathname === '/strategy' ? 'text-white' : 'text-zinc-500'
-          }`}
-        >
-          <BarChart2 className="w-6 h-6" strokeWidth={1.5} />
-        </button>
-        
-        <button
-          onClick={() => router.push('/leaderboard')}
-          className={`flex-1 py-4 flex flex-col items-center justify-center ${
-            pathname === '/leaderboard' ? 'text-white' : 'text-zinc-500'
-          }`}
-        >
-          <Trophy className="w-6 h-6" strokeWidth={1.5} />
-        </button>
-        
-        <button
-          onClick={() => router.push('/profile')}
-          className={`flex-1 py-4 flex flex-col items-center justify-center ${
-            pathname === '/profile' ? 'text-white' : 'text-zinc-500'
-          }`}
-        >
-          {avatarUrl ? (
-            <div className="relative w-6 h-6 rounded-full overflow-hidden">
-              <Image
-                src={avatarUrl}
-                alt="Profile"
-                fill
-                className="object-cover"
-              />
-            </div>
-          ) : (
-            <User className="w-6 h-6" strokeWidth={1.5} />
-          )}
-        </button>
+    <div className="fixed bottom-6 left-0 right-0 z-50 px-6">
+      <div className="max-w-md mx-auto">
+        <div className="flex items-center justify-between bg-black rounded-full px-8 py-3 shadow-lg border border-zinc-800/30">
+          <NavItem 
+            icon={<Home className="w-6 h-6" strokeWidth={1.5} />} 
+            isActive={pathname === '/dashboard'}
+            onClick={() => router.push('/dashboard')}
+          />
+          
+          <NavItem 
+            icon={<BarChart2 className="w-6 h-6" strokeWidth={1.5} />}
+            isActive={pathname === '/strategy'}
+            onClick={() => router.push('/strategy')}
+          />
+          
+          <NavItem 
+            icon={<Trophy className="w-6 h-6" strokeWidth={1.5} />}
+            isActive={pathname === '/leaderboard'}
+            onClick={() => router.push('/leaderboard')}
+          />
+          
+          <NavItem 
+            icon={
+              avatarUrl ? (
+                <div className="relative w-6 h-6 rounded-full overflow-hidden">
+                  <Image
+                    src={avatarUrl}
+                    alt="Profile"
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+              ) : (
+                <User className="w-6 h-6" strokeWidth={1.5} />
+              )
+            }
+            isActive={pathname === '/profile'}
+            onClick={() => router.push('/profile')}
+          />
+        </div>
       </div>
     </div>
+  );
+}
+
+interface NavItemProps {
+  icon: React.ReactNode;
+  isActive: boolean;
+  onClick: () => void;
+}
+
+function NavItem({ icon, isActive, onClick }: NavItemProps) {
+  return (
+    <button
+      onClick={onClick}
+      className={`p-2 ${isActive ? 'bg-white text-black rounded-full' : 'text-zinc-500'}`}
+    >
+      {icon}
+    </button>
   );
 } 

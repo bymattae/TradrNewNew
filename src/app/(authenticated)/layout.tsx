@@ -1,8 +1,8 @@
 'use client';
 
 import { ReactNode, useState } from 'react';
-import HubButton from '@/app/components/HubButton';
 import HubMenu from '@/app/components/HubMenu';
+import BottomNavBar from '@/app/components/BottomNavBar';
 
 interface AuthenticatedLayoutProps {
   children: ReactNode;
@@ -18,7 +18,7 @@ export default function AuthenticatedLayout({
       <div className="flex-1 overflow-hidden">
         {children}
       </div>
-      <HubButton onClick={() => setIsHubMenuOpen(true)} />
+      <BottomNavBar onOpenHubMenu={() => setIsHubMenuOpen(true)} />
       <HubMenu isOpen={isHubMenuOpen} onClose={() => setIsHubMenuOpen(false)} />
     </div>
   );

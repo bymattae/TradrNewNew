@@ -61,7 +61,20 @@ export default function Dashboard3Page() {
     <div className="fixed inset-0 flex flex-col bg-gradient-radial from-[#320D66] via-[#1C1C24] to-[#15161B] overflow-hidden">
       <div className="w-full max-w-md mx-auto min-h-screen flex flex-col">
         {/* Top Bar */}
-        <div className="px-4 py-3 flex items-center justify-end">
+        <div className="px-4 py-3 flex items-center justify-between">
+          {/* Tradr Icon */}
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="relative w-8 h-8"
+          >
+            <Image
+              src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/assets/TradrIcon%20(1).png`}
+              alt="Tradr"
+              fill
+              className="object-contain"
+            />
+          </motion.div>
           <motion.button 
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -198,14 +211,6 @@ export default function Dashboard3Page() {
 
                   {/* Powered by Tradr */}
                   <div className="flex items-center justify-center space-x-2 pb-2">
-                    <div className="relative w-4 h-4">
-                      <Image
-                        src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/assets/TradrIcon%20(1).png`}
-                        alt="Tradr"
-                        fill
-                        className="object-contain opacity-80"
-                      />
-                    </div>
                     <div className="text-white/50 text-sm font-medium tracking-wide backdrop-blur-sm">
                       Powered by <span className="text-white/70">Tradr</span>
                     </div>
@@ -214,18 +219,6 @@ export default function Dashboard3Page() {
               </div>
             </motion.div>
           </div>
-        </div>
-
-        {/* Fixed Bottom Icon */}
-        <div className="fixed bottom-8 left-8 z-50">
-          <motion.button 
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="p-5 rounded-full bg-purple-500 hover:bg-purple-600 active:scale-95 transition-all duration-200 shadow-[0_0_30px_rgba(168,85,247,0.3)]"
-            onClick={() => router.push('/hub')}
-          >
-            <Grid className="w-6 h-6 text-white" />
-          </motion.button>
         </div>
       </div>
     </div>

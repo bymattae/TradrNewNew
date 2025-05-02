@@ -110,20 +110,20 @@ export default function Dashboard3Page() {
         </div>
 
         {/* Main Content Area */}
-        <div className="flex-1 flex flex-col px-4 pb-24 mt-2">
+        <div className="flex-1 flex flex-col px-4 pb-20 mt-2">
           {/* Profile Preview Card */}
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="w-full rounded-3xl bg-[#1C1C24]/80 backdrop-blur-xl border border-white/5 shadow-[0_0_25px_rgba(168,85,247,0.1)] flex flex-col mb-safe overflow-hidden"
+            className="w-full rounded-3xl bg-[#1C1C24]/80 backdrop-blur-xl border border-white/5 shadow-[0_0_25px_rgba(168,85,247,0.1)] flex flex-col overflow-hidden"
             style={{ 
-              maxHeight: 'calc(100vh - 7rem - env(safe-area-inset-bottom, 0px))'
+              maxHeight: 'calc(100vh - 9rem)'
             }}
           >
             {/* Scrollable Content */}
-            <div className="flex-1 overflow-y-auto">
-              <div className="px-6 py-6 space-y-6">
+            <div className="flex-1 overflow-y-auto pb-4">
+              <div className="px-6 py-6 space-y-5">
                 {/* Avatar and Username Section */}
                 <motion.div 
                   initial={{ opacity: 0, scale: 0.95 }}
@@ -218,7 +218,7 @@ export default function Dashboard3Page() {
                 </motion.div>
 
                 {/* Powered by Tradr */}
-                <div className="flex items-center justify-center space-x-2">
+                <div className="flex items-center justify-center mt-4 py-2">
                   <div className="text-white/50 text-sm font-medium tracking-wide backdrop-blur-sm">
                     Powered by <span className="text-white/70">Tradr</span>
                   </div>

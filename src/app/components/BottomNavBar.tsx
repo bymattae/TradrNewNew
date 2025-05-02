@@ -35,7 +35,7 @@ export default function BottomNavBar() {
   
   return (
     <div 
-      className="fixed bottom-0 left-0 right-0 z-50"
+      className="fixed bottom-0 left-0 right-0 z-40 bg-transparent"
       style={{ 
         paddingBottom: 'calc(0.5rem + env(safe-area-inset-bottom, 0.5rem))',
         paddingLeft: '1.5rem',

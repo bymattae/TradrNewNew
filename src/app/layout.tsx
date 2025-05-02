@@ -40,10 +40,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${spaceGrotesk.variable} ${inter.variable} ${ibmPlexMono.variable}`}>
-      <body className="bg-black antialiased overscroll-none">
+    <html lang="en" className={`${spaceGrotesk.variable} ${inter.variable} ${ibmPlexMono.variable} h-full overflow-hidden`}>
+      <body className="bg-black antialiased h-full overscroll-none overflow-hidden touch-none">
         <AuthProvider>
-          <div className="mx-auto max-w-md min-h-screen">
+          <div className="mx-auto max-w-md h-full overflow-hidden">
             {children}
           </div>
           <Toaster richColors position="top-center" />

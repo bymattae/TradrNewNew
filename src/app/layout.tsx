@@ -23,13 +23,15 @@ const ibmPlexMono = IBM_Plex_Mono({
 export const metadata: Metadata = {
   title: 'Tradr',
   description: 'Professional trading insights and portfolio management',
-  viewport: {
-    width: 'device-width',
-    initialScale: 1,
-    maximumScale: 1,
-    userScalable: false,
-    viewportFit: 'cover',
-  },
+};
+
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+  userScalable: true,
+  viewportFit: 'cover',
+  themeColor: '#1C1C24',
 };
 
 export default function RootLayout({
@@ -39,7 +41,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${spaceGrotesk.variable} ${inter.variable} ${ibmPlexMono.variable}`}>
-      <body className="bg-black antialiased">
+      <body className="bg-black antialiased overscroll-none">
         <AuthProvider>
           <div className="mx-auto max-w-md min-h-screen">
             {children}

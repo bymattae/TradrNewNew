@@ -16,6 +16,14 @@ const config: Config = {
       padding: {
         'safe': 'env(safe-area-inset-bottom, 0px)',
       },
+      margin: {
+        'safe': 'env(safe-area-inset-bottom, 0px)',
+      },
+      spacing: {
+        'safe-bottom': 'env(safe-area-inset-bottom, 0px)',
+        'safe-top': 'env(safe-area-inset-top, 0px)',
+        'screen-minus-nav': 'calc(100vh - 5rem)',
+      },
       colors: {
         profit: {
           DEFAULT: '#00DC82',

@@ -18,7 +18,7 @@ export default function AuthenticatedLayout({
       <div className="flex-1 overflow-hidden">
         {children}
       </div>
-      <BottomNavBar onOpenHubMenu={() => setIsHubMenuOpen(true)} />
+      <BottomNavBar />
       <HubMenu isOpen={isHubMenuOpen} onClose={() => setIsHubMenuOpen(false)} />
     </div>
   );

@@ -34,7 +34,13 @@ export default function BottomNavBar() {
   }, [supabase]);
   
   return (
-    <div className="fixed bottom-8 left-0 right-0 z-50 px-6">
+    <div 
+      className="fixed left-0 right-0 z-50 px-6 pb-safe" 
+      style={{ 
+        bottom: 'max(1rem, env(safe-area-inset-bottom, 1rem))', 
+        paddingBottom: 'env(safe-area-inset-bottom, 0px)' 
+      }}
+    >
       <div className="max-w-md mx-auto">
         <div className="flex items-center justify-between bg-[#1C1C24]/90 backdrop-blur-sm rounded-full px-8 py-3 shadow-lg border border-[#2A2B30]/30">
           <NavItem 

@@ -13,6 +13,9 @@ const config: Config = {
         sans: ['var(--font-inter)', 'system-ui', 'sans-serif'],
         mono: ['var(--font-ibm-plex-mono)', 'monospace'],
       },
+      padding: {
+        'safe': 'env(safe-area-inset-bottom, 0px)',
+      },
       colors: {
         profit: {
           DEFAULT: '#00DC82',

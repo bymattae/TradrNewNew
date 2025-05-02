@@ -110,14 +110,14 @@ export default function Dashboard3Page() {
         </div>
 
         {/* Main Content Area */}
-        <div className="flex-1 flex flex-col px-4 pb-24 -mt-1">
+        <div className="flex-1 flex flex-col px-4 pb-32 -mt-1">
           {/* Profile Preview Card */}
           <div className="my-auto">
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="w-full rounded-3xl bg-[#1C1C24]/80 backdrop-blur-xl border border-white/5 shadow-[0_0_25px_rgba(168,85,247,0.1)] flex flex-col max-h-[calc(100vh-12rem)] relative overflow-hidden"
+              className="w-full rounded-3xl bg-[#1C1C24]/80 backdrop-blur-xl border border-white/5 shadow-[0_0_25px_rgba(168,85,247,0.1)] flex flex-col max-h-[calc(100vh-14rem)] relative overflow-hidden"
             >
               {/* Scrollable Content */}
               <div className="flex-1 overflow-y-auto">

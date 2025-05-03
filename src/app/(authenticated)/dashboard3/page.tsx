@@ -119,8 +119,8 @@ export default function Dashboard3Page() {
             className="w-full h-[calc(100%-1.5rem)] rounded-3xl bg-[#1C1C24]/80 backdrop-blur-xl border border-white/5 shadow-[0_0_25px_rgba(168,85,247,0.1)] flex flex-col overflow-hidden z-20"
           >
             {/* Scrollable Content */}
-            <div className="flex-1 overflow-y-auto scrollbar-hide">
-              <div className="px-6 py-5 space-y-4">
+            <div className="flex-1 overflow-y-auto scrollbar-hide relative">
+              <div className="px-6 py-5 space-y-4 pb-14">
                 {/* Avatar and Username Section */}
                 <motion.div 
                   initial={{ opacity: 0, scale: 0.95 }}
@@ -213,13 +213,21 @@ export default function Dashboard3Page() {
                     </button>
                   </div>
                 </motion.div>
-
-                {/* Powered by Tradr */}
-                <div className="flex items-center justify-center mt-2 py-1">
-                  <div className="text-white/50 text-sm font-medium tracking-wide backdrop-blur-sm">
-                    Powered by <span className="text-white/70">Tradr</span>
-                  </div>
-                </div>
+              </div>
+              
+              {/* Powered by Tradr */}
+              <div className="absolute bottom-2 inset-x-0 flex items-center justify-center">
+                <motion.div 
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.8 }}
+                  whileHover={{ scale: 1.05, y: -1 }}
+                  className="px-3 py-1.5 bg-gradient-to-r from-purple-500/5 via-white/10 to-blue-500/5 rounded-full backdrop-blur-sm border border-white/5 shadow-sm transition-all duration-300 hover:border-purple-500/20 hover:shadow-[0_0_10px_rgba(168,85,247,0.15)] cursor-pointer"
+                >
+                  <span className="text-xs font-medium bg-clip-text text-transparent bg-gradient-to-r from-purple-200/80 via-white/90 to-blue-200/80">
+                    Powered by <span className="font-semibold">Tradr</span>
+                  </span>
+                </motion.div>
               </div>
             </div>
           </motion.div>

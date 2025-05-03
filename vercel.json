@@ -1,0 +1,9 @@
+{
+  "git": {
+    "productionBranch": "revert-changes",
+    "deploymentEnabled": {
+      "main": true,
+      "revert-changes": true
+    }
+  }
+} 

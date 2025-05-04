@@ -314,9 +314,9 @@ export default function Dashboard3Page() {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.8 }}
-                  className="mt-auto pt-8 pb-8 select-none w-full"
+                  className="mt-auto pt-8 pb-5 select-none w-full"
                 >
-                  <div className="border-t border-white/10 mb-4 w-full" />
+                  <div className="border-t border-white/5 mb-4 w-full" />
                   <div className="flex flex-col items-center justify-center">
                     <div className="flex items-center gap-2 mb-1">
                       <span className="text-xs font-medium text-white/60">Powered by</span>

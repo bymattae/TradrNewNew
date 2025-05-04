@@ -10,6 +10,7 @@ import { BsTwitterX, BsWhatsapp, BsTelegram, BsLink45Deg } from 'react-icons/bs'
 import { FiShare } from 'react-icons/fi';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
+import { TradrIcon } from '@/app/components/Icons';
 
 export default function Dashboard3Page() {
   const router = useRouter();
@@ -309,18 +310,28 @@ export default function Dashboard3Page() {
                 </div>
                 
                 {/* Powered by Tradr at the bottom */}
-                <motion.div 
+                <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.8 }}
-                  whileHover={{ scale: 1.05, y: -1 }}
-                  className="flex items-center justify-center mb-3 mt-auto"
+                  className="flex flex-col items-center justify-center mt-6 mb-3 select-none"
                 >
-                  <div className="px-3 py-1.5 bg-gradient-to-r from-purple-500/5 via-white/10 to-blue-500/5 rounded-full backdrop-blur-sm border border-white/5 shadow-sm transition-all duration-300 hover:border-purple-500/20 hover:shadow-[0_0_10px_rgba(168,85,247,0.15)] cursor-pointer">
+                  <div className="flex items-center gap-1.5 px-4 py-2 bg-gradient-to-r from-purple-500/5 via-white/10 to-blue-500/5 rounded-full backdrop-blur-sm border border-white/5 shadow-sm opacity-80">
                     <span className="text-xs font-medium bg-clip-text text-transparent bg-gradient-to-r from-purple-200/80 via-white/90 to-blue-200/80">
-                      Powered by <span className="font-semibold">Tradr</span>
+                      Powered by
+                    </span>
+                    <span className="flex items-center gap-1 ml-2">
+                      <TradrIcon className="w-4 h-4 text-purple-400" />
+                      <span className="text-xs font-semibold bg-clip-text text-transparent bg-gradient-to-r from-purple-200/80 via-white/90 to-blue-200/80">Tradr</span>
                     </span>
                   </div>
+                  <a
+                    href="/onboarding"
+                    className="mt-1.5 text-[11px] text-purple-300/80 hover:text-purple-400 transition-colors flex items-center gap-1 font-medium cursor-pointer"
+                    style={{ letterSpacing: '0.01em' }}
+                  >
+                    Make yours <span className="text-base">→</span>
+                  </a>
                 </motion.div>
               </div>
             </div>

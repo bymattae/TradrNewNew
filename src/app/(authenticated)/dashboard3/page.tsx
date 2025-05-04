@@ -312,7 +312,7 @@ export default function Dashboard3Page() {
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.8 }}
                   whileHover={{ scale: 1.05, y: -1 }}
-                  className="flex items-center justify-center mt-4"
+                  className="flex items-center justify-center mt-12"
                 >
                   <div className="px-3 py-1.5 bg-gradient-to-r from-purple-500/5 via-white/10 to-blue-500/5 rounded-full backdrop-blur-sm border border-white/5 shadow-sm transition-all duration-300 hover:border-purple-500/20 hover:shadow-[0_0_10px_rgba(168,85,247,0.15)] cursor-pointer">
                     <span className="text-xs font-medium bg-clip-text text-transparent bg-gradient-to-r from-purple-200/80 via-white/90 to-blue-200/80">

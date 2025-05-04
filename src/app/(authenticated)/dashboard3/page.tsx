@@ -309,18 +309,17 @@ export default function Dashboard3Page() {
                   </motion.div>
                 </div>
                 
-                {/* Powered by Tradr at the bottom */}
+                {/* Premium Footer at the bottom of the card */}
                 <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.8 }}
-                  className="flex flex-col items-center justify-center mt-10 mb-6 select-none"
+                  className="mt-auto pt-8 pb-8 select-none w-full"
                 >
-                  <div className="flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-purple-500/5 via-white/10 to-blue-500/5 rounded-full backdrop-blur-sm border border-white/5 shadow-sm opacity-80">
-                    <span className="text-xs font-medium bg-clip-text text-transparent bg-gradient-to-r from-purple-200/80 via-white/90 to-blue-200/80">
-                      Powered by
-                    </span>
-                    <span className="flex items-center gap-1 ml-2">
+                  <div className="border-t border-white/10 mb-4 w-full" />
+                  <div className="flex flex-col items-center justify-center">
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="text-xs font-medium text-white/60">Powered by</span>
                       <div className='relative w-5 h-5'>
                         <Image
                           src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/assets/TradrIcon%20(1).png`}
@@ -329,16 +328,16 @@ export default function Dashboard3Page() {
                           className="object-contain"
                         />
                       </div>
-                      <span className="text-xs font-semibold bg-clip-text text-transparent bg-gradient-to-r from-purple-200/80 via-white/90 to-blue-200/80">Tradr</span>
-                    </span>
+                      <span className="text-xs font-semibold text-white/70">Tradr</span>
+                    </div>
+                    <a
+                      href="/onboarding"
+                      className="mt-1 text-[11px] text-purple-300/80 hover:text-purple-400 transition-colors flex items-center gap-1 font-medium cursor-pointer"
+                      style={{ letterSpacing: '0.01em' }}
+                    >
+                      Make yours <span className="text-base">→</span>
+                    </a>
                   </div>
-                  <a
-                    href="/onboarding"
-                    className="mt-2 mb-2 text-[11px] text-purple-300/80 hover:text-purple-400 transition-colors flex items-center gap-1 font-medium cursor-pointer"
-                    style={{ letterSpacing: '0.01em' }}
-                  >
-                    Make yours <span className="text-base">→</span>
-                  </a>
                 </motion.div>
               </div>
             </div>

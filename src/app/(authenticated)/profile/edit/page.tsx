@@ -10,6 +10,7 @@ import { useAuth } from "@/lib/hooks/useAuth";
 import { getProfile, updateProfile } from "@/lib/supabase/profile";
 import { components } from "@/lib/styles/design-system";
 import Image from "next/image";
+import { DefaultAvatar } from "@/app/components/DefaultAvatar";
 
 const DEFAULT_HASHTAGS = ["#NFTTrader", "#DeFiWhale", "#Web3"];
 const THEME_OPTIONS = [
@@ -201,13 +202,17 @@ export default function EditProfilePage() {
               {/* Profile Picture Upload */}
               <div className="flex flex-col items-center gap-2">
                 <div className="relative group">
-                  <Image
-                    src={avatarPreview || "/avatar.png"}
-                    alt="Profile Avatar"
-                    width={80}
-                    height={80}
-                    className="rounded-full object-cover border-2 border-[#7048E8] shadow-md"
-                  />
+                  {avatarPreview ? (
+                    <Image
+                      src={avatarPreview}
+                      alt="Profile Avatar"
+                      width={80}
+                      height={80}
+                      className="rounded-full object-cover border-2 border-[#7048E8] shadow-md"
+                    />
+                  ) : (
+                    <DefaultAvatar className="rounded-full border-2 border-[#7048E8] shadow-md" />
+                  )}
                   <label className="absolute bottom-0 right-0 bg-[#7048E8] p-1.5 rounded-full cursor-pointer border-2 border-white/80 group-hover:scale-110 transition-transform">
                     <input
                       type="file"

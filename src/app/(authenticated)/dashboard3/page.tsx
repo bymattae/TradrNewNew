@@ -20,30 +20,46 @@ export default function Dashboard3Page() {
   const [isShareOpen, setIsShareOpen] = useState(false);
   const sharePopupRef = useRef<HTMLDivElement>(null);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [animatedPosition, setAnimatedPosition] = useState({ x: 0, y: 0 });
   const cardRef = useRef<HTMLDivElement>(null);
-  const animationRef = useRef<number | null>(null);
 
-  // Animate the light position autonomously
+  // Track mouse position for dynamic lighting effect
   useEffect(() => {
-    let angle = 0;
-    let radius = 100;
-    
-    const animate = () => {
-      // Move in a circular pattern
-      angle += 0.005;
-      const x = Math.cos(angle) * radius;
-      const y = Math.sin(angle) * radius;
-      
-      setAnimatedPosition({ x, y });
-      animationRef.current = requestAnimationFrame(animate);
+    const handleMouseMove = (e: MouseEvent) => {
+      if (cardRef.current) {
+        const rect = cardRef.current.getBoundingClientRect();
+        // Calculate position within element and normalize to -1 to 1 range
+        const x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+        const y = ((e.clientY - rect.top) / rect.height) * 2 - 1;
+        
+        // Add some damping for smoother movement
+        setMousePosition(prev => ({
+          x: prev.x + (x * 100 - prev.x) * 0.1,
+          y: prev.y + (y * 100 - prev.y) * 0.1
+        }));
+      }
     };
     
-    animate();
+    const handleMouseLeave = () => {
+      // Gradually reset position when mouse leaves
+      setMousePosition(prev => ({
+        x: prev.x * 0.9,
+        y: prev.y * 0.9
+      }));
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    
+    // Save the current card element to a variable
+    const currentCardRef = cardRef.current;
+    
+    if (currentCardRef) {
+      currentCardRef.addEventListener('mouseleave', handleMouseLeave);
+    }
     
     return () => {
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current);
+      window.removeEventListener('mousemove', handleMouseMove);
+      if (currentCardRef) {
+        currentCardRef.removeEventListener('mouseleave', handleMouseLeave);
       }
     };
   }, []);
@@ -230,61 +246,61 @@ export default function Dashboard3Page() {
         </div>
 
         {/* Main Content Area with Padding Top and Bottom */}
-        <div className="flex-1 flex flex-col px-4 pt-2.5 pb-5 overflow-hidden">
+        <div className="flex-1 flex flex-col px-4 pt-2.5 pb-20 overflow-hidden">
           {/* Dynamic Glow Effect Wrapper */}
-          <div className="relative w-full h-full">
-            {/* Base glow effect */}
-            <div 
-              className="absolute inset-0 rounded-3xl"
-              style={{ 
-                boxShadow: '0 0 15px 1px rgba(168, 85, 247, 0.3), 0 0 30px 2px rgba(99, 102, 241, 0.2)',
-                zIndex: 0 
-              }}
-            ></div>
-            
-            {/* Moving Glow Effect - Main Light Source */}
-            <div 
-              className="absolute -inset-1 rounded-3xl overflow-hidden z-0"
-            >
-              {/* Traveling light effect */}
-              <div 
-                className="absolute w-[150%] h-[150%] rounded-full opacity-70"
-                style={{
-                  background: 'radial-gradient(circle, rgba(168, 85, 247, 0.8) 0%, rgba(99, 102, 241, 0.4) 20%, transparent 60%)',
-                  top: `${50 + animatedPosition.y}%`,
-                  left: `${50 + animatedPosition.x}%`,
-                  transform: 'translate(-50%, -50%)',
-                  filter: 'blur(20px)',
-                }}
-              ></div>
+          <div className="relative w-full h-[calc(100%-1.5rem)]">
+            {/* Animated Glow Elements */}
+            <div className="absolute -inset-0.5 rounded-3xl bg-transparent z-0 overflow-hidden">
+              <div className="absolute inset-0 rounded-3xl overflow-hidden">
+                {/* Primary glow layer */}
+                <div 
+                  className="absolute -inset-[100%] animate-[rotate_20s_linear_infinite] opacity-60 bg-[conic-gradient(from_0deg,transparent_0_340deg,#9372E2_360deg)]"
+                  style={{
+                    transform: `rotate(${mousePosition.x / 5}deg) translateX(${mousePosition.x / 30}px) translateY(${mousePosition.y / 30}px)`,
+                    filter: 'blur(8px)'
+                  }}
+                ></div>
+                
+                {/* Secondary glow layer - opposite direction */}
+                <div 
+                  className="absolute -inset-[100%] animate-[rotate_15s_linear_infinite] opacity-40 bg-[conic-gradient(from_0deg,transparent_0_170deg,#6366F1_190deg,transparent_220deg_340deg,#A855F7_360deg)]"
+                  style={{
+                    animationDirection: 'reverse',
+                    transform: `rotate(${-mousePosition.y / 10}deg) translateX(${-mousePosition.x / 25}px) translateY(${-mousePosition.y / 25}px)`,
+                    filter: 'blur(10px)'
+                  }}
+                ></div>
+                
+                {/* Accent glow layer */}
+                <div 
+                  className="absolute -inset-[100%] animate-[rotate_30s_linear_infinite] opacity-30 bg-[conic-gradient(from_0deg,transparent_0_220deg,#F0AB3D_250deg,transparent_290deg_340deg,#6366F1_360deg)]"
+                  style={{
+                    transform: `rotate(${mousePosition.x / 15 - mousePosition.y / 15}deg)`,
+                    filter: 'blur(12px)'
+                  }}
+                ></div>
+                
+                {/* Quick moving highlight */}
+                <div 
+                  className="absolute -inset-[50%] animate-[rotate_10s_linear_infinite] opacity-20 bg-[conic-gradient(from_0deg,transparent_0_150deg,white_160deg,transparent_170deg_340deg,#A855F7_360deg)]"
+                  style={{
+                    transform: `rotate(${mousePosition.x / 2}deg) translateX(${mousePosition.x / 15}px)`,
+                    filter: 'blur(5px)'
+                  }}
+                ></div>
+              </div>
               
-              {/* Secondary traveling light */}
+              {/* Inner mask to contain glow at the edges */}
+              <div className="absolute inset-[1px] rounded-[22px] bg-[#1C1C24]/40 backdrop-blur-sm"></div>
+              
+              {/* Sheen effect - subtle highlight along the top edge */}
               <div 
-                className="absolute w-[100%] h-[100%] rounded-full opacity-50"
+                className="absolute inset-x-0 top-0 h-1/2 bg-gradient-to-b from-white/5 to-transparent rounded-t-3xl opacity-60 pointer-events-none"
                 style={{
-                  background: 'radial-gradient(circle, rgba(255, 255, 255, 0.8) 0%, rgba(168, 85, 247, 0.5) 10%, transparent 40%)',
-                  top: `${50 - animatedPosition.y * 0.7}%`,
-                  left: `${50 - animatedPosition.x * 0.7}%`,
-                  transform: 'translate(-50%, -50%)',
-                  filter: 'blur(10px)',
+                  transform: `translateY(${mousePosition.y / 80}px) rotateX(${mousePosition.y / 30}deg)`
                 }}
               ></div>
             </div>
-            
-            {/* Color wash effect */}
-            <div 
-              className="absolute inset-0 z-0 rounded-3xl overflow-hidden"
-              style={{
-                background: `conic-gradient(
-                  from ${animatedPosition.x * 3}deg at ${50 + animatedPosition.x * 0.2}% ${50 + animatedPosition.y * 0.2}%, 
-                  rgba(168, 85, 247, 0.4) 0deg, 
-                  rgba(99, 102, 241, 0.3) 120deg, 
-                  rgba(240, 171, 61, 0.3) 240deg, 
-                  rgba(168, 85, 247, 0.4) 360deg
-                )`,
-                filter: 'blur(20px)',
-              }}
-            ></div>
 
             {/* Profile Preview Card */}
             <motion.div 
@@ -293,157 +309,122 @@ export default function Dashboard3Page() {
               animate={{ opacity: 1, y: 0 }}
               whileHover={{ scale: 1.005 }}
               transition={{ delay: 0.2, type: "spring", stiffness: 300 }}
-              className="w-full h-full rounded-3xl bg-[#1C1C24]/90 backdrop-blur-xl flex flex-col overflow-hidden z-10 relative"
-              style={{
-                boxShadow: '0 0 30px rgba(168, 85, 247, 0.3), 0 0 10px rgba(99, 102, 241, 0.4) inset',
-                border: '1px solid rgba(255, 255, 255, 0.2)'
-              }}
+              className="w-full h-full rounded-3xl bg-[#1C1C24]/90 backdrop-blur-xl border border-white/10 shadow-[0_0_25px_rgba(168,85,247,0.15)] flex flex-col overflow-hidden z-20 relative"
             >
-              {/* Dynamic light position inner effect */}
-              <div 
-                className="absolute inset-0 rounded-3xl pointer-events-none overflow-hidden"
-              >
-                {/* Inner highlight that follows the moving light */}
-                <div 
-                  className="absolute w-full h-full"
-                  style={{
-                    background: `radial-gradient(
-                      circle at ${50 + animatedPosition.x * 0.3}% ${50 + animatedPosition.y * 0.3}%,
-                      rgba(255, 255, 255, 0.2) 0%,
-                      transparent 40%
-                    )`,
-                  }}
-                ></div>
-                
-                {/* Inner border that catches the light */}
-                <div 
-                  className="absolute inset-0 rounded-3xl"
-                  style={{
-                    border: '1px solid rgba(255, 255, 255, 0.2)',
-                    boxShadow: `
-                      0 0 20px 1px rgba(168, 85, 247, 0.3) inset,
-                      0 0 8px 1px rgba(99, 102, 241, 0.2)
-                    `
-                  }}
-                ></div>
-              </div>
-              
-              {/* Scrollable content container - Include the watermark inside this container */}
+              {/* Inner stroke for depth effect */}
+              <div className="absolute inset-0 rounded-3xl border border-purple-600/5 pointer-events-none"></div>
+
+              {/* Scrollable Content */}
               <div className="flex-1 overflow-y-auto scrollbar-hide">
-                <div className="px-6 py-5 flex flex-col h-full">
-                  {/* Main content */}
-                  <div className="flex-1 space-y-4">
-                    {/* Avatar and Username Section */}
-                    <motion.div 
-                      initial={{ opacity: 0, scale: 0.95 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      transition={{ delay: 0.3 }}
-                      className="text-center space-y-2.5"
-                    >
-                      <div className="relative w-20 h-20 mx-auto rounded-full overflow-hidden ring-2 ring-purple-500/30 ring-offset-4 ring-offset-[#1C1C24] shadow-[0_0_20px_rgba(168,85,247,0.2)]">
-                        <Image
-                          src={profile?.avatar_url || '/default-avatar.png'}
-                          alt="Profile"
-                          fill
-                          className="object-cover"
-                        />
-                      </div>
-                      <h2 className="text-white font-bold text-2xl tracking-tight">
-                        {profile?.username || currentUser?.email?.split('@')[0] || 'cryptowhale'}
-                      </h2>
-                    </motion.div>
+                <div className="px-6 py-5 space-y-4 pb-20">
+                  {/* Avatar and Username Section */}
+                  <motion.div 
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.3 }}
+                    className="text-center space-y-2.5"
+                  >
+                    <div className="relative w-20 h-20 mx-auto rounded-full overflow-hidden ring-2 ring-purple-500/30 ring-offset-4 ring-offset-[#1C1C24] shadow-[0_0_20px_rgba(168,85,247,0.2)]">
+                      <Image
+                        src={profile?.avatar_url || '/default-avatar.png'}
+                        alt="Profile"
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+                    <h2 className="text-white font-bold text-2xl tracking-tight">
+                      {profile?.username || currentUser?.email?.split('@')[0] || 'cryptowhale'}
+                    </h2>
+                  </motion.div>
 
-                    {/* Bio Section */}
-                    <motion.div 
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ delay: 0.4 }}
-                      className="text-center"
-                    >
-                      <p className="text-white/80 text-sm leading-relaxed">
-                        {profile?.bio || 'I\'m a trader from germany'}
-                      </p>
-                    </motion.div>
-
-                    {/* Tags Section */}
-                    <motion.div 
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ delay: 0.5 }}
-                      className="flex flex-wrap justify-center gap-2"
-                    >
-                      {(profile?.tags || ['#Coolman']).map((tag: string, index: number) => (
-                        <span 
-                          key={index} 
-                          className="px-4 py-1.5 bg-purple-500/10 text-purple-300 text-sm rounded-full font-medium border border-purple-500/20"
-                        >
-                          #{tag}
-                        </span>
-                      ))}
-                    </motion.div>
-
-                    {/* Stats Section */}
-                    <motion.div 
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.6 }}
-                      className="bg-black/20 rounded-2xl p-4 max-w-sm mx-auto w-full border border-white/5 shadow-[0_0_25px_rgba(168,85,247,0.1)] backdrop-blur-sm"
-                    >
-                      <div className="grid grid-cols-3 gap-4">
-                        <div className="text-center">
-                          <p className="text-white font-semibold text-xl tracking-tight">12.5%</p>
-                          <p className="text-gray-400 text-sm mt-1">Gain</p>
-                        </div>
-                        <div className="text-center">
-                          <p className="text-white font-semibold text-xl tracking-tight">89%</p>
-                          <p className="text-gray-400 text-sm mt-1">Win Rate</p>
-                        </div>
-                        <div className="text-center">
-                          <p className="text-white font-semibold text-xl tracking-tight">1:3</p>
-                          <p className="text-gray-400 text-sm mt-1">Risk Ratio</p>
-                        </div>
-                      </div>
-                    </motion.div>
-
-                    {/* CTA Section */}
-                    <motion.div 
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.7 }}
-                      className="bg-gradient-to-br from-purple-500/10 to-blue-500/10 rounded-2xl p-4 max-w-sm mx-auto w-full border border-purple-500/20 shadow-[0_0_30px_rgba(168,85,247,0.15)] backdrop-blur-sm"
-                    >
-                      <div className="space-y-3">
-                        <div className="flex items-center justify-center space-x-3">
-                          <span className="text-2xl">🔥</span>
-                          <h3 className="text-white font-bold text-xl tracking-tight">Join our alpha community</h3>
-                        </div>
-                        <p className="text-white/80 text-sm leading-relaxed text-center">
-                          Connect with 500+ traders, share insights, and grow together.
-                        </p>
-                        <button className="w-full bg-gradient-to-r from-[#A855F7] to-[#6366F1] text-white py-3 rounded-xl font-medium hover:opacity-90 active:scale-95 transition-all duration-200 shadow-[0_0_20px_rgba(168,85,247,0.3)]">
-                          Join Community
-                        </button>
-                      </div>
-                    </motion.div>
-                  </div>
-                  
-                  {/* Powered by Tradr - Add margin top to push it to the bottom */}
+                  {/* Bio Section */}
                   <motion.div 
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    transition={{ delay: 0.8 }}
-                    className="flex items-center justify-center mt-8 mb-2"
+                    transition={{ delay: 0.4 }}
+                    className="text-center"
                   >
-                    <motion.div 
-                      whileHover={{ scale: 1.05, y: -1 }}
-                      className="px-3 py-1.5 bg-gradient-to-r from-purple-500/5 via-white/10 to-blue-500/5 rounded-full backdrop-blur-sm border border-white/5 shadow-sm transition-all duration-300 hover:border-purple-500/20 hover:shadow-[0_0_10px_rgba(168,85,247,0.15)] cursor-pointer"
-                    >
-                      <span className="text-xs font-medium bg-clip-text text-transparent bg-gradient-to-r from-purple-200/80 via-white/90 to-blue-200/80">
-                        Powered by <span className="font-semibold">Tradr</span>
+                    <p className="text-white/80 text-sm leading-relaxed">
+                      {profile?.bio || 'I\'m a trader from germany'}
+                    </p>
+                  </motion.div>
+
+                  {/* Tags Section */}
+                  <motion.div 
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.5 }}
+                    className="flex flex-wrap justify-center gap-2"
+                  >
+                    {(profile?.tags || ['#Coolman']).map((tag: string, index: number) => (
+                      <span 
+                        key={index} 
+                        className="px-4 py-1.5 bg-purple-500/10 text-purple-300 text-sm rounded-full font-medium border border-purple-500/20"
+                      >
+                        #{tag}
                       </span>
-                    </motion.div>
+                    ))}
+                  </motion.div>
+
+                  {/* Stats Section */}
+                  <motion.div 
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.6 }}
+                    className="bg-black/20 rounded-2xl p-4 max-w-sm mx-auto w-full border border-white/5 shadow-[0_0_25px_rgba(168,85,247,0.1)] backdrop-blur-sm"
+                  >
+                    <div className="grid grid-cols-3 gap-4">
+                      <div className="text-center">
+                        <p className="text-white font-semibold text-xl tracking-tight">12.5%</p>
+                        <p className="text-gray-400 text-sm mt-1">Gain</p>
+                      </div>
+                      <div className="text-center">
+                        <p className="text-white font-semibold text-xl tracking-tight">89%</p>
+                        <p className="text-gray-400 text-sm mt-1">Win Rate</p>
+                      </div>
+                      <div className="text-center">
+                        <p className="text-white font-semibold text-xl tracking-tight">1:3</p>
+                        <p className="text-gray-400 text-sm mt-1">Risk Ratio</p>
+                      </div>
+                    </div>
+                  </motion.div>
+
+                  {/* CTA Section */}
+                  <motion.div 
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.7 }}
+                    className="bg-gradient-to-br from-purple-500/10 to-blue-500/10 rounded-2xl p-4 max-w-sm mx-auto w-full border border-purple-500/20 shadow-[0_0_30px_rgba(168,85,247,0.15)] backdrop-blur-sm"
+                  >
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-center space-x-3">
+                        <span className="text-2xl">🔥</span>
+                        <h3 className="text-white font-bold text-xl tracking-tight">Join our alpha community</h3>
+                      </div>
+                      <p className="text-white/80 text-sm leading-relaxed text-center">
+                        Connect with 500+ traders, share insights, and grow together.
+                      </p>
+                      <button className="w-full bg-gradient-to-r from-[#A855F7] to-[#6366F1] text-white py-3 rounded-xl font-medium hover:opacity-90 active:scale-95 transition-all duration-200 shadow-[0_0_20px_rgba(168,85,247,0.3)]">
+                        Join Community
+                      </button>
+                    </div>
                   </motion.div>
                 </div>
+              </div>
+              
+              {/* Powered by Tradr */}
+              <div className="absolute bottom-0 inset-x-0 flex items-center justify-center pb-2 z-10 bg-gradient-to-t from-[#1C1C24] to-transparent h-12">
+                <motion.div 
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.8 }}
+                  whileHover={{ scale: 1.05, y: -1 }}
+                  className="px-3 py-1.5 bg-gradient-to-r from-purple-500/5 via-white/10 to-blue-500/5 rounded-full backdrop-blur-sm border border-white/5 shadow-sm transition-all duration-300 hover:border-purple-500/20 hover:shadow-[0_0_10px_rgba(168,85,247,0.15)] cursor-pointer"
+                >
+                  <span className="text-xs font-medium bg-clip-text text-transparent bg-gradient-to-r from-purple-200/80 via-white/90 to-blue-200/80">
+                    Powered by <span className="font-semibold">Tradr</span>
+                  </span>
+                </motion.div>
               </div>
             </motion.div>
           </div>
@@ -466,10 +447,10 @@ const rotateKeyframes = `
 
 @keyframes pulse {
   0%, 100% {
-    opacity: 0.3;
+    opacity: 0.4;
   }
   50% {
-    opacity: 0.9;
+    opacity: 0.8;
   }
 }
 
@@ -479,15 +460,6 @@ const rotateKeyframes = `
   }
   50% {
     transform: translateY(-10px);
-  }
-}
-
-@keyframes glow {
-  0%, 100% {
-    box-shadow: 0 0 20px 5px rgba(168, 85, 247, 0.3);
-  }
-  50% {
-    box-shadow: 0 0 30px 10px rgba(99, 102, 241, 0.4);
   }
 }
 `;

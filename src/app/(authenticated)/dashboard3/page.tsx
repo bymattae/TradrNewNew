@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import getSupabaseBrowserClient from '@/lib/supabase/client';
 import { toast } from 'sonner';
 import { User } from '@supabase/supabase-js';
-import { Settings, Link2, ExternalLink, MessageCircle, Copy } from 'lucide-react';
+import { Edit, Link2, ExternalLink, MessageCircle, Copy } from 'lucide-react';
 import { BsTwitterX, BsWhatsapp, BsTelegram, BsLink45Deg } from 'react-icons/bs';
 import { FiShare } from 'react-icons/fi';
 import Image from 'next/image';
@@ -198,7 +198,7 @@ export default function Dashboard3Page() {
             animate={{ opacity: 1, scale: 1 }}
             className="p-2.5 rounded-full bg-[#1A1B1F]/80 backdrop-blur-sm border border-[#2A2B30] hover:bg-[#2A2B30] active:scale-95 transition-all duration-200"
           >
-            <Settings className="w-5 h-5 text-white/90" />
+            <Edit className="w-5 h-5 text-white/90" />
           </motion.button>
         </div>
 

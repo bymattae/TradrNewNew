@@ -249,57 +249,68 @@ export default function Dashboard3Page() {
         <div className="flex-1 flex flex-col px-4 pt-2.5 pb-20 overflow-hidden">
           {/* Dynamic Glow Effect Wrapper */}
           <div className="relative w-full h-[calc(100%-1.5rem)]">
-            {/* Animated Glow Elements */}
-            <div className="absolute -inset-0.5 rounded-3xl bg-transparent z-0 overflow-hidden">
-              <div className="absolute inset-0 rounded-3xl overflow-hidden">
+            {/* Animated Glow Effects Container */}
+            <div className="absolute -inset-1 z-0">
+              {/* Static glow base */}
+              <div 
+                className="absolute inset-0 -z-10 rounded-[26px] bg-gradient-to-r from-purple-600/30 via-blue-500/30 to-purple-600/30 animate-[pulse_4s_ease-in-out_infinite]"
+                style={{ filter: 'blur(15px)' }}
+              ></div>
+              
+              {/* Main rotating glow elements */}
+              <div className="absolute -inset-1.5 rounded-[28px] overflow-hidden -z-10">
                 {/* Primary glow layer */}
                 <div 
-                  className="absolute -inset-[100%] animate-[rotate_20s_linear_infinite] opacity-60 bg-[conic-gradient(from_0deg,transparent_0_340deg,#9372E2_360deg)]"
+                  className="absolute -inset-[10%] animate-[rotate_25s_linear_infinite] opacity-90 bg-[conic-gradient(from_0deg,transparent_0_300deg,#A855F7_345deg,#6366F1_360deg)]"
                   style={{
-                    transform: `rotate(${mousePosition.x / 5}deg) translateX(${mousePosition.x / 30}px) translateY(${mousePosition.y / 30}px)`,
-                    filter: 'blur(8px)'
+                    transform: `rotate(${mousePosition.x / 5}deg)`,
+                    filter: 'blur(20px)'
                   }}
                 ></div>
                 
                 {/* Secondary glow layer - opposite direction */}
                 <div 
-                  className="absolute -inset-[100%] animate-[rotate_15s_linear_infinite] opacity-40 bg-[conic-gradient(from_0deg,transparent_0_170deg,#6366F1_190deg,transparent_220deg_340deg,#A855F7_360deg)]"
+                  className="absolute -inset-[30%] animate-[rotate_30s_linear_infinite] opacity-70 bg-[conic-gradient(from_0deg,transparent_0_170deg,#6366F1_190deg,transparent_210deg_300deg,#A855F7_330deg,#6366F1_360deg)]"
                   style={{
                     animationDirection: 'reverse',
-                    transform: `rotate(${-mousePosition.y / 10}deg) translateX(${-mousePosition.x / 25}px) translateY(${-mousePosition.y / 25}px)`,
-                    filter: 'blur(10px)'
+                    transform: `rotate(${-mousePosition.y / 10}deg)`,
+                    filter: 'blur(25px)'
                   }}
                 ></div>
                 
                 {/* Accent glow layer */}
                 <div 
-                  className="absolute -inset-[100%] animate-[rotate_30s_linear_infinite] opacity-30 bg-[conic-gradient(from_0deg,transparent_0_220deg,#F0AB3D_250deg,transparent_290deg_340deg,#6366F1_360deg)]"
+                  className="absolute -inset-[25%] animate-[rotate_20s_linear_infinite] opacity-50 bg-[conic-gradient(from_0deg,transparent_0_220deg,#F0AB3D_250deg,transparent_290deg_340deg,#6366F1_360deg)]"
                   style={{
                     transform: `rotate(${mousePosition.x / 15 - mousePosition.y / 15}deg)`,
-                    filter: 'blur(12px)'
-                  }}
-                ></div>
-                
-                {/* Quick moving highlight */}
-                <div 
-                  className="absolute -inset-[50%] animate-[rotate_10s_linear_infinite] opacity-20 bg-[conic-gradient(from_0deg,transparent_0_150deg,white_160deg,transparent_170deg_340deg,#A855F7_360deg)]"
-                  style={{
-                    transform: `rotate(${mousePosition.x / 2}deg) translateX(${mousePosition.x / 15}px)`,
-                    filter: 'blur(5px)'
+                    filter: 'blur(20px)'
                   }}
                 ></div>
               </div>
               
-              {/* Inner mask to contain glow at the edges */}
-              <div className="absolute inset-[1px] rounded-[22px] bg-[#1C1C24]/40 backdrop-blur-sm"></div>
-              
-              {/* Sheen effect - subtle highlight along the top edge */}
-              <div 
-                className="absolute inset-x-0 top-0 h-1/2 bg-gradient-to-b from-white/5 to-transparent rounded-t-3xl opacity-60 pointer-events-none"
-                style={{
-                  transform: `translateY(${mousePosition.y / 80}px) rotateX(${mousePosition.y / 30}deg)`
-                }}
-              ></div>
+              {/* Animated highlights that follow mouse */}
+              <div className="absolute inset-0 overflow-hidden rounded-[26px]">
+                {/* Quick light streaks */}
+                <div 
+                  className="absolute w-[200%] h-[200%] opacity-40 bg-[radial-gradient(circle_at_center,white_0%,transparent_15%)]"
+                  style={{
+                    top: `${mousePosition.y / 2}px`,
+                    left: `${mousePosition.x / 2}px`,
+                    transform: 'translate(-50%, -50%)',
+                    filter: 'blur(10px)',
+                    mixBlendMode: 'overlay'
+                  }}
+                ></div>
+                
+                {/* Edge highlight */}
+                <div
+                  className="absolute inset-0 rounded-[26px] opacity-50"
+                  style={{
+                    background: `radial-gradient(circle at ${50 + mousePosition.x / 30}% ${50 + mousePosition.y / 30}%, rgba(168, 85, 247, 0.3) 0%, rgba(99, 102, 241, 0.1) 40%, transparent 60%)`,
+                    filter: 'blur(15px)'
+                  }}
+                ></div>
+              </div>
             </div>
 
             {/* Profile Preview Card */}
@@ -309,10 +320,23 @@ export default function Dashboard3Page() {
               animate={{ opacity: 1, y: 0 }}
               whileHover={{ scale: 1.005 }}
               transition={{ delay: 0.2, type: "spring", stiffness: 300 }}
-              className="w-full h-full rounded-3xl bg-[#1C1C24]/90 backdrop-blur-xl border border-white/10 shadow-[0_0_25px_rgba(168,85,247,0.15)] flex flex-col overflow-hidden z-20 relative"
+              className="w-full h-full rounded-3xl bg-[#1C1C24]/90 backdrop-blur-xl border border-white/10 flex flex-col overflow-hidden z-10 relative shadow-[0_0_30px_rgba(168,85,247,0.2),0_0_10px_rgba(99,102,241,0.3)_inset] animate-[glow_6s_ease-in-out_infinite]"
             >
               {/* Inner stroke for depth effect */}
-              <div className="absolute inset-0 rounded-3xl border border-purple-600/5 pointer-events-none"></div>
+              <div className="absolute inset-0 rounded-3xl border border-purple-500/20 pointer-events-none"></div>
+              
+              {/* Ultra thin outer glow rim */}
+              <div className="absolute -inset-px rounded-[26px] pointer-events-none bg-gradient-to-r from-purple-500/20 via-blue-500/20 to-fuchsia-500/20 blur-[0.5px]"></div>
+
+              {/* Interior glow effect */}
+              <div className="absolute inset-0 rounded-3xl overflow-hidden pointer-events-none">
+                <div className="absolute inset-0 opacity-30"
+                  style={{
+                    background: `radial-gradient(circle at ${50 + mousePosition.x / 20}% ${50 + mousePosition.y / 20}%, rgba(168, 85, 247, 0.3) 0%, transparent 70%)`,
+                    filter: 'blur(20px)'
+                  }}
+                ></div>
+              </div>
 
               {/* Scrollable Content */}
               <div className="flex-1 overflow-y-auto scrollbar-hide">
@@ -447,10 +471,10 @@ const rotateKeyframes = `
 
 @keyframes pulse {
   0%, 100% {
-    opacity: 0.4;
+    opacity: 0.3;
   }
   50% {
-    opacity: 0.8;
+    opacity: 0.9;
   }
 }
 
@@ -460,6 +484,15 @@ const rotateKeyframes = `
   }
   50% {
     transform: translateY(-10px);
+  }
+}
+
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 0 20px 5px rgba(168, 85, 247, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 30px 10px rgba(99, 102, 241, 0.4);
   }
 }
 `;

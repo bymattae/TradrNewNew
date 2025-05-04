@@ -19,6 +19,50 @@ export default function Dashboard3Page() {
   const [isHovered, setIsHovered] = useState(false);
   const [isShareOpen, setIsShareOpen] = useState(false);
   const sharePopupRef = useRef<HTMLDivElement>(null);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  // Track mouse position for dynamic lighting effect
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (cardRef.current) {
+        const rect = cardRef.current.getBoundingClientRect();
+        // Calculate position within element and normalize to -1 to 1 range
+        const x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+        const y = ((e.clientY - rect.top) / rect.height) * 2 - 1;
+        
+        // Add some damping for smoother movement
+        setMousePosition(prev => ({
+          x: prev.x + (x * 100 - prev.x) * 0.1,
+          y: prev.y + (y * 100 - prev.y) * 0.1
+        }));
+      }
+    };
+    
+    const handleMouseLeave = () => {
+      // Gradually reset position when mouse leaves
+      setMousePosition(prev => ({
+        x: prev.x * 0.9,
+        y: prev.y * 0.9
+      }));
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    
+    // Save the current card element to a variable
+    const currentCardRef = cardRef.current;
+    
+    if (currentCardRef) {
+      currentCardRef.addEventListener('mouseleave', handleMouseLeave);
+    }
+    
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      if (currentCardRef) {
+        currentCardRef.removeEventListener('mouseleave', handleMouseLeave);
+      }
+    };
+  }, []);
 
   // Close share popup when clicking outside
   useEffect(() => {
@@ -203,128 +247,226 @@ export default function Dashboard3Page() {
 
         {/* Main Content Area with Padding Top and Bottom */}
         <div className="flex-1 flex flex-col px-4 pt-2.5 pb-20 overflow-hidden">
-          {/* Profile Preview Card */}
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="w-full h-[calc(100%-1.5rem)] rounded-3xl bg-[#1C1C24]/80 backdrop-blur-xl border border-white/5 shadow-[0_0_25px_rgba(168,85,247,0.1)] flex flex-col overflow-hidden z-20 relative"
-          >
-            {/* Scrollable Content */}
-            <div className="flex-1 overflow-y-auto scrollbar-hide">
-              <div className="px-6 py-5 space-y-4 pb-20">
-                {/* Avatar and Username Section */}
-                <motion.div 
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.3 }}
-                  className="text-center space-y-2.5"
-                >
-                  <div className="relative w-20 h-20 mx-auto rounded-full overflow-hidden ring-2 ring-purple-500/30 ring-offset-4 ring-offset-[#1C1C24] shadow-[0_0_20px_rgba(168,85,247,0.2)]">
-                    <Image
-                      src={profile?.avatar_url || '/default-avatar.png'}
-                      alt="Profile"
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
-                  <h2 className="text-white font-bold text-2xl tracking-tight">
-                    {profile?.username || currentUser?.email?.split('@')[0] || 'cryptowhale'}
-                  </h2>
-                </motion.div>
+          {/* Dynamic Glow Effect Wrapper */}
+          <div className="relative w-full h-[calc(100%-1.5rem)]">
+            {/* Animated Glow Elements */}
+            <div className="absolute -inset-0.5 rounded-3xl bg-transparent z-0 overflow-hidden">
+              <div className="absolute inset-0 rounded-3xl overflow-hidden">
+                {/* Primary glow layer */}
+                <div 
+                  className="absolute -inset-[100%] animate-[rotate_20s_linear_infinite] opacity-60 bg-[conic-gradient(from_0deg,transparent_0_340deg,#9372E2_360deg)]"
+                  style={{
+                    transform: `rotate(${mousePosition.x / 5}deg) translateX(${mousePosition.x / 30}px) translateY(${mousePosition.y / 30}px)`,
+                    filter: 'blur(8px)'
+                  }}
+                ></div>
+                
+                {/* Secondary glow layer - opposite direction */}
+                <div 
+                  className="absolute -inset-[100%] animate-[rotate_15s_linear_infinite] opacity-40 bg-[conic-gradient(from_0deg,transparent_0_170deg,#6366F1_190deg,transparent_220deg_340deg,#A855F7_360deg)]"
+                  style={{
+                    animationDirection: 'reverse',
+                    transform: `rotate(${-mousePosition.y / 10}deg) translateX(${-mousePosition.x / 25}px) translateY(${-mousePosition.y / 25}px)`,
+                    filter: 'blur(10px)'
+                  }}
+                ></div>
+                
+                {/* Accent glow layer */}
+                <div 
+                  className="absolute -inset-[100%] animate-[rotate_30s_linear_infinite] opacity-30 bg-[conic-gradient(from_0deg,transparent_0_220deg,#F0AB3D_250deg,transparent_290deg_340deg,#6366F1_360deg)]"
+                  style={{
+                    transform: `rotate(${mousePosition.x / 15 - mousePosition.y / 15}deg)`,
+                    filter: 'blur(12px)'
+                  }}
+                ></div>
+                
+                {/* Quick moving highlight */}
+                <div 
+                  className="absolute -inset-[50%] animate-[rotate_10s_linear_infinite] opacity-20 bg-[conic-gradient(from_0deg,transparent_0_150deg,white_160deg,transparent_170deg_340deg,#A855F7_360deg)]"
+                  style={{
+                    transform: `rotate(${mousePosition.x / 2}deg) translateX(${mousePosition.x / 15}px)`,
+                    filter: 'blur(5px)'
+                  }}
+                ></div>
+              </div>
+              
+              {/* Inner mask to contain glow at the edges */}
+              <div className="absolute inset-[1px] rounded-[22px] bg-[#1C1C24]/40 backdrop-blur-sm"></div>
+              
+              {/* Sheen effect - subtle highlight along the top edge */}
+              <div 
+                className="absolute inset-x-0 top-0 h-1/2 bg-gradient-to-b from-white/5 to-transparent rounded-t-3xl opacity-60 pointer-events-none"
+                style={{
+                  transform: `translateY(${mousePosition.y / 80}px) rotateX(${mousePosition.y / 30}deg)`
+                }}
+              ></div>
+            </div>
 
-                {/* Bio Section */}
-                <motion.div 
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.4 }}
-                  className="text-center"
-                >
-                  <p className="text-white/80 text-sm leading-relaxed">
-                    {profile?.bio || 'I\'m a trader from germany'}
-                  </p>
-                </motion.div>
+            {/* Profile Preview Card */}
+            <motion.div 
+              ref={cardRef}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              whileHover={{ scale: 1.005 }}
+              transition={{ delay: 0.2, type: "spring", stiffness: 300 }}
+              className="w-full h-full rounded-3xl bg-[#1C1C24]/90 backdrop-blur-xl border border-white/10 shadow-[0_0_25px_rgba(168,85,247,0.15)] flex flex-col overflow-hidden z-20 relative"
+            >
+              {/* Inner stroke for depth effect */}
+              <div className="absolute inset-0 rounded-3xl border border-purple-600/5 pointer-events-none"></div>
 
-                {/* Tags Section */}
-                <motion.div 
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.5 }}
-                  className="flex flex-wrap justify-center gap-2"
-                >
-                  {(profile?.tags || ['#Coolman']).map((tag: string, index: number) => (
-                    <span 
-                      key={index} 
-                      className="px-4 py-1.5 bg-purple-500/10 text-purple-300 text-sm rounded-full font-medium border border-purple-500/20"
-                    >
-                      #{tag}
-                    </span>
-                  ))}
-                </motion.div>
+              {/* Scrollable Content */}
+              <div className="flex-1 overflow-y-auto scrollbar-hide">
+                <div className="px-6 py-5 space-y-4 pb-20">
+                  {/* Avatar and Username Section */}
+                  <motion.div 
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.3 }}
+                    className="text-center space-y-2.5"
+                  >
+                    <div className="relative w-20 h-20 mx-auto rounded-full overflow-hidden ring-2 ring-purple-500/30 ring-offset-4 ring-offset-[#1C1C24] shadow-[0_0_20px_rgba(168,85,247,0.2)]">
+                      <Image
+                        src={profile?.avatar_url || '/default-avatar.png'}
+                        alt="Profile"
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+                    <h2 className="text-white font-bold text-2xl tracking-tight">
+                      {profile?.username || currentUser?.email?.split('@')[0] || 'cryptowhale'}
+                    </h2>
+                  </motion.div>
 
-                {/* Stats Section */}
-                <motion.div 
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.6 }}
-                  className="bg-black/20 rounded-2xl p-4 max-w-sm mx-auto w-full border border-white/5 shadow-[0_0_25px_rgba(168,85,247,0.1)] backdrop-blur-sm"
-                >
-                  <div className="grid grid-cols-3 gap-4">
-                    <div className="text-center">
-                      <p className="text-white font-semibold text-xl tracking-tight">12.5%</p>
-                      <p className="text-gray-400 text-sm mt-1">Gain</p>
-                    </div>
-                    <div className="text-center">
-                      <p className="text-white font-semibold text-xl tracking-tight">89%</p>
-                      <p className="text-gray-400 text-sm mt-1">Win Rate</p>
-                    </div>
-                    <div className="text-center">
-                      <p className="text-white font-semibold text-xl tracking-tight">1:3</p>
-                      <p className="text-gray-400 text-sm mt-1">Risk Ratio</p>
-                    </div>
-                  </div>
-                </motion.div>
-
-                {/* CTA Section */}
-                <motion.div 
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.7 }}
-                  className="bg-gradient-to-br from-purple-500/10 to-blue-500/10 rounded-2xl p-4 max-w-sm mx-auto w-full border border-purple-500/20 shadow-[0_0_30px_rgba(168,85,247,0.15)] backdrop-blur-sm"
-                >
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-center space-x-3">
-                      <span className="text-2xl">🔥</span>
-                      <h3 className="text-white font-bold text-xl tracking-tight">Join our alpha community</h3>
-                    </div>
-                    <p className="text-white/80 text-sm leading-relaxed text-center">
-                      Connect with 500+ traders, share insights, and grow together.
+                  {/* Bio Section */}
+                  <motion.div 
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.4 }}
+                    className="text-center"
+                  >
+                    <p className="text-white/80 text-sm leading-relaxed">
+                      {profile?.bio || 'I\'m a trader from germany'}
                     </p>
-                    <button className="w-full bg-gradient-to-r from-[#A855F7] to-[#6366F1] text-white py-3 rounded-xl font-medium hover:opacity-90 active:scale-95 transition-all duration-200 shadow-[0_0_20px_rgba(168,85,247,0.3)]">
-                      Join Community
-                    </button>
-                  </div>
+                  </motion.div>
+
+                  {/* Tags Section */}
+                  <motion.div 
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.5 }}
+                    className="flex flex-wrap justify-center gap-2"
+                  >
+                    {(profile?.tags || ['#Coolman']).map((tag: string, index: number) => (
+                      <span 
+                        key={index} 
+                        className="px-4 py-1.5 bg-purple-500/10 text-purple-300 text-sm rounded-full font-medium border border-purple-500/20"
+                      >
+                        #{tag}
+                      </span>
+                    ))}
+                  </motion.div>
+
+                  {/* Stats Section */}
+                  <motion.div 
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.6 }}
+                    className="bg-black/20 rounded-2xl p-4 max-w-sm mx-auto w-full border border-white/5 shadow-[0_0_25px_rgba(168,85,247,0.1)] backdrop-blur-sm"
+                  >
+                    <div className="grid grid-cols-3 gap-4">
+                      <div className="text-center">
+                        <p className="text-white font-semibold text-xl tracking-tight">12.5%</p>
+                        <p className="text-gray-400 text-sm mt-1">Gain</p>
+                      </div>
+                      <div className="text-center">
+                        <p className="text-white font-semibold text-xl tracking-tight">89%</p>
+                        <p className="text-gray-400 text-sm mt-1">Win Rate</p>
+                      </div>
+                      <div className="text-center">
+                        <p className="text-white font-semibold text-xl tracking-tight">1:3</p>
+                        <p className="text-gray-400 text-sm mt-1">Risk Ratio</p>
+                      </div>
+                    </div>
+                  </motion.div>
+
+                  {/* CTA Section */}
+                  <motion.div 
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.7 }}
+                    className="bg-gradient-to-br from-purple-500/10 to-blue-500/10 rounded-2xl p-4 max-w-sm mx-auto w-full border border-purple-500/20 shadow-[0_0_30px_rgba(168,85,247,0.15)] backdrop-blur-sm"
+                  >
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-center space-x-3">
+                        <span className="text-2xl">🔥</span>
+                        <h3 className="text-white font-bold text-xl tracking-tight">Join our alpha community</h3>
+                      </div>
+                      <p className="text-white/80 text-sm leading-relaxed text-center">
+                        Connect with 500+ traders, share insights, and grow together.
+                      </p>
+                      <button className="w-full bg-gradient-to-r from-[#A855F7] to-[#6366F1] text-white py-3 rounded-xl font-medium hover:opacity-90 active:scale-95 transition-all duration-200 shadow-[0_0_20px_rgba(168,85,247,0.3)]">
+                        Join Community
+                      </button>
+                    </div>
+                  </motion.div>
+                </div>
+              </div>
+              
+              {/* Powered by Tradr */}
+              <div className="absolute bottom-0 inset-x-0 flex items-center justify-center pb-2 z-10 bg-gradient-to-t from-[#1C1C24] to-transparent h-12">
+                <motion.div 
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.8 }}
+                  whileHover={{ scale: 1.05, y: -1 }}
+                  className="px-3 py-1.5 bg-gradient-to-r from-purple-500/5 via-white/10 to-blue-500/5 rounded-full backdrop-blur-sm border border-white/5 shadow-sm transition-all duration-300 hover:border-purple-500/20 hover:shadow-[0_0_10px_rgba(168,85,247,0.15)] cursor-pointer"
+                >
+                  <span className="text-xs font-medium bg-clip-text text-transparent bg-gradient-to-r from-purple-200/80 via-white/90 to-blue-200/80">
+                    Powered by <span className="font-semibold">Tradr</span>
+                  </span>
                 </motion.div>
               </div>
-            </div>
-            
-            {/* Powered by Tradr */}
-            <div className="absolute bottom-0 inset-x-0 flex items-center justify-center pb-2 z-10 bg-gradient-to-t from-[#1C1C24] to-transparent h-12">
-              <motion.div 
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.8 }}
-                whileHover={{ scale: 1.05, y: -1 }}
-                className="px-3 py-1.5 bg-gradient-to-r from-purple-500/5 via-white/10 to-blue-500/5 rounded-full backdrop-blur-sm border border-white/5 shadow-sm transition-all duration-300 hover:border-purple-500/20 hover:shadow-[0_0_10px_rgba(168,85,247,0.15)] cursor-pointer"
-              >
-                <span className="text-xs font-medium bg-clip-text text-transparent bg-gradient-to-r from-purple-200/80 via-white/90 to-blue-200/80">
-                  Powered by <span className="font-semibold">Tradr</span>
-                </span>
-              </motion.div>
-            </div>
-          </motion.div>
+            </motion.div>
+          </div>
         </div>
       </div>
     </div>
   );
+}
+
+// Add keyframe animation for the glow effect
+const rotateKeyframes = `
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+`;
+
+// Add the keyframes to the document head
+if (typeof document !== 'undefined') {
+  const style = document.createElement('style');
+  style.textContent = rotateKeyframes;
+  document.head.appendChild(style);
 } 

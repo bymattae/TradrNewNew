@@ -20,46 +20,30 @@ export default function Dashboard3Page() {
   const [isShareOpen, setIsShareOpen] = useState(false);
   const sharePopupRef = useRef<HTMLDivElement>(null);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [animatedPosition, setAnimatedPosition] = useState({ x: 0, y: 0 });
   const cardRef = useRef<HTMLDivElement>(null);
+  const animationRef = useRef<number | null>(null);
 
-  // Track mouse position for dynamic lighting effect
+  // Animate the light position autonomously
   useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      if (cardRef.current) {
-        const rect = cardRef.current.getBoundingClientRect();
-        // Calculate position within element and normalize to -1 to 1 range
-        const x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-        const y = ((e.clientY - rect.top) / rect.height) * 2 - 1;
-        
-        // Add some damping for smoother movement
-        setMousePosition(prev => ({
-          x: prev.x + (x * 100 - prev.x) * 0.1,
-          y: prev.y + (y * 100 - prev.y) * 0.1
-        }));
-      }
+    let angle = 0;
+    let radius = 100;
+    
+    const animate = () => {
+      // Move in a circular pattern
+      angle += 0.005;
+      const x = Math.cos(angle) * radius;
+      const y = Math.sin(angle) * radius;
+      
+      setAnimatedPosition({ x, y });
+      animationRef.current = requestAnimationFrame(animate);
     };
     
-    const handleMouseLeave = () => {
-      // Gradually reset position when mouse leaves
-      setMousePosition(prev => ({
-        x: prev.x * 0.9,
-        y: prev.y * 0.9
-      }));
-    };
-
-    window.addEventListener('mousemove', handleMouseMove);
-    
-    // Save the current card element to a variable
-    const currentCardRef = cardRef.current;
-    
-    if (currentCardRef) {
-      currentCardRef.addEventListener('mouseleave', handleMouseLeave);
-    }
+    animate();
     
     return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-      if (currentCardRef) {
-        currentCardRef.removeEventListener('mouseleave', handleMouseLeave);
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
       }
     };
   }, []);
@@ -249,31 +233,56 @@ export default function Dashboard3Page() {
         <div className="flex-1 flex flex-col px-4 pt-2.5 pb-20 overflow-hidden">
           {/* Dynamic Glow Effect Wrapper */}
           <div className="relative w-full h-[calc(100%-1.5rem)]">
-            {/* Static Glow Effect - Guaranteed to be visible */}
+            {/* Base glow effect */}
             <div 
-              className="absolute inset-0 rounded-3xl" 
+              className="absolute inset-0 rounded-3xl"
               style={{ 
-                boxShadow: '0 0 20px 2px rgba(168, 85, 247, 0.6), 0 0 40px 5px rgba(99, 102, 241, 0.4)',
+                boxShadow: '0 0 15px 1px rgba(168, 85, 247, 0.3), 0 0 30px 2px rgba(99, 102, 241, 0.2)',
                 zIndex: 0 
               }}
             ></div>
             
-            {/* Pulsing Outer Glow */}
-            <div className="absolute -inset-2 rounded-3xl z-0 animate-[pulse_4s_ease-in-out_infinite]">
+            {/* Moving Glow Effect - Main Light Source */}
+            <div 
+              className="absolute -inset-1 rounded-3xl overflow-hidden z-0"
+            >
+              {/* Traveling light effect */}
               <div 
-                className="w-full h-full rounded-3xl bg-gradient-to-r from-purple-600/40 via-blue-500/40 to-purple-600/40"
-                style={{ 
-                  filter: 'blur(18px)',
+                className="absolute w-[150%] h-[150%] rounded-full opacity-70"
+                style={{
+                  background: 'radial-gradient(circle, rgba(168, 85, 247, 0.8) 0%, rgba(99, 102, 241, 0.4) 20%, transparent 60%)',
+                  top: `${50 + animatedPosition.y}%`,
+                  left: `${50 + animatedPosition.x}%`,
+                  transform: 'translate(-50%, -50%)',
+                  filter: 'blur(20px)',
+                }}
+              ></div>
+              
+              {/* Secondary traveling light */}
+              <div 
+                className="absolute w-[100%] h-[100%] rounded-full opacity-50"
+                style={{
+                  background: 'radial-gradient(circle, rgba(255, 255, 255, 0.8) 0%, rgba(168, 85, 247, 0.5) 10%, transparent 40%)',
+                  top: `${50 - animatedPosition.y * 0.7}%`,
+                  left: `${50 - animatedPosition.x * 0.7}%`,
+                  transform: 'translate(-50%, -50%)',
+                  filter: 'blur(10px)',
                 }}
               ></div>
             </div>
             
-            {/* Extra visible border glow */}
+            {/* Color wash effect */}
             <div 
-              className="absolute -inset-[3px] rounded-3xl z-0"
+              className="absolute inset-0 z-0 rounded-3xl overflow-hidden"
               style={{
-                background: 'linear-gradient(90deg, rgba(168, 85, 247, 0.5), rgba(99, 102, 241, 0.5), rgba(168, 85, 247, 0.5))',
-                filter: 'blur(4px)'
+                background: `conic-gradient(
+                  from ${animatedPosition.x * 3}deg at ${50 + animatedPosition.x * 0.2}% ${50 + animatedPosition.y * 0.2}%, 
+                  rgba(168, 85, 247, 0.4) 0deg, 
+                  rgba(99, 102, 241, 0.3) 120deg, 
+                  rgba(240, 171, 61, 0.3) 240deg, 
+                  rgba(168, 85, 247, 0.4) 360deg
+                )`,
+                filter: 'blur(20px)',
               }}
             ></div>
 
@@ -290,14 +299,34 @@ export default function Dashboard3Page() {
                 border: '1px solid rgba(255, 255, 255, 0.2)'
               }}
             >
-              {/* Highly visible inner border glow */}
+              {/* Dynamic light position inner effect */}
               <div 
-                className="absolute inset-0 rounded-3xl pointer-events-none"
-                style={{
-                  border: '1px solid rgba(168, 85, 247, 0.5)',
-                  boxShadow: '0 0 15px 1px rgba(168, 85, 247, 0.5) inset'
-                }}
-              ></div>
+                className="absolute inset-0 rounded-3xl pointer-events-none overflow-hidden"
+              >
+                {/* Inner highlight that follows the moving light */}
+                <div 
+                  className="absolute w-full h-full"
+                  style={{
+                    background: `radial-gradient(
+                      circle at ${50 + animatedPosition.x * 0.3}% ${50 + animatedPosition.y * 0.3}%,
+                      rgba(255, 255, 255, 0.2) 0%,
+                      transparent 40%
+                    )`,
+                  }}
+                ></div>
+                
+                {/* Inner border that catches the light */}
+                <div 
+                  className="absolute inset-0 rounded-3xl"
+                  style={{
+                    border: '1px solid rgba(255, 255, 255, 0.2)',
+                    boxShadow: `
+                      0 0 20px 1px rgba(168, 85, 247, 0.3) inset,
+                      0 0 8px 1px rgba(99, 102, 241, 0.2)
+                    `
+                  }}
+                ></div>
+              </div>
               
               {/* Scrollable Content */}
               <div className="flex-1 overflow-y-auto scrollbar-hide">

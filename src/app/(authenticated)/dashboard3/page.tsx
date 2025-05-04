@@ -305,20 +305,20 @@ export default function Dashboard3Page() {
                     </button>
                   </div>
                 </motion.div>
-              </div>
-              
-              {/* Powered by Tradr */}
-              <div className="absolute bottom-2 inset-x-0 flex items-center justify-center">
+                
+                {/* Powered by Tradr - Now directly in the content flow */}
                 <motion.div 
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.8 }}
                   whileHover={{ scale: 1.05, y: -1 }}
-                  className="px-3 py-1.5 bg-gradient-to-r from-purple-500/5 via-white/10 to-blue-500/5 rounded-full backdrop-blur-sm border border-white/5 shadow-sm transition-all duration-300 hover:border-purple-500/20 hover:shadow-[0_0_10px_rgba(168,85,247,0.15)] cursor-pointer"
+                  className="flex items-center justify-center mt-4"
                 >
-                  <span className="text-xs font-medium bg-clip-text text-transparent bg-gradient-to-r from-purple-200/80 via-white/90 to-blue-200/80">
-                    Powered by <span className="font-semibold">Tradr</span>
-                  </span>
+                  <div className="px-3 py-1.5 bg-gradient-to-r from-purple-500/5 via-white/10 to-blue-500/5 rounded-full backdrop-blur-sm border border-white/5 shadow-sm transition-all duration-300 hover:border-purple-500/20 hover:shadow-[0_0_10px_rgba(168,85,247,0.15)] cursor-pointer">
+                    <span className="text-xs font-medium bg-clip-text text-transparent bg-gradient-to-r from-purple-200/80 via-white/90 to-blue-200/80">
+                      Powered by <span className="font-semibold">Tradr</span>
+                    </span>
+                  </div>
                 </motion.div>
               </div>
             </div>

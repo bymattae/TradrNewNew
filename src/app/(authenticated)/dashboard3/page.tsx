@@ -230,9 +230,9 @@ export default function Dashboard3Page() {
         </div>
 
         {/* Main Content Area with Padding Top and Bottom */}
-        <div className="flex-1 flex flex-col px-4 pt-2.5 pb-20 overflow-hidden">
+        <div className="flex-1 flex flex-col px-4 pt-2.5 pb-5 overflow-hidden">
           {/* Dynamic Glow Effect Wrapper */}
-          <div className="relative w-full h-[calc(100%-1.5rem)]">
+          <div className="relative w-full h-full">
             {/* Base glow effect */}
             <div 
               className="absolute inset-0 rounded-3xl"
@@ -328,9 +328,9 @@ export default function Dashboard3Page() {
                 ></div>
               </div>
               
-              {/* Scrollable content container */}
+              {/* Scrollable content container - Include the watermark inside this container */}
               <div className="flex-1 overflow-y-auto scrollbar-hide">
-                <div className="px-6 py-5 flex flex-col min-h-full">
+                <div className="px-6 py-5 flex flex-col h-full">
                   {/* Main content */}
                   <div className="flex-1 space-y-4">
                     {/* Avatar and Username Section */}
@@ -427,12 +427,14 @@ export default function Dashboard3Page() {
                     </motion.div>
                   </div>
                   
-                  {/* Powered by Tradr - Part of the scrollable content */}
-                  <div className="py-4 flex items-center justify-center mt-auto">
+                  {/* Powered by Tradr - Add margin top to push it to the bottom */}
+                  <motion.div 
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.8 }}
+                    className="flex items-center justify-center mt-8 mb-2"
+                  >
                     <motion.div 
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ delay: 0.8 }}
                       whileHover={{ scale: 1.05, y: -1 }}
                       className="px-3 py-1.5 bg-gradient-to-r from-purple-500/5 via-white/10 to-blue-500/5 rounded-full backdrop-blur-sm border border-white/5 shadow-sm transition-all duration-300 hover:border-purple-500/20 hover:shadow-[0_0_10px_rgba(168,85,247,0.15)] cursor-pointer"
                     >
@@ -440,7 +442,7 @@ export default function Dashboard3Page() {
                         Powered by <span className="font-semibold">Tradr</span>
                       </span>
                     </motion.div>
-                  </div>
+                  </motion.div>
                 </div>
               </div>
             </motion.div>

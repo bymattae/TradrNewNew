@@ -9,6 +9,7 @@ import { DefaultAvatar } from "@/app/components/DefaultAvatar";
 import { getProfile, updateProfile } from "@/lib/supabase/profile";
 import { useAuth } from "@/lib/hooks/useAuth";
 import { FiShare } from 'react-icons/fi';
+import ProfilePreview from '@/app/components/ProfilePreview';
 
 export default function EditProfilePage() {
   const router = useRouter();
@@ -124,97 +125,110 @@ export default function EditProfilePage() {
         </div>
         {/* Main Content - scrollable, no outer card */}
         <div className="flex-1 flex flex-col px-4 pt-2.5 pb-24 overflow-y-auto gap-4">
-          {/* Profile Picture Upload */}
-          <div className="flex flex-col items-center gap-2 border border-[#2A2B30] rounded-2xl p-4 bg-[#181824] shadow-[0_0_25px_rgba(168,85,247,0.1)]">
-            <div className="relative group">
-              {avatarPreview ? (
-                <Image
-                  src={avatarPreview}
-                  alt="Profile Avatar"
-                  width={80}
-                  height={80}
-                  className="rounded-full object-cover border-2 border-[#7048E8] shadow-md"
-                />
-              ) : (
-                <DefaultAvatar className="rounded-full border-2 border-[#7048E8] shadow-md w-20 h-20" />
-              )}
-              <label className="absolute bottom-0 right-0 bg-[#7048E8] p-1.5 rounded-full cursor-pointer border-2 border-white/80 group-hover:scale-110 transition-transform">
+          {activeTab === 'edit' ? (
+            <>
+              {/* Profile Picture Upload */}
+              <div className="flex flex-col items-center gap-2 border border-[#2A2B30] rounded-2xl p-4 bg-[#181824] shadow-[0_0_25px_rgba(168,85,247,0.1)]">
+                <div className="relative group">
+                  {avatarPreview ? (
+                    <Image
+                      src={avatarPreview}
+                      alt="Profile Avatar"
+                      width={80}
+                      height={80}
+                      className="rounded-full object-cover border-2 border-[#7048E8] shadow-md"
+                    />
+                  ) : (
+                    <DefaultAvatar className="rounded-full border-2 border-[#7048E8] shadow-md w-20 h-20" />
+                  )}
+                  <label className="absolute bottom-0 right-0 bg-[#7048E8] p-1.5 rounded-full cursor-pointer border-2 border-white/80 group-hover:scale-110 transition-transform">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={handleAvatarChange}
+                    />
+                    <Edit className="w-4 h-4 text-white" />
+                  </label>
+                </div>
+                <span className="text-xs text-gray-400">Tap to change</span>
+              </div>
+              {/* Username Input */}
+              <div className="flex items-center border border-[#2A2B30] rounded-2xl px-4 py-3 bg-[#181824] shadow-[0_0_25px_rgba(168,85,247,0.1)]">
+                <span className="text-white/60 mr-2">@</span>
                 <input
-                  type="file"
-                  accept="image/*"
-                  className="hidden"
-                  onChange={handleAvatarChange}
+                  type="text"
+                  value={form.username}
+                  onChange={e => handleChange('username', e.target.value)}
+                  className="bg-transparent outline-none text-white text-base font-medium flex-1"
+                  maxLength={24}
+                  placeholder="yourname"
+                  required
                 />
-                <Edit className="w-4 h-4 text-white" />
-              </label>
-            </div>
-            <span className="text-xs text-gray-400">Tap to change</span>
-          </div>
-          {/* Username Input */}
-          <div className="flex items-center border border-[#2A2B30] rounded-2xl px-4 py-3 bg-[#181824] shadow-[0_0_25px_rgba(168,85,247,0.1)]">
-            <span className="text-white/60 mr-2">@</span>
-            <input
-              type="text"
-              value={form.username}
-              onChange={e => handleChange('username', e.target.value)}
-              className="bg-transparent outline-none text-white text-base font-medium flex-1"
-              maxLength={24}
-              placeholder="yourname"
-              required
-            />
-            <span className="text-white/40 ml-2 text-sm">tradr.co/@yourname</span>
-          </div>
-          {/* Bio Input */}
-          <div className="flex items-center border border-[#2A2B30] rounded-2xl px-4 py-3 bg-[#181824] shadow-[0_0_25px_rgba(168,85,247,0.1)]">
-            <textarea
-              value={form.bio}
-              onChange={e => handleChange('bio', e.target.value)}
-              className="bg-transparent outline-none text-white text-base flex-1 resize-none min-h-[80px]"
-              maxLength={240}
-              placeholder="Say something bold."
-              rows={3}
-            />
-            <Edit className="w-4 h-4 text-white/40 ml-2" />
-          </div>
-          {/* Hashtags Input */}
-          <div className="flex flex-wrap gap-2 border border-[#2A2B30] rounded-2xl px-4 py-3 bg-[#181824] shadow-[0_0_25px_rgba(168,85,247,0.1)]">
-            {(form.hashtags || []).map((tag: string) => (
-              <span
-                key={tag}
-                className="px-4 py-1.5 rounded-full text-sm font-medium bg-gradient-to-r from-blue-700/40 to-purple-700/40 text-white flex items-center gap-1"
+                <span className="text-white/40 ml-2 text-sm">tradr.co/@{form.username || 'yourname'}</span>
+              </div>
+              {/* Bio Input */}
+              <div className="flex items-center border border-[#2A2B30] rounded-2xl px-4 py-3 bg-[#181824] shadow-[0_0_25px_rgba(168,85,247,0.1)]">
+                <textarea
+                  value={form.bio}
+                  onChange={e => handleChange('bio', e.target.value)}
+                  className="bg-transparent outline-none text-white text-base flex-1 resize-none min-h-[80px]"
+                  maxLength={240}
+                  placeholder="Say something bold."
+                  rows={3}
+                />
+              </div>
+              {/* Hashtags Input */}
+              <div className="flex flex-wrap gap-2 border border-[#2A2B30] rounded-2xl px-4 py-3 bg-[#181824] shadow-[0_0_25px_rgba(168,85,247,0.1)]">
+                {(form.hashtags || []).map((tag: string, idx: number) => (
+                  <span
+                    key={tag + idx}
+                    className="px-4 py-1.5 rounded-full text-sm font-medium bg-gradient-to-r from-blue-700/40 to-purple-700/40 text-white flex items-center gap-1"
+                  >
+                    {tag}
+                    <button
+                      type="button"
+                      className="ml-1 text-white/40 hover:text-red-400"
+                      onClick={() => handleRemoveHashtag(tag)}
+                    >
+                      ×
+                    </button>
+                  </span>
+                ))}
+                <input
+                  type="text"
+                  className="bg-[#232336] outline-none text-white/80 text-sm px-2 py-1 rounded-full min-w-[60px] flex-1"
+                  placeholder="+ Add tag"
+                  onKeyDown={handleHashtagInput}
+                />
+              </div>
+              {/* Add Strategy Block */}
+              <button
+                type="button"
+                className="w-full rounded-2xl bg-[#181824] py-4 text-lg font-medium text-white shadow-lg border border-[#2A2B30]"
+                onClick={() => router.push('/strategy')}
               >
-                {tag}
-                <button
-                  type="button"
-                  className="ml-1 text-white/40 hover:text-red-400"
-                  onClick={() => handleRemoveHashtag(tag)}
-                >
-                  ×
-                </button>
-              </span>
-            ))}
-            <input
-              type="text"
-              className="bg-[#232336] outline-none text-white/80 text-sm px-2 py-1 rounded-full min-w-[60px]"
-              placeholder="+ Add tag"
-              onKeyDown={handleHashtagInput}
+                + Add strategy
+              </button>
+              {/* Display a Link Block */}
+              <button
+                type="button"
+                className="w-full rounded-2xl bg-[#181824] py-4 text-lg font-medium text-white shadow-lg border border-[#2A2B30]"
+              >
+                + Display a link
+              </button>
+            </>
+          ) : (
+            <ProfilePreview
+              username={form.username || 'yourname'}
+              bio={form.bio}
+              tags={form.hashtags || []}
+              avatarUrl={avatarPreview || undefined}
+              onEditClick={() => setActiveTab('edit')}
+              onShareClick={() => {}}
+              onThemeClick={() => {}}
             />
-          </div>
-          {/* Add Strategy Block */}
-          <button
-            type="button"
-            className="w-full rounded-2xl bg-[#181824] py-4 text-lg font-medium text-white shadow-lg border border-[#2A2B30]"
-            onClick={() => router.push('/strategy')}
-          >
-            + Add strategy
-          </button>
-          {/* Display a Link Block */}
-          <button
-            type="button"
-            className="w-full rounded-2xl bg-[#181824] py-4 text-lg font-medium text-white shadow-lg border border-[#2A2B30]"
-          >
-            + Display a link
-          </button>
+          )}
         </div>
         {/* Save Button - always visible at bottom */}
         <div className="w-full px-4 pb-4 pt-2 bg-gradient-to-t from-[#181824] via-[#181824]/80 to-transparent">

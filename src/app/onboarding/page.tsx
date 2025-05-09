@@ -100,8 +100,8 @@ interface ProfilePreviewDialogProps {
   onClose: () => void;
   username: string;
   bio: string;
-  avatar: string;
-  socialLinks: SocialLink[];
+  avatar_url: string;
+  hashtags: string[];
 }
 
 export default function OnboardingPage() {
@@ -850,8 +850,8 @@ export default function OnboardingPage() {
         onClose={() => setIsPreviewOpen(false)}
         username={username}
         bio={bio}
-        avatar={avatarUrl}
-        socialLinks={socialLinks}
+        avatar_url={avatarUrl}
+        hashtags={hashtags}
       />
 
       {/* Social Links Edit Modal */}

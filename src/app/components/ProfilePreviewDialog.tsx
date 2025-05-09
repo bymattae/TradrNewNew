@@ -2,19 +2,14 @@
 
 import { Dialog } from '@headlessui/react';
 import ProfileCard from './ProfileCard';
-import Image from 'next/image';
-import { SocialIcons } from '@/lib/SocialIcons';
 
 interface ProfilePreviewDialogProps {
   isOpen: boolean;
   onClose: () => void;
   username: string;
   bio: string;
-  avatar: string;
-  socialLinks: Array<{
-    platform: keyof typeof SocialIcons;
-    url: string;
-  }>;
+  avatar_url: string;
+  hashtags: string[];
 }
 
 export function ProfilePreviewDialog({
@@ -22,8 +17,8 @@ export function ProfilePreviewDialog({
   onClose,
   username,
   bio,
-  avatar,
-  socialLinks
+  avatar_url,
+  hashtags
 }: ProfilePreviewDialogProps) {
   return (
     <Dialog
@@ -37,8 +32,8 @@ export function ProfilePreviewDialog({
           <ProfileCard
             username={username}
             bio={bio}
-            avatar_url={avatar}
-            hashtags={[]}
+            avatar_url={avatar_url}
+            hashtags={hashtags}
           />
         </Dialog.Panel>
       </div>

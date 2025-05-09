@@ -28,8 +28,8 @@ export default function EditProfilePage() {
       setForm({
         username: data?.username || "",
         bio: data?.bio || "",
-        hashtags: data?.hashtags || [],
-        avatar_url: data?.avatar_url || null,
+        tags: data?.hashtags || data?.tags || [],
+        avatarUrl: data?.avatar_url || null,
       });
       setAvatarPreview(data?.avatar_url || null);
     });
@@ -45,23 +45,23 @@ export default function EditProfilePage() {
       const reader = new FileReader();
       reader.onload = (ev) => {
         setAvatarPreview(ev.target?.result as string);
-        handleChange("avatar_url", ev.target?.result as string);
+        handleChange("avatarUrl", ev.target?.result as string);
       };
       reader.readAsDataURL(file);
     }
   };
 
-  const handleHashtagInput = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleTagInput = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && e.currentTarget.value.trim()) {
       const tag = e.currentTarget.value.trim();
-      if (!form.hashtags.includes(tag)) {
-        handleChange("hashtags", [...form.hashtags, tag]);
+      if (!form.tags.includes(tag)) {
+        handleChange("tags", [...form.tags, tag]);
       }
       e.currentTarget.value = "";
     }
   };
-  const handleRemoveHashtag = (tag: string) => {
-    handleChange("hashtags", form.hashtags.filter((t: string) => t !== tag));
+  const handleRemoveTag = (tag: string) => {
+    handleChange("tags", form.tags.filter((t: string) => t !== tag));
   };
 
   const handleSave = async () => {
@@ -72,8 +72,8 @@ export default function EditProfilePage() {
       await updateProfile(user.id, {
         username: form.username,
         bio: form.bio,
-        hashtags: form.hashtags,
-        avatar_url: form.avatar_url,
+        hashtags: form.tags,
+        avatar_url: form.avatarUrl,
       });
       setSaving(false);
       router.push("/dashboard");
@@ -178,9 +178,9 @@ export default function EditProfilePage() {
                   rows={3}
                 />
               </div>
-              {/* Hashtags Input */}
+              {/* Tags Input */}
               <div className="flex flex-wrap gap-2 border border-[#2A2B30] rounded-2xl px-4 py-3 bg-[#181824] shadow-[0_0_25px_rgba(168,85,247,0.1)]">
-                {(form.hashtags || []).map((tag: string, idx: number) => (
+                {(form.tags || []).map((tag: string, idx: number) => (
                   <span
                     key={tag + idx}
                     className="px-4 py-1.5 rounded-full text-sm font-medium bg-gradient-to-r from-blue-700/40 to-purple-700/40 text-white flex items-center gap-1"
@@ -189,7 +189,7 @@ export default function EditProfilePage() {
                     <button
                       type="button"
                       className="ml-1 text-white/40 hover:text-red-400"
-                      onClick={() => handleRemoveHashtag(tag)}
+                      onClick={() => handleRemoveTag(tag)}
                     >
                       ×
                     </button>
@@ -197,9 +197,9 @@ export default function EditProfilePage() {
                 ))}
                 <input
                   type="text"
-                  className="bg-[#232336] outline-none text-white/80 text-sm px-2 py-1 rounded-full min-w-[60px] flex-1"
+                  className="bg-[#232336] outline-none text-white/80 text-sm px-2 py-1 rounded-full min-w-[60px] w-auto"
                   placeholder="+ Add tag"
-                  onKeyDown={handleHashtagInput}
+                  onKeyDown={handleTagInput}
                 />
               </div>
               {/* Add Strategy Block */}
@@ -222,7 +222,7 @@ export default function EditProfilePage() {
             <ProfilePreview
               username={form.username || 'yourname'}
               bio={form.bio}
-              tags={form.hashtags || []}
+              tags={form.tags || []}
               avatarUrl={avatarPreview || undefined}
               onEditClick={() => setActiveTab('edit')}
               onShareClick={() => {}}

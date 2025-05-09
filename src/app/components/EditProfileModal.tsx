@@ -82,7 +82,7 @@ export default function EditProfileModal({ isOpen, onClose, profile, onSave }: E
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 flex flex-col h-full w-full"
+          className="fixed inset-0 bg-[#13131a] z-50 flex flex-col h-full w-full overflow-y-auto"
           onClick={onClose}
         >
           {/* Top bar with back/close button and tabs */}
@@ -119,171 +119,127 @@ export default function EditProfileModal({ isOpen, onClose, profile, onSave }: E
           </div>
 
           {/* Content area, scrollable if needed */}
-          <div className="flex-1 overflow-y-auto flex justify-center items-center">
-            <motion.div
-              initial={{ scale: 0.98, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.98, opacity: 0 }}
-              className="w-full max-w-lg bg-[#181824] rounded-2xl shadow-xl m-6"
-              onClick={e => e.stopPropagation()}
-            >
-              <div className="p-6">
-                {activeTab === 'edit' ? (
-                  <div className="space-y-6">
-                    {/* Profile Picture */}
-                    <div className="flex flex-col items-center gap-2">
-                      <div className="relative group">
-                        {avatarPreview ? (
-                          <Image
-                            src={avatarPreview}
-                            alt="Profile"
-                            width={80}
-                            height={80}
-                            className="rounded-full object-cover border-2 border-[#7048E8] shadow-md"
-                          />
-                        ) : (
-                          <DefaultAvatar className="w-20 h-20 rounded-full border-2 border-[#7048E8] shadow-md" />
-                        )}
-                        <label className="absolute bottom-0 right-0 bg-[#7048E8] p-1.5 rounded-full cursor-pointer border-2 border-white/80 group-hover:scale-110 transition-transform">
-                          <input
-                            type="file"
-                            accept="image/*"
-                            className="hidden"
-                            onChange={handleAvatarChange}
-                          />
-                          <Edit className="w-4 h-4 text-white" />
-                        </label>
-                      </div>
-                      <span className="text-xs text-gray-400">Tap to change</span>
-                    </div>
-
-                    {/* Username */}
-                    <div>
-                      <label className="block text-sm font-medium text-white mb-1">Username</label>
-                      <input
-                        type="text"
-                        value={form.username}
-                        onChange={e => handleChange('username', e.target.value)}
-                        className={components.input.base + " w-full"}
-                        maxLength={24}
-                        required
-                      />
-                    </div>
-
-                    {/* Bio */}
-                    <div>
-                      <label className="block text-sm font-medium text-white mb-1">Short Bio</label>
-                      <textarea
-                        value={form.bio}
-                        onChange={e => handleChange('bio', e.target.value)}
-                        className={components.input.base + " w-full min-h-[60px]"}
-                        maxLength={120}
-                        placeholder="Share a bit about yourself..."
-                      />
-                    </div>
-
-                    {/* Hashtags */}
-                    <div>
-                      <label className="block text-sm font-medium text-white mb-1">Hashtags</label>
-                      <div className="flex flex-wrap gap-2 mb-2">
-                        {form.hashtags.map((tag: string) => (
-                          <span
-                            key={tag}
-                            className="bg-[#333]/50 text-white/70 px-3 py-1 rounded-full text-xs flex items-center gap-1"
-                          >
-                            {tag}
-                            <button
-                              type="button"
-                              className="ml-1 text-white/40 hover:text-red-400"
-                              onClick={() => handleRemoveHashtag(tag)}
-                            >
-                              ×
-                            </button>
-                          </span>
-                        ))}
-                        <input
-                          type="text"
-                          className="bg-transparent outline-none text-white/80 text-xs px-2 py-1 min-w-[60px]"
-                          placeholder="#AddTag"
-                          onKeyDown={handleHashtagInput}
-                        />
-                      </div>
-                      <span className="text-xs text-gray-500">Press Enter to add a hashtag</span>
-                    </div>
-
-                    {/* Add Strategy Button */}
-                    <button
-                      type="button"
-                      className="w-full py-5 mt-2 rounded-xl bg-[#181824] border border-white/10 text-white text-lg font-medium hover:bg-[#232336] transition-colors"
-                      style={{ boxShadow: '0 2px 8px 0 rgba(112,72,232,0.10)' }}
-                    >
-                      + Add strategy
+          <div className="flex-1 flex flex-col items-center justify-center w-full py-8 px-2 md:px-0 overflow-y-auto">
+            <div className="w-full max-w-md flex flex-col gap-5">
+              {/* Profile Section */}
+              <div className="bg-[#232336] rounded-2xl p-6 flex flex-col items-center gap-2 shadow-md">
+                <div className="relative group mb-2">
+                  {avatarPreview ? (
+                    <Image
+                      src={avatarPreview}
+                      alt="Profile"
+                      width={80}
+                      height={80}
+                      className="rounded-full object-cover border-2 border-[#7048E8] shadow-md"
+                    />
+                  ) : (
+                    <DefaultAvatar className="w-20 h-20 rounded-full border-2 border-[#7048E8] shadow-md" />
+                  )}
+                  <label className="absolute bottom-0 right-0 bg-[#7048E8] p-1.5 rounded-full cursor-pointer border-2 border-white/80 group-hover:scale-110 transition-transform">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={handleAvatarChange}
+                    />
+                    <Edit className="w-4 h-4 text-white" />
+                  </label>
+                </div>
+                <div className="flex flex-col items-center w-full">
+                  <div className="flex items-center gap-2 w-full justify-center">
+                    <span className="text-white text-base font-semibold">@</span>
+                    <input
+                      type="text"
+                      value={form.username}
+                      onChange={e => handleChange('username', e.target.value)}
+                      className="bg-transparent text-white text-base font-semibold outline-none w-1/2 text-center"
+                      maxLength={24}
+                      required
+                    />
+                    <button className="ml-2 p-1 rounded hover:bg-[#28284a] transition-colors">
+                      <Edit className="w-4 h-4 text-[#7048E8]" />
                     </button>
-
-                    {/* Display a Link Button */}
-                    <button
-                      type="button"
-                      className="w-full py-5 mt-4 rounded-xl bg-[#181824] border border-white/10 text-white text-lg font-medium hover:bg-[#232336] transition-colors"
-                      style={{ boxShadow: '0 2px 8px 0 rgba(112,72,232,0.10)' }}
-                    >
-                      + Display a link
-                    </button>
-
-                    {/* Save Button */}
-                    <button
-                      type="button"
-                      onClick={handleSaveClick}
-                      disabled={saving}
-                      className={components.button.primary + " w-full mt-6 flex items-center justify-center gap-2"}
-                    >
-                      {saving && <Loader2 className="w-4 h-4 animate-spin" />}
-                      Save Changes
-                    </button>
-
-                    {error && (
-                      <div className="text-red-400 text-xs text-center mt-2">{error}</div>
-                    )}
                   </div>
-                ) : (
-                  <div className="flex flex-col items-center gap-4">
-                    <div className="mb-2 text-xs text-purple-300 flex items-center gap-1">
-                      <Eye className="w-4 h-4" />
-                      <span>Previewing profile</span>
-                    </div>
-                    <div className="w-full rounded-2xl bg-[#181824] p-6 shadow-lg">
-                      {/* Profile Preview Content */}
-                      <div className="flex flex-col items-center gap-4">
-                        {avatarPreview ? (
-                          <Image
-                            src={avatarPreview}
-                            alt="Profile"
-                            width={80}
-                            height={80}
-                            className="rounded-full object-cover border-2 border-[#7048E8] shadow-md"
-                          />
-                        ) : (
-                          <DefaultAvatar className="w-20 h-20 rounded-full border-2 border-[#7048E8] shadow-md" />
-                        )}
-                        <div className="text-center">
-                          <h2 className="text-xl font-semibold text-white">{form.username}</h2>
-                          <p className="mt-2 text-gray-400">{form.bio}</p>
-                        </div>
-                        <div className="flex flex-wrap gap-2 justify-center">
-                          {form.hashtags.map((tag: string) => (
-                            <span
-                              key={tag}
-                              className="bg-[#333]/50 text-white/70 px-3 py-1 rounded-full text-xs"
-                            >
-                              {tag}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )}
+                  <span className="text-xs text-gray-400 mt-1">tradr.co/@{form.username || 'yourname'}</span>
+                </div>
               </div>
-            </motion.div>
+
+              {/* Bio Section */}
+              <div className="bg-[#232336] rounded-2xl p-6 flex flex-col gap-2 shadow-md">
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-white text-sm font-medium">Say something bold.</span>
+                  <button className="ml-1 p-1 rounded hover:bg-[#28284a] transition-colors">
+                    <Edit className="w-4 h-4 text-[#7048E8]" />
+                  </button>
+                </div>
+                <textarea
+                  value={form.bio}
+                  onChange={e => handleChange('bio', e.target.value)}
+                  className="bg-transparent text-white text-sm outline-none w-full min-h-[40px] resize-none"
+                  maxLength={120}
+                  placeholder="Say something bold."
+                />
+              </div>
+
+              {/* Hashtags Section */}
+              <div className="bg-[#232336] rounded-2xl p-6 flex flex-col gap-2 shadow-md">
+                <span className="text-white text-sm font-medium mb-1">Hashtags</span>
+                <div className="flex flex-wrap gap-2 mb-2">
+                  {form.hashtags.map((tag: string) => (
+                    <span
+                      key={tag}
+                      className="bg-[#333]/50 text-white/70 px-3 py-1 rounded-full text-xs flex items-center gap-1"
+                    >
+                      {tag}
+                      <button
+                        type="button"
+                        className="ml-1 text-white/40 hover:text-red-400"
+                        onClick={() => handleRemoveHashtag(tag)}
+                      >
+                        ×
+                      </button>
+                    </span>
+                  ))}
+                  <input
+                    type="text"
+                    className="bg-transparent outline-none text-white/80 text-xs px-2 py-1 min-w-[60px]"
+                    placeholder="#AddTag"
+                    onKeyDown={handleHashtagInput}
+                  />
+                </div>
+                <span className="text-xs text-gray-500">Press Enter to add a hashtag</span>
+              </div>
+
+              {/* Add Strategy Section */}
+              <button
+                type="button"
+                className="w-full py-6 rounded-2xl bg-[#232336] text-white text-lg font-medium shadow-md border border-white/10 hover:bg-[#28284a] transition-colors"
+              >
+                + Add strategy
+              </button>
+
+              {/* Display a Link Section */}
+              <button
+                type="button"
+                className="w-full py-6 rounded-2xl bg-[#232336] text-white text-lg font-medium shadow-md border border-white/10 hover:bg-[#28284a] transition-colors"
+              >
+                + Display a link
+              </button>
+
+              {/* Save Button */}
+              <button
+                type="button"
+                onClick={handleSaveClick}
+                disabled={saving}
+                className="w-full py-5 rounded-2xl mt-2 bg-gradient-to-r from-purple-600 to-blue-500 text-white text-lg font-semibold shadow-lg flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
+              >
+                {saving && <Loader2 className="w-4 h-4 animate-spin" />}
+                Save Changes
+              </button>
+              {error && (
+                <div className="text-red-400 text-xs text-center mt-2">{error}</div>
+              )}
+            </div>
           </div>
         </motion.div>
       )}

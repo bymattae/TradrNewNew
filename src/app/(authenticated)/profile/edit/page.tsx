@@ -152,7 +152,7 @@ export default function EditProfilePage() {
           </div>
           {/* Hashtags Input */}
           <div className="flex flex-wrap gap-2">
-            {form.hashtags.map((tag: string) => (
+            {(form.hashtags || []).map((tag: string) => (
               <span
                 key={tag}
                 className="px-4 py-1.5 rounded-full text-sm font-medium bg-gradient-to-r from-blue-700/40 to-purple-700/40 text-white flex items-center gap-1"

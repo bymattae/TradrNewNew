@@ -220,10 +220,10 @@ export default function EditProfilePage() {
             </>
           ) : (
             <ProfilePreview
-              username={form.username || ''}
-              bio={form.bio || ''}
+              username={form.username || 'yourname'}
+              bio={form.bio}
               tags={form.tags || []}
-              avatarUrl={form.avatarUrl || undefined}
+              avatarUrl={avatarPreview || undefined}
               onEditClick={() => setActiveTab('edit')}
               onShareClick={() => {}}
               onThemeClick={() => {}}

@@ -1,23 +1,45 @@
 'use client';
 
-import { Settings, Edit2, Share2, Palette } from 'lucide-react';
-import CopyableUrl from '@/app/components/CopyableUrl';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import getSupabaseBrowserClient from '@/lib/supabase/client';
+import { getProfile } from '@/lib/supabase/profile';
 import ProfilePreview from '@/app/components/ProfilePreview';
-import { useState } from 'react';
+import CopyableUrl from '@/app/components/CopyableUrl';
+import { Settings } from 'lucide-react';
 
 export default function ProfilePage() {
-  // Handlers for the profile preview buttons
-  const handleEditClick = () => {
-    console.log('Edit clicked');
-  };
-  
-  const handleShareClick = () => {
-    console.log('Share clicked');
-  };
-  
-  const handleThemeClick = () => {
-    console.log('Theme clicked');
-  };
+  const router = useRouter();
+  const supabase = getSupabaseBrowserClient();
+  const [profile, setProfile] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) {
+          router.push('/auth/join');
+          return;
+        }
+        const profileData = await getProfile(user.id);
+        setProfile(profileData);
+      } catch (error) {
+        router.push('/auth/join');
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProfile();
+  }, [router, supabase]);
+
+  if (loading) {
+    return <div className="flex items-center justify-center h-screen text-white">Loading...</div>;
+  }
+
+  if (!profile) {
+    return <div className="flex items-center justify-center h-screen text-white">No profile found.</div>;
+  }
 
   return (
     <main className="h-[844px] w-full bg-black text-white flex flex-col items-center overflow-hidden">
@@ -35,33 +57,18 @@ export default function ProfilePage() {
       {/* Content container with consistent spacing */}
       <div className="w-full px-4 flex-1 flex flex-col gap-6 pt-6">
         {/* Live URL Card - Using the CopyableUrl component */}
-        <CopyableUrl username="mattjames" />
+        <CopyableUrl username={profile.username} />
 
         {/* Profile Preview - Scaled down slightly */}
         <div className="transform scale-[0.98]">
           <ProfilePreview 
-            username="mattjames"
-            bio="I'm a professional trader from Cardiff looking to level up my skills in trading."
-            tags={['#crypto', '#defi', '#trading']}
-            strategies={[{
-              title: 'Main Strategy',
-              stats: {
-                gain: 47,
-                winRate: 89,
-                riskRatio: '1:2.5'
-              }
-            }]}
-            links={[{
-              title: 'Join my Premium Strategy Course',
-              description: 'Get access to my proven strategy for consistent gains in any market condition.',
-              cta: {
-                text: 'Get Access Now',
-                url: '#'
-              }
-            }]}
-            onEditClick={handleEditClick}
-            onShareClick={handleShareClick}
-            onThemeClick={handleThemeClick}
+            username={profile.username || ''}
+            bio={profile.bio || ''}
+            tags={profile.hashtags || []}
+            avatarUrl={profile.avatar_url || ''}
+            onEditClick={() => router.push('/profile/edit')}
+            onShareClick={() => {}}
+            onThemeClick={() => {}}
           />
         </div>
       </div>

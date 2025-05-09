@@ -211,12 +211,30 @@ export default function EditProfileModal({ isOpen, onClose, profile, onSave }: E
                       <span className="text-xs text-gray-500">Press Enter to add a hashtag</span>
                     </div>
 
+                    {/* Add Strategy Button */}
+                    <button
+                      type="button"
+                      className="w-full py-5 mt-2 rounded-xl bg-[#181824] border border-white/10 text-white text-lg font-medium hover:bg-[#232336] transition-colors"
+                      style={{ boxShadow: '0 2px 8px 0 rgba(112,72,232,0.10)' }}
+                    >
+                      + Add strategy
+                    </button>
+
+                    {/* Display a Link Button */}
+                    <button
+                      type="button"
+                      className="w-full py-5 mt-4 rounded-xl bg-[#181824] border border-white/10 text-white text-lg font-medium hover:bg-[#232336] transition-colors"
+                      style={{ boxShadow: '0 2px 8px 0 rgba(112,72,232,0.10)' }}
+                    >
+                      + Display a link
+                    </button>
+
                     {/* Save Button */}
                     <button
                       type="button"
                       onClick={handleSaveClick}
                       disabled={saving}
-                      className={components.button.primary + " w-full mt-4 flex items-center justify-center gap-2"}
+                      className={components.button.primary + " w-full mt-6 flex items-center justify-center gap-2"}
                     >
                       {saving && <Loader2 className="w-4 h-4 animate-spin" />}
                       Save Changes

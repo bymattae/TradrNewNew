@@ -9,7 +9,7 @@ import { DefaultAvatar } from "@/app/components/DefaultAvatar";
 import { getProfile, updateProfile } from "@/lib/supabase/profile";
 import { useAuth } from "@/lib/hooks/useAuth";
 import { FiShare } from 'react-icons/fi';
-import ProfilePreview from '@/app/components/ProfilePreview';
+import ProfileCard from '@/app/components/ProfileCard';
 
 export default function EditProfilePage() {
   const router = useRouter();
@@ -220,14 +220,11 @@ export default function EditProfilePage() {
               </button>
             </>
           ) : (
-            <ProfilePreview
+            <ProfileCard
               username={form.username || ''}
               bio={form.bio || ''}
-              tags={form.hashtags || []}
-              avatarUrl={form.avatar_url || undefined}
-              onEditClick={() => setActiveTab('edit')}
-              onShareClick={() => {}}
-              onThemeClick={() => {}}
+              avatar_url={form.avatar_url || undefined}
+              hashtags={form.hashtags || []}
             />
           )}
         </div>

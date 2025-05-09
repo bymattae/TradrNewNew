@@ -8,6 +8,7 @@ import Image from "next/image";
 import { DefaultAvatar } from "@/app/components/DefaultAvatar";
 import { getProfile, updateProfile } from "@/lib/supabase/profile";
 import { useAuth } from "@/lib/hooks/useAuth";
+import { FiShare } from 'react-icons/fi';
 
 export default function EditProfilePage() {
   const router = useRouter();
@@ -17,6 +18,7 @@ export default function EditProfilePage() {
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<'edit' | 'preview'>('edit');
 
   useEffect(() => {
     if (!user) return;
@@ -86,116 +88,143 @@ export default function EditProfilePage() {
       <div className="w-full max-w-md mx-auto px-4 py-2 flex items-center justify-between flex-shrink-0 h-14 bg-[#181824] border-b border-white/10" style={{ position: 'sticky', top: 0, zIndex: 10 }}>
         <button
           onClick={() => router.push('/dashboard')}
-          className="flex items-center gap-1 text-white/80 hover:text-white transition-colors"
+          className="p-2.5 rounded-full bg-[#1A1B1F]/80 backdrop-blur-sm border border-[#2A2B30] hover:bg-[#2A2B30] active:scale-95 transition-all duration-200"
         >
-          <ArrowLeft className="w-5 h-5" />
+          <ArrowLeft className="w-5 h-5 text-white/90" />
         </button>
         <h2 className="text-lg font-semibold text-white">Edit Profile</h2>
-        <div className="w-8 h-8" />
+        <div className="w-10 h-10" />
       </div>
-      {/* Main Card */}
-      <div className="w-full max-w-md mx-auto rounded-2xl bg-[#181824] p-4 shadow-lg flex flex-col gap-4 mt-4" style={{minHeight: 0}}>
-        {/* Profile Picture Upload */}
-        <div className="flex flex-col items-center gap-2 border border-white/10 rounded-xl p-4 bg-[#181824]">
-          <div className="relative group">
-            {avatarPreview ? (
-              <Image
-                src={avatarPreview}
-                alt="Profile Avatar"
-                width={80}
-                height={80}
-                className="rounded-full object-cover border-2 border-[#7048E8] shadow-md"
-              />
-            ) : (
-              <DefaultAvatar className="rounded-full border-2 border-[#7048E8] shadow-md w-20 h-20" />
-            )}
-            <label className="absolute bottom-0 right-0 bg-[#7048E8] p-1.5 rounded-full cursor-pointer border-2 border-white/80 group-hover:scale-110 transition-transform">
-              <input
-                type="file"
-                accept="image/*"
-                className="hidden"
-                onChange={handleAvatarChange}
-              />
-              <Edit className="w-4 h-4 text-white" />
-            </label>
+      {/* Tabs - Edit/Preview */}
+      <div className="w-full max-w-md mx-auto flex items-center justify-center gap-2 bg-[#181824] border-b border-white/10" style={{height: '48px'}}>
+        <button
+          onClick={() => setActiveTab('edit')}
+          className={`px-4 py-2 text-sm font-semibold rounded-xl transition-colors ${
+            activeTab === 'edit'
+              ? 'bg-gradient-to-r from-purple-600/30 to-blue-500/30 text-white shadow underline underline-offset-8 decoration-purple-400'
+              : 'text-white/60 hover:text-white'
+          }`}
+        >
+          Edit
+        </button>
+        <button
+          onClick={() => setActiveTab('preview')}
+          className={`px-4 py-2 text-sm font-semibold rounded-xl transition-colors ${
+            activeTab === 'preview'
+              ? 'bg-gradient-to-r from-purple-600/30 to-blue-500/30 text-white shadow underline underline-offset-8 decoration-purple-400'
+              : 'text-white/60 hover:text-white'
+          }`}
+        >
+          Preview
+        </button>
+      </div>
+      {/* Main Card - flush with header, scrollable content, sticky save button */}
+      <div className="w-full max-w-md mx-auto flex-1 flex flex-col rounded-2xl bg-[#181824] shadow-lg relative" style={{height: 'calc(100dvh - 110px)'}}>
+        <div className="flex-1 flex flex-col gap-4 p-4 overflow-y-auto">
+          {/* Profile Picture Upload */}
+          <div className="flex flex-col items-center gap-2 border border-[#2A2B30] rounded-2xl p-4 bg-[#1C1C24]/80 shadow-[0_0_25px_rgba(168,85,247,0.1)]">
+            <div className="relative group">
+              {avatarPreview ? (
+                <Image
+                  src={avatarPreview}
+                  alt="Profile Avatar"
+                  width={80}
+                  height={80}
+                  className="rounded-full object-cover border-2 border-[#7048E8] shadow-md"
+                />
+              ) : (
+                <DefaultAvatar className="rounded-full border-2 border-[#7048E8] shadow-md w-20 h-20" />
+              )}
+              <label className="absolute bottom-0 right-0 bg-[#7048E8] p-1.5 rounded-full cursor-pointer border-2 border-white/80 group-hover:scale-110 transition-transform">
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={handleAvatarChange}
+                />
+                <Edit className="w-4 h-4 text-white" />
+              </label>
+            </div>
+            <span className="text-xs text-gray-400">Tap to change</span>
           </div>
-          <span className="text-xs text-gray-400">Tap to change</span>
-        </div>
-        {/* Username Input */}
-        <div className="flex items-center border border-white/10 rounded-xl px-4 py-3 bg-[#232336]">
-          <span className="text-white/60 mr-2">@</span>
-          <input
-            type="text"
-            value={form.username}
-            onChange={e => handleChange('username', e.target.value)}
-            className="bg-transparent outline-none text-white text-base font-medium flex-1"
-            maxLength={24}
-            placeholder="yourname"
-            required
-          />
-          <span className="text-white/40 ml-2 text-sm">tradr.co/@yourname</span>
-        </div>
-        {/* Bio Input */}
-        <div className="flex items-center border border-white/10 rounded-xl px-4 py-3 bg-[#232336]">
-          <textarea
-            value={form.bio}
-            onChange={e => handleChange('bio', e.target.value)}
-            className="bg-transparent outline-none text-white text-base flex-1 resize-none min-h-[80px]"
-            maxLength={240}
-            placeholder="Say something bold."
-            rows={3}
-          />
-          <Edit className="w-4 h-4 text-white/40 ml-2" />
-        </div>
-        {/* Hashtags Input */}
-        <div className="flex flex-wrap gap-2 border border-white/10 rounded-xl px-4 py-3 bg-[#232336]">
-          {(form.hashtags || []).map((tag: string) => (
-            <span
-              key={tag}
-              className="px-4 py-1.5 rounded-full text-sm font-medium bg-gradient-to-r from-blue-700/40 to-purple-700/40 text-white flex items-center gap-1"
-            >
-              {tag}
-              <button
-                type="button"
-                className="ml-1 text-white/40 hover:text-red-400"
-                onClick={() => handleRemoveHashtag(tag)}
+          {/* Username Input */}
+          <div className="flex items-center border border-[#2A2B30] rounded-2xl px-4 py-3 bg-[#1C1C24]/80 shadow-[0_0_25px_rgba(168,85,247,0.1)]">
+            <span className="text-white/60 mr-2">@</span>
+            <input
+              type="text"
+              value={form.username}
+              onChange={e => handleChange('username', e.target.value)}
+              className="bg-transparent outline-none text-white text-base font-medium flex-1"
+              maxLength={24}
+              placeholder="yourname"
+              required
+            />
+            <span className="text-white/40 ml-2 text-sm">tradr.co/@yourname</span>
+          </div>
+          {/* Bio Input */}
+          <div className="flex items-center border border-[#2A2B30] rounded-2xl px-4 py-3 bg-[#1C1C24]/80 shadow-[0_0_25px_rgba(168,85,247,0.1)]">
+            <textarea
+              value={form.bio}
+              onChange={e => handleChange('bio', e.target.value)}
+              className="bg-transparent outline-none text-white text-base flex-1 resize-none min-h-[80px]"
+              maxLength={240}
+              placeholder="Say something bold."
+              rows={3}
+            />
+            <Edit className="w-4 h-4 text-white/40 ml-2" />
+          </div>
+          {/* Hashtags Input */}
+          <div className="flex flex-wrap gap-2 border border-[#2A2B30] rounded-2xl px-4 py-3 bg-[#1C1C24]/80 shadow-[0_0_25px_rgba(168,85,247,0.1)]">
+            {(form.hashtags || []).map((tag: string) => (
+              <span
+                key={tag}
+                className="px-4 py-1.5 rounded-full text-sm font-medium bg-gradient-to-r from-blue-700/40 to-purple-700/40 text-white flex items-center gap-1"
               >
-                ×
-              </button>
-            </span>
-          ))}
-          <input
-            type="text"
-            className="bg-[#232336] outline-none text-white/80 text-sm px-2 py-1 rounded-full min-w-[60px]"
-            placeholder="+ Add tag"
-            onKeyDown={handleHashtagInput}
-          />
+                {tag}
+                <button
+                  type="button"
+                  className="ml-1 text-white/40 hover:text-red-400"
+                  onClick={() => handleRemoveHashtag(tag)}
+                >
+                  ×
+                </button>
+              </span>
+            ))}
+            <input
+              type="text"
+              className="bg-[#232336] outline-none text-white/80 text-sm px-2 py-1 rounded-full min-w-[60px]"
+              placeholder="+ Add tag"
+              onKeyDown={handleHashtagInput}
+            />
+          </div>
+          {/* Add Strategy Block */}
+          <button
+            type="button"
+            className="w-full rounded-2xl bg-[#181824] py-4 text-lg font-medium text-white shadow-lg border border-[#2A2B30]"
+            onClick={() => router.push('/strategy')}
+          >
+            + Add strategy
+          </button>
+          {/* Display a Link Block */}
+          <button
+            type="button"
+            className="w-full rounded-2xl bg-[#181824] py-4 text-lg font-medium text-white shadow-lg border border-[#2A2B30]"
+          >
+            + Display a link
+          </button>
         </div>
-        {/* Add Strategy Block */}
-        <button
-          type="button"
-          className="w-full rounded-2xl bg-[#181824] py-4 text-lg font-medium text-white shadow-lg border border-white/10"
-          onClick={() => router.push('/strategy')}
-        >
-          + Add strategy
-        </button>
-        {/* Display a Link Block */}
-        <button
-          type="button"
-          className="w-full rounded-2xl bg-[#181824] py-4 text-lg font-medium text-white shadow-lg border border-white/10"
-        >
-          + Display a link
-        </button>
-        {/* Save Button */}
-        <button
-          type="button"
-          className={components.button.primary + ' w-full py-4 text-lg mt-2'}
-          onClick={handleSave}
-          disabled={saving}
-        >
-          {saving ? 'Saving...' : 'Save Changes'}
-        </button>
-        {error && <div className="text-red-400 text-xs text-center mt-2">{error}</div>}
+        {/* Sticky Save Button */}
+        <div className="sticky bottom-0 left-0 right-0 bg-[#181824] p-4 z-10 border-t border-[#2A2B30]">
+          <button
+            type="button"
+            className={components.button.primary + ' w-full py-4 text-lg'}
+            onClick={handleSave}
+            disabled={saving}
+          >
+            {saving ? 'Saving...' : 'Save Changes'}
+          </button>
+          {error && <div className="text-red-400 text-xs text-center mt-2">{error}</div>}
+        </div>
       </div>
     </div>
   );

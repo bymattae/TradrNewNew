@@ -81,21 +81,22 @@ export default function EditProfilePage() {
   };
 
   return (
-    <div className="w-full h-full min-h-0 bg-gradient-radial from-[#320D66] via-[#1C1C24] to-[#15161B] flex items-center justify-center">
-      <div className="w-full max-w-md mx-auto rounded-2xl bg-[#181824] p-6 shadow-lg flex flex-col gap-6" style={{minHeight: 0}}>
-        {/* Header */}
-        <div className="flex items-center justify-between mb-4">
-          <button
-            onClick={() => router.push('/dashboard')}
-            className="flex items-center gap-1 text-white/80 hover:text-white transition-colors"
-          >
-            <ArrowLeft className="w-5 h-5" />
-          </button>
-          <h2 className="text-lg font-semibold text-white">Edit Profile</h2>
-          <div className="w-8 h-8" />
-        </div>
+    <div className="w-full h-full min-h-0 bg-gradient-radial from-[#320D66] via-[#1C1C24] to-[#15161B] flex flex-col items-center justify-start">
+      {/* Header - match dashboard style */}
+      <div className="w-full max-w-md mx-auto px-4 py-2 flex items-center justify-between flex-shrink-0 h-14 bg-[#181824] border-b border-white/10" style={{ position: 'sticky', top: 0, zIndex: 10 }}>
+        <button
+          onClick={() => router.push('/dashboard')}
+          className="flex items-center gap-1 text-white/80 hover:text-white transition-colors"
+        >
+          <ArrowLeft className="w-5 h-5" />
+        </button>
+        <h2 className="text-lg font-semibold text-white">Edit Profile</h2>
+        <div className="w-8 h-8" />
+      </div>
+      {/* Main Card */}
+      <div className="w-full max-w-md mx-auto rounded-2xl bg-[#181824] p-4 shadow-lg flex flex-col gap-4 mt-4" style={{minHeight: 0}}>
         {/* Profile Picture Upload */}
-        <div className="flex flex-col items-center gap-2">
+        <div className="flex flex-col items-center gap-2 border border-white/10 rounded-xl p-4 bg-[#181824]">
           <div className="relative group">
             {avatarPreview ? (
               <Image
@@ -121,7 +122,7 @@ export default function EditProfilePage() {
           <span className="text-xs text-gray-400">Tap to change</span>
         </div>
         {/* Username Input */}
-        <div className="flex items-center bg-[#232336] rounded-xl px-4 py-3">
+        <div className="flex items-center border border-white/10 rounded-xl px-4 py-3 bg-[#232336]">
           <span className="text-white/60 mr-2">@</span>
           <input
             type="text"
@@ -135,19 +136,19 @@ export default function EditProfilePage() {
           <span className="text-white/40 ml-2 text-sm">tradr.co/@yourname</span>
         </div>
         {/* Bio Input */}
-        <div className="flex items-center bg-[#232336] rounded-xl px-4 py-3">
-          <input
-            type="text"
+        <div className="flex items-center border border-white/10 rounded-xl px-4 py-3 bg-[#232336]">
+          <textarea
             value={form.bio}
             onChange={e => handleChange('bio', e.target.value)}
-            className="bg-transparent outline-none text-white text-base flex-1"
-            maxLength={120}
+            className="bg-transparent outline-none text-white text-base flex-1 resize-none min-h-[80px]"
+            maxLength={240}
             placeholder="Say something bold."
+            rows={3}
           />
           <Edit className="w-4 h-4 text-white/40 ml-2" />
         </div>
         {/* Hashtags Input */}
-        <div className="flex flex-wrap gap-2 bg-[#232336] rounded-xl px-4 py-3">
+        <div className="flex flex-wrap gap-2 border border-white/10 rounded-xl px-4 py-3 bg-[#232336]">
           {(form.hashtags || []).map((tag: string) => (
             <span
               key={tag}
@@ -173,7 +174,7 @@ export default function EditProfilePage() {
         {/* Add Strategy Block */}
         <button
           type="button"
-          className="w-full rounded-2xl bg-[#181824] py-8 text-lg font-medium text-white shadow-lg"
+          className="w-full rounded-2xl bg-[#181824] py-4 text-lg font-medium text-white shadow-lg border border-white/10"
           onClick={() => router.push('/strategy')}
         >
           + Add strategy
@@ -181,7 +182,7 @@ export default function EditProfilePage() {
         {/* Display a Link Block */}
         <button
           type="button"
-          className="w-full rounded-2xl bg-[#181824] py-8 text-lg font-medium text-white shadow-lg"
+          className="w-full rounded-2xl bg-[#181824] py-4 text-lg font-medium text-white shadow-lg border border-white/10"
         >
           + Display a link
         </button>

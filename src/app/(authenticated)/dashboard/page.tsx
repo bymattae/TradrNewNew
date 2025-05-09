@@ -11,15 +11,29 @@ import { FiShare } from 'react-icons/fi';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { TradrIcon } from '@/app/components/Icons';
+import EditProfileModal from '@/app/components/EditProfileModal';
+
+// Update type definition at the top
+interface Profile {
+  id?: string;  // Optional since we might not have it during creation
+  username: string;
+  bio: string;
+  avatar_url: string | null;
+  hashtags: string[];
+  tags?: string[];  // For backward compatibility
+  created_at?: string;
+  updated_at?: string;
+}
 
 export default function Dashboard3Page() {
   const router = useRouter();
   const supabase = getSupabaseBrowserClient();
   const [currentUser, setCurrentUser] = useState<User | null>(null);
-  const [profile, setProfile] = useState<any>(null);
+  const [profile, setProfile] = useState<Profile | null>(null);
   const [isHovered, setIsHovered] = useState(false);
   const [isShareOpen, setIsShareOpen] = useState(false);
   const sharePopupRef = useRef<HTMLDivElement>(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   // Close share popup when clicking outside
   useEffect(() => {
@@ -46,17 +60,22 @@ export default function Dashboard3Page() {
 
         setCurrentUser(user);
 
-        const { data: profile } = await supabase
+        const { data: profileData } = await supabase
           .from('profiles')
-          .select('username, bio, avatar_url, tags')
+          .select('username, bio, avatar_url, tags, hashtags')
           .eq('id', user.id)
           .single();
+
+        const profile = {
+          ...profileData,
+          hashtags: profileData?.hashtags || profileData?.tags || [],
+        };
 
         const isProfileEmpty = !profile || (
           !profile.username &&
           !profile.bio &&
           !profile.avatar_url &&
-          (!profile.tags || profile.tags.length === 0)
+          (!profile.hashtags || profile.hashtags.length === 0)
         );
 
         if (isProfileEmpty) {
@@ -65,7 +84,7 @@ export default function Dashboard3Page() {
           return;
         }
 
-        setProfile(profile);
+        setProfile(profile as Profile);
       } catch (error) {
         console.error('Error checking auth:', error);
         router.push('/auth/join');
@@ -74,6 +93,28 @@ export default function Dashboard3Page() {
     
     checkAuth();
   }, [router, supabase]);
+
+  // Handle profile update
+  const handleProfileUpdate = async (updatedProfile: Partial<Profile>) => {
+    try {
+      await supabase
+        .from('profiles')
+        .update({
+          username: updatedProfile.username,
+          bio: updatedProfile.bio,
+          avatar_url: updatedProfile.avatar_url,
+          hashtags: updatedProfile.hashtags,
+        })
+        .eq('id', currentUser?.id);
+
+      // Update local state
+      setProfile(prev => prev ? { ...prev, ...updatedProfile } : null);
+      toast.success('Profile updated successfully');
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      throw new Error('Failed to update profile');
+    }
+  };
 
   return (
     <div className="fixed inset-0 flex flex-col bg-gradient-radial from-[#320D66] via-[#1C1C24] to-[#15161B] overflow-hidden">
@@ -192,11 +233,12 @@ export default function Dashboard3Page() {
             </button>
           </motion.div>
 
-          {/* Right side - Settings */}
+          {/* Right side - Edit button */}
           <motion.button 
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             className="p-2.5 rounded-full bg-[#1A1B1F]/80 backdrop-blur-sm border border-[#2A2B30] hover:bg-[#2A2B30] active:scale-95 transition-all duration-200"
+            onClick={() => setIsEditModalOpen(true)}
           >
             <Edit className="w-5 h-5 text-white/90" />
           </motion.button>
@@ -254,12 +296,16 @@ export default function Dashboard3Page() {
                     transition={{ delay: 0.5 }}
                     className="flex flex-wrap justify-center gap-2"
                   >
-                    {(profile?.tags || ['#Coolman']).map((tag: string, index: number) => (
+                    {(profile?.hashtags || ['#Coolman']).map((tag: string, index: number) => (
                       <span 
                         key={index} 
-                        className="px-4 py-1.5 bg-purple-500/10 text-purple-300 text-sm rounded-full font-medium border border-purple-500/20"
+                        className={`px-3 py-1 rounded-full text-xs ${
+                          isHovered
+                            ? 'bg-white/10 text-white/90'
+                            : 'bg-[#333]/50 text-white/70'
+                        }`}
                       >
-                        #{tag}
+                        {tag}
                       </span>
                     ))}
                   </motion.div>
@@ -344,6 +390,14 @@ export default function Dashboard3Page() {
           </motion.div>
         </div>
       </div>
+
+      {/* Edit Profile Modal */}
+      <EditProfileModal
+        isOpen={isEditModalOpen}
+        onClose={() => setIsEditModalOpen(false)}
+        profile={profile}
+        onSave={handleProfileUpdate}
+      />
     </div>
   );
 } 

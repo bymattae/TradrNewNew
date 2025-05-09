@@ -10,12 +10,27 @@ import { getProfile, updateProfile } from "@/lib/supabase/profile";
 import { useAuth } from "@/lib/hooks/useAuth";
 import { FiShare } from 'react-icons/fi';
 import ProfileCard from '@/app/components/ProfileCard';
+import { toast } from 'sonner';
+import getSupabaseBrowserClient from '@/lib/supabase/client';
+
+interface ProfileForm {
+  username: string;
+  bio: string;
+  hashtags: string[];
+  avatar_url: string | null;
+}
 
 export default function EditProfilePage() {
   const router = useRouter();
   const { user } = useAuth();
+  const supabase = getSupabaseBrowserClient();
   const [profile, setProfile] = useState<any>(null);
-  const [form, setForm] = useState<any>({});
+  const [form, setForm] = useState<ProfileForm>({
+    username: '',
+    bio: '',
+    hashtags: [],
+    avatar_url: null,
+  });
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -23,20 +38,29 @@ export default function EditProfilePage() {
 
   useEffect(() => {
     if (!user) return;
-    getProfile(user.id).then((data: any) => {
-      setProfile(data);
-      setForm({
-        username: data?.username || "",
-        bio: data?.bio || "",
-        hashtags: data?.hashtags || [],
-        avatar_url: data?.avatar_url || null,
-      });
-      setAvatarPreview(data?.avatar_url || null);
-    });
+    
+    const loadProfile = async () => {
+      try {
+        const data = await getProfile(user.id);
+        setProfile(data);
+        setForm({
+          username: data?.username || '',
+          bio: data?.bio || '',
+          hashtags: data?.hashtags || [],
+          avatar_url: data?.avatar_url || null,
+        });
+        setAvatarPreview(data?.avatar_url || null);
+      } catch (error) {
+        console.error('Error loading profile:', error);
+        toast.error('Failed to load profile');
+      }
+    };
+
+    loadProfile();
   }, [user]);
 
-  const handleChange = (field: string, value: any) => {
-    setForm((prev: any) => ({ ...prev, [field]: value }));
+  const handleChange = (field: keyof ProfileForm, value: any) => {
+    setForm(prev => ({ ...prev, [field]: value }));
   };
 
   const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -44,8 +68,9 @@ export default function EditProfilePage() {
     if (file) {
       const reader = new FileReader();
       reader.onload = (ev) => {
-        setAvatarPreview(ev.target?.result as string);
-        handleChange("avatar_url", ev.target?.result as string);
+        const result = ev.target?.result as string;
+        setAvatarPreview(result);
+        handleChange('avatar_url', result);
       };
       reader.readAsDataURL(file);
     }
@@ -55,30 +80,58 @@ export default function EditProfilePage() {
     if (e.key === "Enter" && e.currentTarget.value.trim()) {
       const tag = e.currentTarget.value.trim();
       if (!form.hashtags.includes(tag)) {
-        handleChange("hashtags", [...form.hashtags, tag]);
+        handleChange('hashtags', [...form.hashtags, tag]);
       }
       e.currentTarget.value = "";
     }
   };
+
   const handleRemoveHashtag = (tag: string) => {
-    handleChange("hashtags", form.hashtags.filter((t: string) => t !== tag));
+    handleChange('hashtags', form.hashtags.filter(t => t !== tag));
   };
 
   const handleSave = async () => {
     if (!user) return;
+    
     setSaving(true);
     setError(null);
+    
     try {
-      await updateProfile(user.id, {
+      // Validate username format
+      const usernameRegex = /^[a-zA-Z0-9_]+$/;
+      if (!usernameRegex.test(form.username)) {
+        throw new Error('Username can only contain letters, numbers, and underscores');
+      }
+
+      // Check if username is already taken
+      const { data: existingUser } = await supabase
+        .from('profiles')
+        .select('id')
+        .eq('username', form.username)
+        .neq('id', user.id)
+        .single();
+
+      if (existingUser) {
+        throw new Error('Username is already taken');
+      }
+
+      // Update profile using standardized function
+      const updatedProfile = await updateProfile(user.id, {
         username: form.username,
         bio: form.bio,
         hashtags: form.hashtags,
         avatar_url: form.avatar_url,
+        updated_at: new Date().toISOString(),
       });
-      setSaving(false);
-      router.push("/dashboard");
-    } catch (e) {
-      setError("Failed to save profile");
+
+      // Update local state
+      setProfile(updatedProfile);
+      toast.success('Profile updated successfully');
+      router.push('/dashboard');
+    } catch (e: any) {
+      setError(e.message || 'Failed to save profile');
+      toast.error(e.message || 'Failed to save profile');
+    } finally {
       setSaving(false);
     }
   };

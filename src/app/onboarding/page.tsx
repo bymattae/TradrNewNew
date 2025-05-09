@@ -9,6 +9,7 @@ import ImageCropModal from '../components/ImageCropModal';
 import ProfilePreview from '../components/ProfilePreview';
 import { Dialog } from '@headlessui/react';
 import { ProfilePreviewDialog } from '../components/ProfilePreviewDialog';
+import { getProfile, updateProfile } from '@/lib/supabase/profile';
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB limit
 
@@ -109,7 +110,7 @@ export default function OnboardingPage() {
   const [bio, setBio] = useState('');
   const [tempBio, setTempBio] = useState('');
   const [isEditingBio, setIsEditingBio] = useState(false);
-  const [tags, setTags] = useState<string[]>([]);
+  const [hashtags, setHashtags] = useState<string[]>([]);
   const [newTag, setNewTag] = useState('');
   const [avatarUrl, setAvatarUrl] = useState('');
   const [uploading, setUploading] = useState(false);
@@ -127,7 +128,7 @@ export default function OnboardingPage() {
   const [errors, setErrors] = useState<{
     username?: boolean;
     bio?: boolean;
-    tags?: boolean;
+    hashtags?: boolean;
     avatar?: boolean;
   }>({});
   const [showValidation, setShowValidation] = useState(false);
@@ -154,18 +155,14 @@ export default function OnboardingPage() {
           }
 
           // Check if user has already completed onboarding
-          const { data: profile } = await supabase
-            .from('profiles')
-            .select('username, bio, avatar_url, tags')
-            .eq('id', initialSession.user.id)
-            .single();
+          const profile = await getProfile(initialSession.user.id);
 
           // Check if profile exists and has any data
           const isProfileEmpty = !profile || (
             !profile.username &&
             !profile.bio &&
             !profile.avatar_url &&
-            (!profile.tags || profile.tags.length === 0)
+            (!profile.hashtags || profile.hashtags.length === 0)
           );
 
           // Only stay on onboarding if profile is completely empty
@@ -208,22 +205,12 @@ export default function OnboardingPage() {
       if (!session?.user?.id) return;
 
       try {
-        const { data: profile, error } = await supabase
-          .from('profiles')
-          .select('*')
-          .eq('id', session.user.id)
-          .single();
-
-        if (error) {
-          console.error('Error loading profile:', error);
-          return;
-        }
-
+        const profile = await getProfile(session.user.id);
         if (profile) {
-          setUsername(profile.username as string || '');
-          setBio(profile.bio as string || '');
-          setTags((profile.tags as string[]) || []);
-          setAvatarUrl(profile.avatar_url as string || '');
+          setUsername(profile.username || '');
+          setBio(profile.bio || '');
+          setHashtags(profile.hashtags || []);
+          setAvatarUrl(profile.avatar_url || '');
         }
       } catch (error) {
         console.error('Error loading profile:', error);
@@ -231,7 +218,7 @@ export default function OnboardingPage() {
     };
 
     loadProfile();
-  }, [session, supabase]);
+  }, [session]);
 
   const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     try {
@@ -318,15 +305,15 @@ export default function OnboardingPage() {
   };
 
   const handleAddTag = () => {
-    if (newTag && !tags.includes(newTag) && tags.length < 3) {
+    if (newTag && !hashtags.includes(newTag) && hashtags.length < 3) {
       const tagToAdd = newTag.startsWith('#') ? newTag : `#${newTag}`;
-      setTags([...tags, tagToAdd]);
+      setHashtags([...hashtags, tagToAdd]);
       setNewTag('');
     }
   };
 
   const handleRemoveTag = (tagToRemove: string) => {
-    setTags(tags.filter(tag => tag !== tagToRemove));
+    setHashtags(hashtags.filter(tag => tag !== tagToRemove));
   };
 
   const handleEditUsername = () => {
@@ -353,7 +340,7 @@ export default function OnboardingPage() {
     const newErrors = {
       username: !username,
       bio: !bio,
-      tags: !tags.length,
+      hashtags: !hashtags.length,
       avatar: !avatarUrl
     };
     
@@ -362,23 +349,7 @@ export default function OnboardingPage() {
   };
 
   const handleFinish = async () => {
-    setShowValidation(true);
-    if (!validateFields()) {
-      toast.error('All required fields must be filled');
-      return;
-    }
-    
-    // Validate username format
-    const usernameRegex = /^[a-zA-Z0-9_]+$/;
-    if (!usernameRegex.test(username)) {
-      toast.error('Username can only contain letters, numbers, and underscores');
-      return;
-    }
-
-    if (!session?.user?.id || !session?.user?.email) {
-      toast.error('Please sign in to save your profile');
-      return;
-    }
+    if (!session?.user?.id) return;
 
     try {
       setIsSaving(true);
@@ -396,24 +367,14 @@ export default function OnboardingPage() {
         return;
       }
 
-      // Save all profile data
-      const { error: saveError } = await supabase
-        .from('profiles')
-        .upsert({
-          id: session.user.id,
-          email: session.user.email,
-          username,
-          bio,
-          tags,
-          avatar_url: avatarUrl,
-          updated_at: new Date().toISOString(),
-        });
-
-      if (saveError) {
-        console.error('Error saving profile:', saveError);
-        toast.error('Failed to save profile');
-        return;
-      }
+      // Save all profile data using the standardized update function
+      await updateProfile(session.user.id, {
+        username,
+        bio,
+        hashtags,
+        avatar_url: avatarUrl,
+        updated_at: new Date().toISOString(),
+      });
 
       toast.success('Profile saved successfully');
       router.push('/dashboard');
@@ -563,7 +524,7 @@ export default function OnboardingPage() {
         <ProfilePreview
           username={username}
           bio={bio}
-          tags={tags}
+          tags={hashtags}
           strategies={[
             {
               title: "Example Strategy",
@@ -740,8 +701,8 @@ export default function OnboardingPage() {
 
             {/* Tags */}
             <div className="space-y-3">
-              <div className={`flex flex-wrap gap-2 items-center p-4 bg-zinc-900/50 border ${showValidation && errors.tags ? 'border-red-500/50' : 'border-zinc-800/50'} rounded-xl`}>
-                {tags.length === 0 ? (
+              <div className={`flex flex-wrap gap-2 items-center p-4 bg-zinc-900/50 border ${showValidation && errors.hashtags ? 'border-red-500/50' : 'border-zinc-800/50'} rounded-xl`}>
+                {hashtags.length === 0 ? (
                   <button
                     onClick={() => setIsEditingTag(true)}
                     className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors group"
@@ -753,7 +714,7 @@ export default function OnboardingPage() {
                   </button>
                 ) : (
                   <>
-                {tags.map((tag, index) => (
+                {hashtags.map((tag, index) => (
                   <div
                     key={index}
                         className="group relative bg-indigo-600/20 border border-indigo-500/30 text-white px-3 py-1.5 rounded-full text-sm backdrop-blur-xl flex items-center gap-1.5"
@@ -769,7 +730,7 @@ export default function OnboardingPage() {
                     </button>
                   </div>
                 ))}
-                {tags.length < 3 && (
+                {hashtags.length < 3 && (
                       <button
                         onClick={() => setIsEditingTag(true)}
                         className="flex items-center justify-center w-7 h-7 rounded-full border border-zinc-800/50 hover:border-indigo-500/50 transition-all text-gray-400 hover:text-indigo-400"
@@ -801,7 +762,7 @@ export default function OnboardingPage() {
                   </div>
                 )}
               </div>
-              {showValidation && errors.tags && (
+              {showValidation && errors.hashtags && (
                 <p className="text-xs text-red-500 w-full">At least one hashtag is required</p>
               )}
             </div>

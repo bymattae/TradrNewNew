@@ -12,6 +12,7 @@ import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { TradrIcon } from '@/app/components/Icons';
 import ProfileCard from '@/app/components/ProfileCard';
+import { getProfile, updateProfile } from '@/lib/supabase/profile';
 
 // Update type definition at the top
 interface Profile {
@@ -59,31 +60,22 @@ export default function Dashboard3Page() {
 
         setCurrentUser(user);
 
-        const { data: profileData } = await supabase
-          .from('profiles')
-          .select('username, bio, avatar_url, tags, hashtags')
-          .eq('id', user.id)
-          .single();
-
-        const profile = {
-          ...profileData,
-          hashtags: profileData?.hashtags || profileData?.tags || [],
-        };
-
-        const isProfileEmpty = !profile || (
-          !profile.username &&
-          !profile.bio &&
-          !profile.avatar_url &&
-          (!profile.hashtags || profile.hashtags.length === 0)
+        const profileData = await getProfile(user.id);
+        
+        const isProfileEmpty = !profileData || (
+          !profileData.username &&
+          !profileData.bio &&
+          !profileData.avatar_url &&
+          (!profileData.hashtags || profileData.hashtags.length === 0)
         );
 
         if (isProfileEmpty) {
           toast.error('Please complete your profile first');
-          setProfile(profile as Profile);
+          setProfile(profileData as Profile);
           return;
         }
 
-        setProfile(profile as Profile);
+        setProfile(profileData as Profile);
       } catch (error) {
         console.error('Error checking auth:', error);
         router.push('/auth/join');
@@ -95,23 +87,23 @@ export default function Dashboard3Page() {
 
   // Handle profile update
   const handleProfileUpdate = async (updatedProfile: Partial<Profile>) => {
+    if (!currentUser?.id) return;
+    
     try {
-      await supabase
-        .from('profiles')
-        .update({
-          username: updatedProfile.username,
-          bio: updatedProfile.bio,
-          avatar_url: updatedProfile.avatar_url,
-          hashtags: updatedProfile.hashtags,
-        })
-        .eq('id', currentUser?.id);
+      const newProfile = await updateProfile(currentUser.id, {
+        username: updatedProfile.username,
+        bio: updatedProfile.bio,
+        avatar_url: updatedProfile.avatar_url,
+        hashtags: updatedProfile.hashtags,
+        updated_at: new Date().toISOString(),
+      });
 
       // Update local state
-      setProfile(prev => prev ? { ...prev, ...updatedProfile } : null);
+      setProfile(newProfile as Profile);
       toast.success('Profile updated successfully');
     } catch (error) {
       console.error('Error updating profile:', error);
-      throw new Error('Failed to update profile');
+      toast.error('Failed to update profile');
     }
   };
 

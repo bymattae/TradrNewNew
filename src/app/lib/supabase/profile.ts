@@ -13,14 +13,26 @@ export async function getProfile(userId: string) {
     .single();
 
   if (error) throw error;
-  return data;
+  
+  // Ensure we always return hashtags, even if they were stored as tags
+  return {
+    ...data,
+    hashtags: data.hashtags || [],
+  };
 }
 
 export async function updateProfile(userId: string, updates: ProfileUpdate) {
   const supabase = createClientComponentClient<Database>();
+  
+  // Ensure we're using hashtags consistently
+  const normalizedUpdates = {
+    ...updates,
+    hashtags: updates.hashtags || [],
+  };
+
   const { data, error } = await supabase
     .from('profiles')
-    .update(updates)
+    .update(normalizedUpdates)
     .eq('id', userId)
     .select()
     .single();
@@ -31,9 +43,16 @@ export async function updateProfile(userId: string, updates: ProfileUpdate) {
 
 export async function createProfile(profile: Profile) {
   const supabase = createClientComponentClient<Database>();
+  
+  // Ensure we're using hashtags consistently
+  const normalizedProfile = {
+    ...profile,
+    hashtags: profile.hashtags || [],
+  };
+
   const { data, error } = await supabase
     .from('profiles')
-    .insert([profile])
+    .insert([normalizedProfile])
     .select()
     .single();
 

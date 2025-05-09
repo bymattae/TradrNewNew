@@ -81,105 +81,100 @@ export default function EditProfilePage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-radial from-[#320D66] via-[#1C1C24] to-[#15161B] flex flex-col items-center">
-      {/* Header */}
-      <div className="w-full max-w-md flex items-center justify-between px-4 py-4 h-16 bg-black/80 border-b border-white/10 shadow-sm sticky top-0 z-20">
-        <button
-          onClick={() => router.push("/dashboard")}
-          className="flex items-center gap-1 text-white/80 hover:text-white transition-colors"
-        >
-          <ArrowLeft className="w-5 h-5" />
-        </button>
-        <h2 className="text-lg font-semibold text-white">Edit Profile</h2>
-        <div className="w-8 h-8" />
-      </div>
-
-      {/* Main Content */}
-      <div className="w-full max-w-md flex-1 flex flex-col gap-6 px-4 py-8">
-        {/* Profile Card Block */}
-        <div className="rounded-2xl bg-[#181824] p-6 shadow-lg flex flex-col gap-6">
-          {/* Profile Picture Upload */}
-          <div className="flex flex-col items-center gap-2">
-            <div className="relative group">
-              {avatarPreview ? (
-                <Image
-                  src={avatarPreview}
-                  alt="Profile Avatar"
-                  width={80}
-                  height={80}
-                  className="rounded-full object-cover border-2 border-[#7048E8] shadow-md"
-                />
-              ) : (
-                <DefaultAvatar className="rounded-full border-2 border-[#7048E8] shadow-md w-20 h-20" />
-              )}
-              <label className="absolute bottom-0 right-0 bg-[#7048E8] p-1.5 rounded-full cursor-pointer border-2 border-white/80 group-hover:scale-110 transition-transform">
-                <input
-                  type="file"
-                  accept="image/*"
-                  className="hidden"
-                  onChange={handleAvatarChange}
-                />
-                <Edit className="w-4 h-4 text-white" />
-              </label>
-            </div>
-            <span className="text-xs text-gray-400">Tap to change</span>
+    <div className="w-full h-full min-h-0 bg-gradient-radial from-[#320D66] via-[#1C1C24] to-[#15161B] flex items-center justify-center">
+      <div className="w-full max-w-md mx-auto rounded-2xl bg-[#181824] p-6 shadow-lg flex flex-col gap-6" style={{minHeight: 0}}>
+        {/* Header */}
+        <div className="flex items-center justify-between mb-4">
+          <button
+            onClick={() => router.push('/dashboard')}
+            className="flex items-center gap-1 text-white/80 hover:text-white transition-colors"
+          >
+            <ArrowLeft className="w-5 h-5" />
+          </button>
+          <h2 className="text-lg font-semibold text-white">Edit Profile</h2>
+          <div className="w-8 h-8" />
+        </div>
+        {/* Profile Picture Upload */}
+        <div className="flex flex-col items-center gap-2">
+          <div className="relative group">
+            {avatarPreview ? (
+              <Image
+                src={avatarPreview}
+                alt="Profile Avatar"
+                width={80}
+                height={80}
+                className="rounded-full object-cover border-2 border-[#7048E8] shadow-md"
+              />
+            ) : (
+              <DefaultAvatar className="rounded-full border-2 border-[#7048E8] shadow-md w-20 h-20" />
+            )}
+            <label className="absolute bottom-0 right-0 bg-[#7048E8] p-1.5 rounded-full cursor-pointer border-2 border-white/80 group-hover:scale-110 transition-transform">
+              <input
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={handleAvatarChange}
+              />
+              <Edit className="w-4 h-4 text-white" />
+            </label>
           </div>
-          {/* Username Input */}
-          <div className="flex items-center bg-[#232336] rounded-xl px-4 py-3">
-            <span className="text-white/60 mr-2">@</span>
-            <input
-              type="text"
-              value={form.username}
-              onChange={e => handleChange("username", e.target.value)}
-              className="bg-transparent outline-none text-white text-base font-medium flex-1"
-              maxLength={24}
-              placeholder="yourname"
-              required
-            />
-            <span className="text-white/40 ml-2 text-sm">tradr.co/@yourname</span>
-          </div>
-          {/* Bio Input */}
-          <div className="flex items-center bg-[#232336] rounded-xl px-4 py-3">
-            <input
-              type="text"
-              value={form.bio}
-              onChange={e => handleChange("bio", e.target.value)}
-              className="bg-transparent outline-none text-white text-base flex-1"
-              maxLength={120}
-              placeholder="Say something bold."
-            />
-            <Edit className="w-4 h-4 text-white/40 ml-2" />
-          </div>
-          {/* Hashtags Input */}
-          <div className="flex flex-wrap gap-2">
-            {(form.hashtags || []).map((tag: string) => (
-              <span
-                key={tag}
-                className="px-4 py-1.5 rounded-full text-sm font-medium bg-gradient-to-r from-blue-700/40 to-purple-700/40 text-white flex items-center gap-1"
+          <span className="text-xs text-gray-400">Tap to change</span>
+        </div>
+        {/* Username Input */}
+        <div className="flex items-center bg-[#232336] rounded-xl px-4 py-3">
+          <span className="text-white/60 mr-2">@</span>
+          <input
+            type="text"
+            value={form.username}
+            onChange={e => handleChange('username', e.target.value)}
+            className="bg-transparent outline-none text-white text-base font-medium flex-1"
+            maxLength={24}
+            placeholder="yourname"
+            required
+          />
+          <span className="text-white/40 ml-2 text-sm">tradr.co/@yourname</span>
+        </div>
+        {/* Bio Input */}
+        <div className="flex items-center bg-[#232336] rounded-xl px-4 py-3">
+          <input
+            type="text"
+            value={form.bio}
+            onChange={e => handleChange('bio', e.target.value)}
+            className="bg-transparent outline-none text-white text-base flex-1"
+            maxLength={120}
+            placeholder="Say something bold."
+          />
+          <Edit className="w-4 h-4 text-white/40 ml-2" />
+        </div>
+        {/* Hashtags Input */}
+        <div className="flex flex-wrap gap-2 bg-[#232336] rounded-xl px-4 py-3">
+          {(form.hashtags || []).map((tag: string) => (
+            <span
+              key={tag}
+              className="px-4 py-1.5 rounded-full text-sm font-medium bg-gradient-to-r from-blue-700/40 to-purple-700/40 text-white flex items-center gap-1"
+            >
+              {tag}
+              <button
+                type="button"
+                className="ml-1 text-white/40 hover:text-red-400"
+                onClick={() => handleRemoveHashtag(tag)}
               >
-                {tag}
-                <button
-                  type="button"
-                  className="ml-1 text-white/40 hover:text-red-400"
-                  onClick={() => handleRemoveHashtag(tag)}
-                >
-                  ×
-                </button>
-              </span>
-            ))}
-            <input
-              type="text"
-              className="bg-[#232336] outline-none text-white/80 text-sm px-2 py-1 rounded-full min-w-[60px]"
-              placeholder="+ Add tag"
-              onKeyDown={handleHashtagInput}
-            />
-          </div>
+                ×
+              </button>
+            </span>
+          ))}
+          <input
+            type="text"
+            className="bg-[#232336] outline-none text-white/80 text-sm px-2 py-1 rounded-full min-w-[60px]"
+            placeholder="+ Add tag"
+            onKeyDown={handleHashtagInput}
+          />
         </div>
         {/* Add Strategy Block */}
         <button
           type="button"
           className="w-full rounded-2xl bg-[#181824] py-8 text-lg font-medium text-white shadow-lg"
-          onClick={() => router.push("/strategy")}
+          onClick={() => router.push('/strategy')}
         >
           + Add strategy
         </button>
@@ -193,11 +188,11 @@ export default function EditProfilePage() {
         {/* Save Button */}
         <button
           type="button"
-          className={components.button.primary + " w-full py-4 text-lg mt-2"}
+          className={components.button.primary + ' w-full py-4 text-lg mt-2'}
           onClick={handleSave}
           disabled={saving}
         >
-          {saving ? "Saving..." : "Save Changes"}
+          {saving ? 'Saving...' : 'Save Changes'}
         </button>
         {error && <div className="text-red-400 text-xs text-center mt-2">{error}</div>}
       </div>

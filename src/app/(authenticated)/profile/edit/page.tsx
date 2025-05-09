@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Edit, ArrowLeft } from "lucide-react";
+import { Edit, ArrowLeft, Settings } from "lucide-react";
 import { components } from "@/lib/styles/design-system";
 import Image from "next/image";
 import { DefaultAvatar } from "@/app/components/DefaultAvatar";
@@ -84,7 +84,7 @@ export default function EditProfilePage() {
 
   return (
     <div className="w-full h-full min-h-0 bg-gradient-radial from-[#320D66] via-[#1C1C24] to-[#15161B] flex flex-col items-center justify-start">
-      {/* Header - match dashboard style */}
+      {/* Header - match dashboard style, tabs in header, settings button right */}
       <div className="w-full max-w-md mx-auto px-4 py-2 flex items-center justify-between flex-shrink-0 h-14 bg-[#181824] border-b border-white/10" style={{ position: 'sticky', top: 0, zIndex: 10 }}>
         <button
           onClick={() => router.push('/dashboard')}
@@ -92,34 +92,37 @@ export default function EditProfilePage() {
         >
           <ArrowLeft className="w-5 h-5 text-white/90" />
         </button>
-        <h2 className="text-lg font-semibold text-white">Edit Profile</h2>
-        <div className="w-10 h-10" />
-      </div>
-      {/* Tabs - Edit/Preview */}
-      <div className="w-full max-w-md mx-auto flex items-center justify-center gap-2 bg-[#181824] border-b border-white/10" style={{height: '48px'}}>
+        {/* Tabs in header */}
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setActiveTab('edit')}
+            className={`px-5 py-2 text-sm font-semibold rounded-full transition-colors focus:outline-none ${
+              activeTab === 'edit'
+                ? 'bg-gradient-to-r from-purple-600 to-blue-500 text-white shadow'
+                : 'bg-[#232336] text-white/70 hover:bg-[#28284a]'
+            }`}
+          >
+            Edit
+          </button>
+          <button
+            onClick={() => setActiveTab('preview')}
+            className={`px-5 py-2 text-sm font-semibold rounded-full transition-colors focus:outline-none ${
+              activeTab === 'preview'
+                ? 'bg-gradient-to-r from-purple-600 to-blue-500 text-white shadow'
+                : 'bg-[#232336] text-white/70 hover:bg-[#28284a]'
+            }`}
+          >
+            Preview
+          </button>
+        </div>
         <button
-          onClick={() => setActiveTab('edit')}
-          className={`px-4 py-2 text-sm font-semibold rounded-xl transition-colors ${
-            activeTab === 'edit'
-              ? 'bg-gradient-to-r from-purple-600/30 to-blue-500/30 text-white shadow underline underline-offset-8 decoration-purple-400'
-              : 'text-white/60 hover:text-white'
-          }`}
+          className="p-2.5 rounded-full bg-[#1A1B1F]/80 backdrop-blur-sm border border-[#2A2B30] hover:bg-[#2A2B30] active:scale-95 transition-all duration-200"
         >
-          Edit
-        </button>
-        <button
-          onClick={() => setActiveTab('preview')}
-          className={`px-4 py-2 text-sm font-semibold rounded-xl transition-colors ${
-            activeTab === 'preview'
-              ? 'bg-gradient-to-r from-purple-600/30 to-blue-500/30 text-white shadow underline underline-offset-8 decoration-purple-400'
-              : 'text-white/60 hover:text-white'
-          }`}
-        >
-          Preview
+          <Settings className="w-5 h-5 text-white/90" />
         </button>
       </div>
       {/* Main Card - flush with header, scrollable content, sticky save button */}
-      <div className="w-full max-w-md mx-auto flex-1 flex flex-col rounded-2xl bg-[#181824] shadow-lg relative" style={{height: 'calc(100dvh - 110px)'}}>
+      <div className="w-full max-w-md mx-auto flex-1 flex flex-col rounded-2xl bg-[#181824] shadow-lg relative" style={{height: 'calc(100dvh - 62px)'}}>
         <div className="flex-1 flex flex-col gap-4 p-4 overflow-y-auto">
           {/* Profile Picture Upload */}
           <div className="flex flex-col items-center gap-2 border border-[#2A2B30] rounded-2xl p-4 bg-[#1C1C24]/80 shadow-[0_0_25px_rgba(168,85,247,0.1)]">

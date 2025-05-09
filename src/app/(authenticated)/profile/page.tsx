@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import getSupabaseBrowserClient from '@/lib/supabase/client';
 import { getProfile } from '@/lib/supabase/profile';
-import ProfilePreview from '@/app/components/ProfilePreview';
+import ProfileCard from '@/app/components/ProfileCard';
 import CopyableUrl from '@/app/components/CopyableUrl';
 import { Settings } from 'lucide-react';
 
@@ -59,16 +59,13 @@ export default function ProfilePage() {
         {/* Live URL Card - Using the CopyableUrl component */}
         <CopyableUrl username={profile.username} />
 
-        {/* Profile Preview - Scaled down slightly */}
+        {/* Profile Card - Scaled down slightly */}
         <div className="transform scale-[0.98]">
-          <ProfilePreview 
+          <ProfileCard 
             username={profile.username || ''}
             bio={profile.bio || ''}
-            tags={profile.hashtags || []}
-            avatarUrl={profile.avatar_url || ''}
-            onEditClick={() => router.push('/profile/edit')}
-            onShareClick={() => {}}
-            onThemeClick={() => {}}
+            avatar_url={profile.avatar_url || ''}
+            hashtags={profile.hashtags || []}
           />
         </div>
       </div>

@@ -6,7 +6,7 @@ import getSupabaseBrowserClient from '@/lib/supabase/client';
 import Image from 'next/image';
 import { toast } from 'sonner';
 import ImageCropModal from '../components/ImageCropModal';
-import ProfilePreview from '../components/ProfilePreview';
+import ProfileCard from '../components/ProfileCard';
 import { Dialog } from '@headlessui/react';
 import { ProfilePreviewDialog } from '../components/ProfilePreviewDialog';
 import { getProfile, updateProfile } from '@/lib/supabase/profile';
@@ -521,24 +521,11 @@ export default function OnboardingPage() {
 
       {/* Add the ProfilePreview */}
       {showPreview && (
-        <ProfilePreview
+        <ProfileCard
           username={username}
           bio={bio}
-          tags={hashtags}
-          strategies={[
-            {
-              title: "Example Strategy",
-              stats: {
-                gain: 0,
-                winRate: 0,
-                riskRatio: "0:0"
-              }
-            }
-          ]}
-          avatarUrl={avatarUrl}
-          onEditClick={() => setStep('edit')}
-          onShareClick={() => {}}
-          onThemeClick={() => {}}
+          avatar_url={avatarUrl}
+          hashtags={hashtags}
         />
       )}
 
